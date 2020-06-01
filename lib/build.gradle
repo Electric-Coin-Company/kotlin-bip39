@@ -1,0 +1,32 @@
+import cash.z.ecc.android.Deps
+
+plugins {
+    id "org.jetbrains.kotlin.jvm"
+    id 'java-library'
+}
+
+group = "cash.z.ecc.android"
+version = "1.0.0-alpha01"
+
+dependencies {
+    implementation Deps.Kotlin.STDLIB
+
+    // Tests
+    testImplementation Deps.Kotest.RUNNER
+    testImplementation Deps.Kotest.ASSERTIONS
+    testImplementation Deps.Kotest.PROPERTY
+}
+test {
+    useJUnitPlatform()
+    testLogging {
+        showExceptions = true
+        showStackTraces = true
+        exceptionFormat = "full"
+        events = ["failed", "skipped"]
+        showStandardStreams = true
+    }
+
+}
+
+sourceCompatibility = "8"
+targetCompatibility = "8"

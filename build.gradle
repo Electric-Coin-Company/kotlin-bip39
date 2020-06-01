@@ -1,0 +1,25 @@
+import cash.z.ecc.android.Deps
+
+buildscript {
+//    ext.versionName = Versions.versionName
+//    ext.groupName = 'cash.z.ecc.android'
+
+    repositories {
+        mavenLocal()
+        google()
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${Deps.kotlinVersion}"
+    }
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        google()
+        jcenter()
+        mavenCentral()
+    }
+}
