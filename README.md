@@ -7,7 +7,9 @@
 
 
 ## Introduction
-A concise implementation of [BIP-0039](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) in Kotlin for Android.
+A concise implementation of [BIP-0039](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) in Kotlin for Android. 
+
+Only 30kB in total size. For comparison, the entire library is about 3X the size of this README file (because there are no dependencies)!
 
 ### Motivation
 
@@ -24,11 +26,11 @@ Plus, it uses a permissive MIT license and no dependencies beyond Kotlin's stdli
 ## Getting Started
 ### Gradle
 
-Add dependencies:
+Add dependencies (see bintray badge, above, for latest version number such as `1.0.0-beta07`):
 
 ```groovy
 dependencies {
-    implementation 'cash.z.ecc.android:android-bip39:1.0.0-beta02'
+    implementation "cash.z.ecc.android:android-bip39:${latestVersion}"
 }
 
 repository {
@@ -42,6 +44,8 @@ This library prefers `CharArrays` over `Strings` for [added security](https://st
 Note: If strings or lists are desired, it is very easy (but not recommended) to convert to/from a CharArray via `String(charArray)` or `String(charArray).split(' ')`.
 * Create new 24-word mnemonic phrase
 ```kotlin
+import cash.z.ecc.android.bip39.Mnemonics.MnemonicCode
+
 val mnemonicCode: MnemonicCode = MnemonicCode(WordCount.COUNT_24)
 
 // assert: mnemonicCode.wordCount == 24, mnemonicCode.languageCode == "en"
