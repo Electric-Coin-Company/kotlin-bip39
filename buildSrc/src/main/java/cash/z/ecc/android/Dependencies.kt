@@ -4,6 +4,9 @@ object Deps {
     // For use in the top-level build.gradle which gives an error when provided
     // `Deps.Kotlin.version` directly
     const val kotlinVersion = "1.3.72"
+    const val group = "cash.z.ecc.android"
+    const val versionName = "1.0.0-beta06"
+    const val description = "A concise implementation of BIP-0039 in Kotlin for Android."
 
     object Kotlin : Version(kotlinVersion) {
         val STDLIB =        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
@@ -17,7 +20,7 @@ object Deps {
 
     object Square : Version("1.9.2") {
         val MOSHI =         "com.squareup.moshi:moshi:$version"
-        val MOSHI_KOTLIN =         "com.squareup.moshi:moshi-kotlin:$version"
+        val MOSHI_KOTLIN =  "com.squareup.moshi:moshi-kotlin:$version"
     }
 }
 

@@ -1,9 +1,6 @@
 import cash.z.ecc.android.Deps
 
 buildscript {
-//    ext.versionName = Versions.versionName
-//    ext.groupName = 'cash.z.ecc.android'
-
     repositories {
         mavenLocal()
         google()
@@ -12,6 +9,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${Deps.kotlinVersion}"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
     }
 }
 
