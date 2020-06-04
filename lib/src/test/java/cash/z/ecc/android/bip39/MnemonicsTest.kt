@@ -1,18 +1,29 @@
 package cash.z.ecc.android.bip39
 
-import io.kotest.assertions.fail
+import cash.z.ecc.android.bip39.Mnemonics.MnemonicCode
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import io.kotest.assertions.asClue
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import okio.Okio
+import java.io.File
+import java.util.*
 
 class MnemonicsTest : BehaviorSpec({
+    val validPhrase = "void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold"
+    val lang = Locale.ENGLISH.language
+
     Given("a valid, known mnemonic phrase") {
-        val mnemonic =
-            "still champion voice habit trend flight survey between bitter process artefact blind carbon truly provide dizzy crush flush breeze blouse charge solid fish spread"
         When("it is converted into a seed") {
-            val result = mnemonic.toCharArray().toSeed()
+            val result = MnemonicCode(validPhrase).toSeed()
             Then("it should not be null") {
                 result shouldNotBe null
             }
@@ -28,14 +39,13 @@ class MnemonicsTest : BehaviorSpec({
                     hex.length shouldBe 128
                 }
                 Then("it should equal the expected value") {
-                    hex shouldBe "f550d5399659396587a59b6ad446eb89da7741ebb1e42f87c22451d20ece8bb1e09ccb3c19f967f37fbf435367bc295c692c0ce000c52f5b991f1ca91169565e"
+                    hex shouldBe "b873212f885ccffbf4692afcb84bc2e55886de2dfa07d90f5c3c239abc31c0a6ce047e30fd8bf6a281e71389aa82d73df74c7bbfb3b06b4639a5cee775cccd3c"
                 }
             }
         }
     }
 
     Given("a request for entropy") {
-        val m = Mnemonics()
         When("each supported word count is requested") {
             Then("ensure each result has the correct bit length") {
                 forAll(
@@ -48,18 +58,23 @@ class MnemonicsTest : BehaviorSpec({
                     val wordCount = Mnemonics.WordCount.valueOf(count)
                     wordCount shouldNotBe null
                     bitLength shouldBe wordCount!!.bitLength
-                    val entropy = m.createEntropy(wordCount)
-                    entropy.size shouldBe bitLength
+                    wordCount.toEntropy().let { entropy ->
+                        entropy.size * 8 shouldBe bitLength
+                    }
                 }
             }
         }
     }
 
-    Given("a supported word length") {
-        Mnemonics.WordCount.values().forEach {
-            When("a mnemonic phrase is created using the ${it.name} enum value") {
-                Then("it has ${it.count - 1} spaces") {
-                    fail("not implemented")
+    Given("a supported word count") {
+        Mnemonics.WordCount.values().forEach { wordCount ->
+            When("a mnemonic phrase is created using the ${wordCount.name} enum value") {
+                Then("it has ${wordCount.count - 1} spaces") {
+                    MnemonicCode(wordCount).let { phrase ->
+                        withClue(String(phrase.chars)) {
+                            phrase.chars.count { it == ' ' } shouldBe wordCount.count - 1
+                        }
+                    }
                 }
             }
         }
@@ -68,29 +83,84 @@ class MnemonicsTest : BehaviorSpec({
     Given("predefined entropy as hex") {
         When("it is converted to a mnemonic phrase") {
             Then("it should match the expected phrase") {
-                val m = Mnemonics()
                 forAll(
                     row(24, "b893a6b0da8fc9b73d709bda939e818a677aa376c266949378300b65a34b8e52", "review outdoor promote relax wish swear volume beach surround ostrich parrot below jeans faculty swallow error nest orange army bitter focus place deer fat"),
                     row(18, "d5bcbf62dea1a07ab1abb0144b299300137168a7939f3071f112b557", "stick tourist suffer run borrow diary shop invite begin flock gospel ability damage reform oxygen initial corn moon dwarf height image"),
                     row(15, "e06ce21369dc09eb2bda66510a76f65ab3f947cce90fcb10", "there grow luggage squirrel scene void quarter error extra father rural rely display physical crisp capable slam lumber"),
                     row(12, "0b01c3c0b0590faf45fc171da17cfb22", "arch asthma usual gaze movie stumble blood load buffalo armor disagree earth")
                 ) { count, entropy, mnemonic ->
-                    fail("not implemented")
+                    val code = MnemonicCode(entropy.fromHex())
+                    String(code.chars) shouldBe mnemonic
                 }
             }
         }
     }
 
-    // TODO: use test values from the original BIP : https://github.com/trezor/python-mnemonic/blob/master/vectors.json
+    // uses test values from the original BIP : https://github.com/trezor/python-mnemonic/blob/master/vectors.json
     Given("The original BIP-0039 test data set") {
-        When("each provided entropy is converted to a mnemonic phrase") {
-            Then("each result matches the corresponding test phrase") {
-                fail("not implemented")
+        val testData: TestDataSet? = loadTestData()
+        testData shouldNotBe null
+        When("each provided entropy is converted to a mnemonic phrase [entropy -> mnemonic]") {
+            Then("each result matches the corresponding test mnemonic phrase") {
+                testData!!.values.forEach {
+                    val entropy = it[0].fromHex()
+                    val mnemonic = it[1]
+                    String(MnemonicCode(entropy).chars) shouldBe mnemonic
+                }
             }
         }
-        When("each provided mnemonic phrase is converted into a seed") {
+        When("each provided mnemonic phrase is reverted to entropy [mnemonic -> entropy]") {
+            Then("each result matches the corresponding test entropy") {
+                testData!!.values.forEach {
+                    val entropy = it[0]
+                    val mnemonic = it[1]
+                    MnemonicCode(mnemonic).toEntropy().toHex() shouldBe entropy
+                }
+            }
+        }
+        When("each provided mnemonic phrase is converted into a seed [mnemonic -> seed]") {
             Then("each result matches the corresponding test seed") {
-                fail("not implemented")
+                testData!!.values.forEach {
+                    val mnemonic = it[1].toCharArray()
+                    val seed = it[2]
+                    val passphrase = "TREZOR".toCharArray()
+                    val language = Locale.ENGLISH.language
+                    MnemonicCode(mnemonic, language).toSeed(passphrase).toHex() shouldBe seed
+                }
+            }
+        }
+    }
+
+    Given("an invalid mnemonic") {
+        When("it was created by swapping two words in a valid mnemonic") {
+            // swapped "trend" and "flight"
+            val mnemonicPhrase = validPhrase.swap(4, 5)
+            Then("it fails with a checksum error") {
+                mnemonicPhrase.asClue {
+                    shouldThrow<Mnemonics.ChecksumException> {
+                        MnemonicCode(mnemonicPhrase).validate()
+                    }
+                }
+            }
+        }
+        When("it contains an invalid word") {
+            val mnemonicPhrase = validPhrase.split(' ').let { words ->
+                validPhrase.replace(words[23], "convincee")
+            }
+            Then("it fails with a word validation error") {
+                mnemonicPhrase.asClue {
+                    shouldThrow<Mnemonics.InvalidWordException> {
+                        MnemonicCode(mnemonicPhrase).validate()
+                    }
+                }
+            }
+        }
+        When("it contains an unsupported number of words") {
+            val mnemonicPhrase = "$validPhrase still"
+            Then("it fails with a word count error") {
+                shouldThrow<Mnemonics.WordCountException> {
+                    MnemonicCode(mnemonicPhrase).validate()
+                }
             }
         }
     }
@@ -100,6 +170,11 @@ class MnemonicsTest : BehaviorSpec({
 //
 // Test Utilities
 //
+
+@JsonClass(generateAdapter = true)
+data class TestDataSet (
+    @Json(name = "english") val values: List<List<String>>
+)
 
 fun ByteArray.toHex(): String {
     val sb = StringBuilder(size * 2)
@@ -119,3 +194,25 @@ fun String.fromHex(): ByteArray {
     }
     return data
 }
+
+fun String.swap(srcWord: Int, destWord: Int = srcWord + 1): String {
+    if (srcWord >= destWord) throw IllegalArgumentException("srcWord must be less than destWord")
+    if (destWord > count { it == ' '}) throw IllegalArgumentException("there aren't that many words")
+    return split(' ').let { words ->
+        words.reduceIndexed { i, result, word ->
+            val next = when (i) {
+                srcWord -> words[destWord]
+                destWord -> words[srcWord]
+                else -> word
+            }
+            if (srcWord == 0 && i == 1) "${words[destWord]} $next" else "$result $next"
+        }
+    }
+}
+
+fun loadTestData(): TestDataSet? =
+    Okio.buffer(Okio.source(File("src/test/resources/data/BIP-0039-test-values.json")))
+        .use { dataFile ->
+            Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+                .adapter(TestDataSet::class.java).fromJson(dataFile)
+        }
