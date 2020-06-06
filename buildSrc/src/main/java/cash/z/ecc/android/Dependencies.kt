@@ -5,7 +5,7 @@ object Deps {
     // `Deps.Kotlin.version` directly
     const val kotlinVersion = "1.3.72"
     const val group = "cash.z.ecc.android"
-    const val versionName = "1.0.0-beta07"
+    const val versionName = "1.0.0-beta08"
     const val description = "A concise implementation of BIP-0039 in Kotlin for Android."
 
     object Kotlin : Version(kotlinVersion) {

@@ -74,7 +74,7 @@ def pomConfig = {
     }
 
     scm {
-        url "https://github.com/zcash/android-bip39"
+        url "https://github.com/zcash/kotlin-bip39"
     }
 }
 
@@ -99,14 +99,14 @@ publishing {
             artifact sourcesJar
             artifact docsJar
             groupId Deps.group
-            artifactId "android-bip39"
+            artifactId "kotlin-bip39"
             version Deps.versionName
 
             pom.withXml {
                 def root = asNode()
                 root.appendNode('description', Deps.description)
-                root.appendNode('name', 'android-bip39')
-                root.appendNode('url', 'https://github.com/zcash/android-bip39')
+                root.appendNode('name', 'kotlin-bip39')
+                root.appendNode('url', 'https://github.com/zcash/kotlin-bip39')
                 root.children().last() + pomConfig
             }
         }
@@ -119,15 +119,15 @@ bintray {
     publications = ['Production']
     override = true
     pkg {
-        repo = 'android-bip39'
-        name = 'android-bip39'
+        repo = 'android'
+        name = 'kotlin-bip39'
         description = Deps.description
         publish = true
         publicDownloadNumbers = true
         userOrg = 'ecc-mobile'
         licenses = ['MIT']
-        vcsUrl = 'https://github.com/zcash/android-bip39.git'
-        dryRun = false
+        vcsUrl = 'https://github.com/zcash/kotlin-bip39.git'
+        dryRun = true
         version {
             name = Deps.versionName
             desc = Deps.description
