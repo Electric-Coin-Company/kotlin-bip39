@@ -140,7 +140,7 @@ val mnemonicCode = MnemonicCode(WordCount.COUNT_24, languageCode = Locale.ENGLIS
 ```
 
 ## Test Results
-![Screenshot from 2020-06-04 04-05-37](https://user-images.githubusercontent.com/1699841/83732898-ba1c5180-a61a-11ea-92a5-16397a1660e7.png)
+![Screenshot from 2020-06-06 15-14-39](https://user-images.githubusercontent.com/1699841/83952728-afbfaa80-a808-11ea-988c-3fb764dc4970.png)
 
 
 ## Credits
