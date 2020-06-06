@@ -1,4 +1,4 @@
-# android-bip39
+# kotlin-bip39
 [![license](https://img.shields.io/github/license/zcash/android-bip39.svg?maxAge=2592000&style=plastic)](https://github.com/zcash/android-bip39/blob/master/LICENSE)
 [![CircleCI](https://img.shields.io/circleci/build/github/zcash/android-bip39/master?style=plastic)](https://circleci.com/gh/zcash/android-bip39/tree/master)
 [![@gmale](https://img.shields.io/badge/contact-android@z.cash-5AA9E7.svg?style=plastic)](https://github.com/gmale)
@@ -19,7 +19,7 @@ Only 30kB in total size. For comparison, the entire library is about 3X the size
   * or they have restrictive licenses
 * No other implementation uses [CharArrays](https://stackoverflow.com/a/8881376/178433), from the ground up, for [added security](https://docs.oracle.com/javase/6/docs/technotes/guides/security/crypto/CryptoSpec.html#PBEEx) and lower chances of [accidentally logging](https://stackoverflow.com/a/8885343/178433) sensitive info.
 
-Consequently, this library strives to use both [idiomatic Kotlin](https://kotlinlang.org/docs/reference/idioms.html) and `CharArrays` whenever possible. It also aims to be concise and thoroughly tested. As a pure kotlin library, it probably also works outside of Android but that is not an explicit goal.
+Consequently, this library strives to use both [idiomatic Kotlin](https://kotlinlang.org/docs/reference/idioms.html) and `CharArrays` whenever possible. It also aims to be concise and thoroughly tested. As a pure kotlin library, it probably also works outside of Android but that is not an explicit goal (Update: confirmed to also work on a [Ktor server](https://ktor.io/)).
 
 Plus, it uses a permissive MIT license and no dependencies beyond Kotlin's stdlib!
 
