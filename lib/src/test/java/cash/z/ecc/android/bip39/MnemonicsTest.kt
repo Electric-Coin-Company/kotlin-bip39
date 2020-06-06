@@ -6,10 +6,8 @@ import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import io.kotest.assertions.asClue
-import io.kotest.assertions.fail
-import io.kotest.assertions.forEachAsClue
+import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
@@ -139,8 +137,7 @@ class MnemonicsTest : BehaviorSpec({
                     val mnemonic = it[1].toCharArray()
                     val seed = it[2]
                     val passphrase = "TREZOR".toCharArray()
-                    val language = Locale.ENGLISH.language
-                    MnemonicCode(mnemonic, language).toSeed(passphrase).toHex() shouldBe seed
+                    MnemonicCode(mnemonic, lang).toSeed(passphrase).toHex() shouldBe seed
                 }
             }
         }
@@ -149,11 +146,25 @@ class MnemonicsTest : BehaviorSpec({
     Given("an invalid mnemonic") {
         When("it was created by swapping two words in a valid mnemonic") {
             // swapped "trend" and "flight"
-            val mnemonicPhrase = validPhrase.swap(4, 5)
-            Then("it fails with a checksum error") {
-                mnemonicPhrase.asClue {
+            validPhrase.swap(4, 5).asClue { mnemonicPhrase ->
+                Then("validate() fails with a checksum error") {
                     shouldThrow<Mnemonics.ChecksumException> {
                         MnemonicCode(mnemonicPhrase).validate()
+                    }
+                }
+                Then("toEntropy() fails with a checksum error") {
+                    shouldThrow<Mnemonics.ChecksumException> {
+                        MnemonicCode(mnemonicPhrase).toEntropy()
+                    }
+                }
+                Then("toSeed() fails with a checksum error") {
+                    shouldThrow<Mnemonics.ChecksumException> {
+                        MnemonicCode(mnemonicPhrase).toSeed()
+                    }
+                }
+                Then("toSeed(validate=false) succeeds!!") {
+                    shouldNotThrowAny {
+                        MnemonicCode(mnemonicPhrase).toSeed(validate = false)
                     }
                 }
             }
@@ -162,10 +173,25 @@ class MnemonicsTest : BehaviorSpec({
             val mnemonicPhrase = validPhrase.split(' ').let { words ->
                 validPhrase.replace(words[23], "convincee")
             }
-            Then("it fails with a word validation error") {
-                mnemonicPhrase.asClue {
+            mnemonicPhrase.asClue {
+                Then("validate() fails with a word validation error") {
                     shouldThrow<Mnemonics.InvalidWordException> {
                         MnemonicCode(mnemonicPhrase).validate()
+                    }
+                }
+                Then("toEntropy() fails with a word validation error") {
+                    shouldThrow<Mnemonics.InvalidWordException> {
+                        MnemonicCode(mnemonicPhrase).toEntropy()
+                    }
+                }
+                Then("toSeed() fails with a word validation error") {
+                    shouldThrow<Mnemonics.InvalidWordException> {
+                        MnemonicCode(mnemonicPhrase).toSeed()
+                    }
+                }
+                Then("toSeed(validate=false) succeeds!!") {
+                    shouldNotThrowAny {
+                        MnemonicCode(mnemonicPhrase).toSeed(validate = false)
                     }
                 }
             }
@@ -175,6 +201,15 @@ class MnemonicsTest : BehaviorSpec({
             Then("it fails with a word count error") {
                 shouldThrow<Mnemonics.WordCountException> {
                     MnemonicCode(mnemonicPhrase).validate()
+                }
+                shouldThrow<Mnemonics.WordCountException> {
+                    MnemonicCode(mnemonicPhrase).toEntropy()
+                }
+                shouldThrow<Mnemonics.WordCountException> {
+                    MnemonicCode(mnemonicPhrase).toSeed()
+                }
+                shouldNotThrowAny {
+                    MnemonicCode(mnemonicPhrase).toSeed(validate = false)
                 }
             }
         }
