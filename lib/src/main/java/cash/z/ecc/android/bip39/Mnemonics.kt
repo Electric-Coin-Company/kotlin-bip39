@@ -62,22 +62,20 @@ object Mnemonics {
 
         val wordCount get() = chars.count { it == ' ' }.let { if (it == 0) it else it + 1 }
 
-        val words: List<CharArray> get() {
-            val wordList = mutableListOf<CharArray>()
-            var cursor = 0
-            repeat(chars.size) { i ->
-                val isSpace = chars[i] == ' '
-                if (isSpace || i == (chars.size - 1)) {
-                    val wordSize = i - cursor + if (isSpace) 0 else 1
-                    wordList.add(CharArray(wordSize).apply {
-                        repeat(wordSize) {
-                            this[it] = chars[cursor + it]
-                        }
-                    })
-                    cursor = i + 1
+        /**
+         * Converts the [chars] array into a list of CharArrays for each word. This library does not
+         * use this value but it exposes it as a convenience. In most cases, just working with the
+         * chars can be enough.
+         */
+        val words: List<CharArray>
+            get() = ArrayList<CharArray>(wordCount).apply {
+                var cursor = 0
+                chars.forEachIndexed { i, c ->
+                    if (c == ' ' || i == chars.lastIndex) {
+                        add(chars.copyOfRange(cursor, if (chars[i].isWhitespace()) i else i - 1))
+                        cursor = i + 1
+                    }
                 }
-            }
-            return wordList
         }
 
         fun clear() = chars.fill(0.toChar())

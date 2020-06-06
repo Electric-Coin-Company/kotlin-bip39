@@ -6,6 +6,8 @@ import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import io.kotest.assertions.asClue
+import io.kotest.assertions.fail
+import io.kotest.assertions.forEachAsClue
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.BehaviorSpec
@@ -13,6 +15,7 @@ import io.kotest.data.forAll
 import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.string.shouldContain
 import okio.Okio
 import java.io.File
 import java.util.*
@@ -69,10 +72,22 @@ class MnemonicsTest : BehaviorSpec({
     Given("a supported word count") {
         Mnemonics.WordCount.values().forEach { wordCount ->
             When("a mnemonic phrase is created using the ${wordCount.name} enum value") {
-                Then("it has ${wordCount.count - 1} spaces") {
-                    MnemonicCode(wordCount).let { phrase ->
-                        withClue(String(phrase.chars)) {
+                MnemonicCode(wordCount).let { phrase ->
+                    String(phrase.chars).asClue { phraseString ->
+                        Then("it has ${wordCount.count - 1} spaces") {
                             phrase.chars.count { it == ' ' } shouldBe wordCount.count - 1
+                        }
+                        And("when that is converted to a list of CharArrays") {
+                            phrase.words.map { String(it) }.asClue { words ->
+                                Then("It has ${wordCount.count} elements") {
+                                    words.size shouldBe wordCount.count
+                                }
+                                Then("Each word is present in the original phrase") {
+                                    words.forEach {
+                                        phraseString shouldContain "$it"
+                                    }
+                                }
+                            }
                         }
                     }
                 }
