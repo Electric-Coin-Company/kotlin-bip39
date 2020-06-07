@@ -5,8 +5,10 @@ object Deps {
     // `Deps.Kotlin.version` directly
     const val kotlinVersion = "1.3.72"
     const val group = "cash.z.ecc.android"
+    const val artifactName = "kotlin-bip39"
     const val versionName = "1.0.0-beta08"
     const val description = "A concise implementation of BIP-0039 in Kotlin for Android."
+    const val githubUrl = "https://github.com/zcash/kotlin-bip39"
 
     object Kotlin : Version(kotlinVersion) {
         val STDLIB =        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
