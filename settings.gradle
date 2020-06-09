@@ -1,2 +1,2 @@
-rootProject.name = 'android-bip39'
+rootProject.name = 'kotlin-bip39'
 include ':lib'

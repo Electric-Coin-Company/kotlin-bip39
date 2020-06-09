@@ -1,13 +1,30 @@
 import cash.z.ecc.android.Deps
 
 plugins {
+    id 'maven-publish'
+    id 'com.jfrog.bintray'
     id "org.jetbrains.kotlin.jvm"
+    id 'org.jetbrains.dokka' version '0.10.1'
     id 'java-library'
 }
 
-group = "cash.z.ecc.android"
-version = "1.0.0-alpha01"
+apply from: "publish.gradle"
 
+tasks {
+    compileKotlin {
+        kotlinOptions { jvmTarget = 1.8 }
+        sourceCompatibility = 1.8
+    }
+    compileTestKotlin {
+        kotlinOptions { jvmTarget = 1.8 }
+        sourceCompatibility = 1.8
+    }
+
+    // Generate Kotlin/Java documentation from sources.
+    dokka {
+        outputFormat = "html"
+    }
+}
 dependencies {
     implementation Deps.Kotlin.STDLIB
 
@@ -15,6 +32,8 @@ dependencies {
     testImplementation Deps.Kotest.RUNNER
     testImplementation Deps.Kotest.ASSERTIONS
     testImplementation Deps.Kotest.PROPERTY
+    testImplementation Deps.Square.MOSHI
+    testImplementation Deps.Square.MOSHI_KOTLIN
 }
 test {
     useJUnitPlatform()
@@ -25,7 +44,6 @@ test {
         events = ["failed", "skipped"]
         showStandardStreams = true
     }
-
 }
 
 sourceCompatibility = "8"
