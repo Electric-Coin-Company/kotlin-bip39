@@ -78,7 +78,7 @@ bintray {
         userOrg = 'ecc-mobile'
         licenses = ['MIT']
         vcsUrl = Deps.githubUrl
-        dryRun = true
+        dryRun = !Deps.publishingActive
         version {
             name = Deps.versionName
             desc = Deps.description
