@@ -72,7 +72,7 @@ object Mnemonics {
                 var cursor = 0
                 chars.forEachIndexed { i, c ->
                     if (c == ' ' || i == chars.lastIndex) {
-                        add(chars.copyOfRange(cursor, if (chars[i].isWhitespace()) i else i - 1))
+                        add(chars.copyOfRange(cursor, if (chars[i].isWhitespace()) i else i + 1))
                         cursor = i + 1
                     }
                 }

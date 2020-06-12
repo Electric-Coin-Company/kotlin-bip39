@@ -11,6 +11,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
@@ -81,8 +82,8 @@ class MnemonicsTest : BehaviorSpec({
                                     words.size shouldBe wordCount.count
                                 }
                                 Then("Each word is present in the original phrase") {
-                                    words.forEach {
-                                        phraseString shouldContain "$it"
+                                    phraseString.split(' ').let { correctWords ->
+                                        words.shouldContainAll(correctWords)
                                     }
                                 }
                             }
