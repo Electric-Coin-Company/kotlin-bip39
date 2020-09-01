@@ -25,7 +25,7 @@ Plus, it uses a permissive MIT license and no dependencies beyond Kotlin's stdli
 ## Getting Started
 ### Gradle
 
-Add dependencies (see bintray badge, above, for latest version number such as `1.0.0-beta07`):
+Add dependencies (see bintray badge, above, for latest version number such as `1.0.0-beta09`):
 
 ```groovy
 dependencies {
