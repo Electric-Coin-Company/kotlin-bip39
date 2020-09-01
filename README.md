@@ -3,7 +3,6 @@
 [![CircleCI](https://img.shields.io/circleci/build/github/zcash/kotlin-bip39/master?style=plastic)](https://circleci.com/gh/zcash/kotlin-bip39/tree/master)
 [![@gmale](https://img.shields.io/badge/contact-android@z.cash-5AA9E7.svg?style=plastic)](https://github.com/gmale)
 ![Bintray](https://img.shields.io/bintray/v/ecc-mobile/android/kotlin-bip39?color=success&style=plastic)
-[![Keybase ZEC](https://img.shields.io/keybase/zec/kevinecc?logoColor=red&style=social)](https://keybase.io/kevinecc)
 
 
 ## Introduction
