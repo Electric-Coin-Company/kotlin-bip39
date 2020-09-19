@@ -3,10 +3,10 @@ package cash.z.ecc.android
 object Deps {
     // For use in the top-level build.gradle which gives an error when provided
     // `Deps.Kotlin.version` directly
-    const val kotlinVersion = "1.3.72"
+    const val kotlinVersion = "1.4.10"
     const val group = "cash.z.ecc.android"
     const val artifactName = "kotlin-bip39"
-    const val versionName = "1.0.0-beta09"
+    const val versionName = "1.0.1"
     const val description = "A concise implementation of BIP-0039 in Kotlin for Android."
     const val githubUrl = "https://github.com/zcash/kotlin-bip39"
     const val publishingActive = false // set to true to activate bintrayUpload task
