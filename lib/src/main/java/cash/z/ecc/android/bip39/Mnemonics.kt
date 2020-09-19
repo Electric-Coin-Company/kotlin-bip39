@@ -6,10 +6,12 @@ import cash.z.ecc.android.bip39.Mnemonics.KEY_SIZE
 import cash.z.ecc.android.bip39.Mnemonics.MnemonicCode
 import cash.z.ecc.android.bip39.Mnemonics.PBE_ALGORITHM
 import cash.z.ecc.android.bip39.Mnemonics.WordCount
+import cash.z.ecc.android.crypto.FallbackProvider
 import java.io.Closeable
 import java.nio.CharBuffer
 import java.nio.charset.Charset
 import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom
 import java.util.*
 import javax.crypto.SecretKeyFactory
@@ -337,8 +339,14 @@ fun MnemonicCode.toSeed(
     if (validate) validate()
     return (DEFAULT_PASSPHRASE.toCharArray() + passphrase).toBytes().let { salt ->
         PBEKeySpec(chars, salt, INTERATION_COUNT, KEY_SIZE).let { pbeKeySpec ->
-            SecretKeyFactory.getInstance(PBE_ALGORITHM).generateSecret(pbeKeySpec).encoded.also {
-                pbeKeySpec.clearPassword()
+            runCatching {
+                SecretKeyFactory.getInstance(PBE_ALGORITHM)
+            }.getOrElse {
+                SecretKeyFactory.getInstance(PBE_ALGORITHM, FallbackProvider())
+            }.let { keyFactory ->
+                keyFactory.generateSecret(pbeKeySpec).encoded.also {
+                    pbeKeySpec.clearPassword()
+                }
             }
         }
     }
