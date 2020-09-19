@@ -8,7 +8,7 @@
 ## Introduction
 A concise implementation of [BIP-0039](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) in Kotlin for Android. 
 
-Only 30kB in total size. For comparison, the entire library is about 3X the size of this README file (because there are no dependencies)!
+Only about 30kB in total size. For comparison, the entire library is about 3X the size of this README file (because there are no dependencies)!
 
 ### Motivation
 
@@ -25,7 +25,7 @@ Plus, it uses a permissive MIT license and no dependencies beyond Kotlin's stdli
 ## Getting Started
 ### Gradle
 
-Add dependencies (see bintray badge, above, for latest version number such as `1.0.0-beta09`):
+Add dependencies (see bintray badge, above, for latest version number such as `1.0.1`):
 
 ```groovy
 dependencies {
@@ -146,6 +146,8 @@ val mnemonicCode = MnemonicCode(WordCount.COUNT_24, languageCode = Locale.ENGLIS
 * [zcash/ebfull](https://github.com/ebfull) - zcash core dev and BIP-0039 co-author who inspired me to create this library
 * [bitcoinj](https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/crypto/MnemonicCode.java) - Java implementation from which much of this code was adapted
 * [Trezor](https://github.com/trezor/python-mnemonic/blob/master/vectors.json) - for their OG [test data set](https://github.com/trezor/python-mnemonic/blob/master/vectors.json) that has excellent edge cases
+* [Cole Barnes](http://cryptofreek.org/2012/11/29/pbkdf2-pure-java-implementation/) - whose PBKDF2SHA512 Java implementation is floating around _everywhere_ online
+* [Ken Sedgwick](https://github.com/ksedgwic) - who adapted Cole Barnes' work to use SHA-512
 
 ## License
 MIT

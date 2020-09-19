@@ -65,8 +65,8 @@ publishing {
 }
 
 bintray {
-    user = project.hasProperty('bintrayUser') ?: System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ?: System.getenv('BINTRAY_API_KEY')
+    user = project.findProperty('bintrayUser') ?: System.getenv('BINTRAY_USER')
+    key = project.findProperty('bintrayApiKey') ?: System.getenv('BINTRAY_API_KEY')
     publications = ['Production']
     override = true
     pkg {
