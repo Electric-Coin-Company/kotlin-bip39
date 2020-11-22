@@ -16,6 +16,8 @@ Only about 30kB in total size. For comparison, the entire library is about 3X th
 * Most that do exist are not Kotlin
   * or they are not idiomatic (because they are direct Java ports to Kotlin)
   * or they have restrictive licenses
+* **Most implementations fail to [validate the checksum](https://github.com/zcash/kotlin-bip39/blob/300e25dba95e0d1e3fe94a0f3c0cd7d707cca999/lib/src/test/java/cash/z/ecc/android/bip39/MnemonicsTest.kt#L147-L172), which can easily lead to loss of funds!**
+  * validating the checksum prevents: leading/trailing white space, valid words in the wrong order, mistyping a valid word (like `chief` instead of `chef`) and other similar issues that could invalidate a backup or lose funds.
 * No other implementation uses [CharArrays](https://stackoverflow.com/a/8881376/178433), from the ground up, for [added security](https://docs.oracle.com/javase/6/docs/technotes/guides/security/crypto/CryptoSpec.html#PBEEx) and lower chances of [accidentally logging](https://stackoverflow.com/a/8885343/178433) sensitive info.
 
 Consequently, this library strives to use both [idiomatic Kotlin](https://kotlinlang.org/docs/reference/idioms.html) and `CharArrays` whenever possible. It also aims to be concise and thoroughly tested. As a pure kotlin library, it probably also works outside of Android but that is not an explicit goal (Update: confirmed to also work on a [Ktor server](https://ktor.io/)).
