@@ -38,7 +38,7 @@ object Pbkdf2Sha512 {
                 acc.apply { this[i] = c.toByte() }
             }
             val hLen = 20.0
-            // note: dropped length check because its redundant, given the size of an int in kotlin
+            // note: dropped length check because it's redundant, given the size of an int in kotlin
             val l = ceil(dkLenBytes / hLen).toInt()
             for (i in 1..l) {
                 F(pBytes, s, c, i).let { Tn ->
