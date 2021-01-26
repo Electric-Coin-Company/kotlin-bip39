@@ -145,7 +145,7 @@ val mnemonicCode = MnemonicCode(WordCount.COUNT_24, languageCode = Locale.ENGLIS
 
 
 ## Credits
-* [zcash/ebfull](https://github.com/ebfull) - zcash core dev and BIP-0039 co-author who inspired me to create this library
+* [zcash/ebfull](https://github.com/ebfull) - Zcash core dev and BIP-0039 co-author who inspired me to create this library
 * [bitcoinj](https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/crypto/MnemonicCode.java) - Java implementation from which much of this code was adapted
 * [Trezor](https://github.com/trezor/python-mnemonic/blob/master/vectors.json) - for their OG [test data set](https://github.com/trezor/python-mnemonic/blob/master/vectors.json) that has excellent edge cases
 * [Cole Barnes](http://cryptofreek.org/2012/11/29/pbkdf2-pure-java-implementation/) - whose PBKDF2SHA512 Java implementation is floating around _everywhere_ online
