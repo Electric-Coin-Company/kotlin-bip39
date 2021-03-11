@@ -2,7 +2,7 @@
 [![license](https://img.shields.io/github/license/zcash/kotlin-bip39.svg?maxAge=2592000&style=plastic)](https://github.com/zcash/kotlin-bip39/blob/master/LICENSE)
 [![CircleCI](https://img.shields.io/circleci/build/github/zcash/kotlin-bip39/master?style=plastic)](https://circleci.com/gh/zcash/kotlin-bip39/tree/master)
 [![@gmale](https://img.shields.io/badge/contact-android@z.cash-5AA9E7.svg?style=plastic)](https://github.com/gmale)
-![Bintray](https://img.shields.io/bintray/v/ecc-mobile/android/kotlin-bip39?color=success&style=plastic)
+![Bintray](https://img.shields.io/maven-central/v/cash.z.ecc.android/kotlin-bip39?color=success&style=plastic)
 
 
 ## Introduction
