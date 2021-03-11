@@ -3,13 +3,7 @@ package cash.z.ecc.android
 object Deps {
     // For use in the top-level build.gradle which gives an error when provided
     // `Deps.Kotlin.version` directly
-    const val kotlinVersion = "1.4.10"
-    const val group = "cash.z.ecc.android"
-    const val artifactName = "kotlin-bip39"
-    const val versionName = "1.0.1"
-    const val description = "A concise implementation of BIP-0039 in Kotlin for Android."
-    const val githubUrl = "https://github.com/zcash/kotlin-bip39"
-    const val publishingActive = false // set to true to activate bintrayUpload task
+    const val kotlinVersion = "1.4.30"
 
     object Kotlin : Version(kotlinVersion) {
         val STDLIB =        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"

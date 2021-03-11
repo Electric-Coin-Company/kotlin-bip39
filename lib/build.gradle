@@ -1,14 +1,14 @@
 import cash.z.ecc.android.Deps
 
 plugins {
-    id 'maven-publish'
-    id 'com.jfrog.bintray'
     id "org.jetbrains.kotlin.jvm"
     id 'org.jetbrains.dokka' version '0.10.1'
     id 'java-library'
+    id 'com.vanniktech.maven.publish' version '0.14.2'
 }
 
-apply from: "publish.gradle"
+group = project.property('GROUP')
+version = project.property('VERSION_NAME')
 
 tasks {
     compileKotlin {
