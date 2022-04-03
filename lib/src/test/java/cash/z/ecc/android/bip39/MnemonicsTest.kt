@@ -14,8 +14,8 @@ import io.kotest.data.row
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.kotest.matchers.string.shouldContain
-import okio.Okio
+import okio.buffer
+import okio.source
 import java.io.File
 import java.util.*
 
@@ -262,7 +262,7 @@ fun String.swap(srcWord: Int, destWord: Int = srcWord + 1): String {
 }
 
 fun loadTestData(): TestDataSet? =
-    Okio.buffer(Okio.source(File("src/test/resources/data/BIP-0039-test-values.json")))
+    File("src/test/resources/data/BIP-0039-test-values.json").source().buffer()
         .use { dataFile ->
             Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
                 .adapter(TestDataSet::class.java).fromJson(dataFile)
