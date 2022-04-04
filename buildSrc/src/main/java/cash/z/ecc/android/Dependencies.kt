@@ -9,9 +9,10 @@ object Deps {
         val STDLIB =        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
     }
 
-    object Kotest : Version("5.2.2") {
+    object Kotest : Version("5.2.1") {
         val RUNNER =        "io.kotest:kotest-runner-junit5:$version"
         val ASSERTIONS =    "io.kotest:kotest-assertions-core:$version"
+        val FRAMEWORK_ENGINE =    "io.kotest:kotest-framework-engine:$version"
         val PROPERTY =      "io.kotest:kotest-property:$version"
     }
 

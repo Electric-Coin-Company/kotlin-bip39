@@ -35,7 +35,7 @@ object Pbkdf2Sha512 {
         Buffer().use { baos ->
             val dkLenBytes = dkLen/8
             val pBytes = p.foldIndexed(ByteArray(p.size)) { i, acc, c ->
-                acc.apply { this[i] = c.toByte() }
+                acc.apply { this[i] = c.code.toByte() }
             }
             val hLen = 20.0
             // note: dropped length check because it's redundant, given the size of an int in kotlin
@@ -46,7 +46,7 @@ object Pbkdf2Sha512 {
                 }
             }
             return ByteArray(dkLenBytes).apply {
-                baos.write(this)
+                baos.read(this)
             }
         }
     }

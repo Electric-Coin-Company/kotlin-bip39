@@ -10,6 +10,7 @@ buildscript {
 
 plugins {
     kotlin("multiplatform").version(cash.z.ecc.android.Deps.kotlinVersion) apply false
+    id("io.kotest.multiplatform") version cash.z.ecc.android.Deps.Kotest.version apply false
     id("com.jfrog.bintray").version("1.+")
 }
 

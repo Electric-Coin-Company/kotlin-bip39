@@ -1,29 +1,16 @@
 import cash.z.ecc.android.Deps
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.dokka") version "0.10.1"
+    id("org.jetbrains.dokka") version "1.6.10"
+    id("io.kotest.multiplatform")
     id("com.vanniktech.maven.publish") version "0.14.2"
 }
 
 group = project.property("GROUP")!!
 version = project.property("VERSION_NAME")!!
 
-//tasks {
-//    compileKotlin {
-//        kotlinOptions { jvmTarget = 1.8 }
-//        sourceCompatibility = 1.8
-//    }
-//    compileTestKotlin {
-//        kotlinOptions { jvmTarget = 1.8 }
-//        sourceCompatibility = 1.8
-//    }
-//
-//    // Generate Kotlin/Java documentation from sources.
-//    dokka {
-//        outputFormat = "html"
-//    }
-//}
 
 kotlin {
     jvm {
@@ -58,11 +45,17 @@ kotlin {
                 implementation(Deps.SquareOkio.OKIO)
             }
         }
+        val commonTest by getting {
+            dependencies {
+                implementation(Deps.Kotest.ASSERTIONS)
+                implementation(Deps.Kotest.PROPERTY)
+                implementation(Deps.Kotest.FRAMEWORK_ENGINE)
+            }
+        }
+
         val jvmTest by getting {
             dependencies {
                 implementation(Deps.Kotest.RUNNER)
-                implementation(Deps.Kotest.ASSERTIONS)
-                implementation(Deps.Kotest.PROPERTY)
                 implementation(Deps.SquareMoshi.MOSHI)
                 implementation(Deps.SquareMoshi.MOSHI_KOTLIN)
             }
@@ -89,13 +82,13 @@ kotlin {
 }
 
 
-//test {
-//    useJUnitPlatform()
-//    testLogging {
-//        showExceptions = true
-//        showStackTraces = true
-//        exceptionFormat = "full"
-//        events = ["failed", "skipped"]
-//        showStandardStreams = true
-//    }
-//}
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+    testLogging {
+        showExceptions = true
+        showStackTraces = true
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        events = setOf(TestLogEvent.FAILED, TestLogEvent.SKIPPED)
+        showStandardStreams = true
+    }
+}

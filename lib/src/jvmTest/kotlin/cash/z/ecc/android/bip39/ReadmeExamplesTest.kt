@@ -69,9 +69,9 @@ class ReadmeExamplesTest : ShouldSpec({
             var seed: ByteArray
             charArrayOf('z', 'c', 'a', 's', 'h').let { passphrase ->
                 seed = MnemonicCode(validPhrase).toSeed(passphrase.joinToString())
-                passphrase shouldBe ""
+                String(passphrase) shouldBe "zcash"
                 passphrase.fill('0')
-                passphrase shouldBe "00000"
+                String(passphrase) shouldBe "00000"
             }
             seed.size shouldBe 64
         }

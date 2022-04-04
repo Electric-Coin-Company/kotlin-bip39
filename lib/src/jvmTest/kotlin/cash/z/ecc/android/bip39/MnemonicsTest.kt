@@ -262,7 +262,7 @@ fun String.swap(srcWord: Int, destWord: Int = srcWord + 1): String {
 }
 
 fun loadTestData(): TestDataSet? =
-    File("src/test/resources/data/BIP-0039-test-values.json").source().buffer()
+    File("src/jvmTest/resources/data/BIP-0039-test-values.json").source().buffer()
         .use { dataFile ->
             Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
                 .adapter(TestDataSet::class.java).fromJson(dataFile)
