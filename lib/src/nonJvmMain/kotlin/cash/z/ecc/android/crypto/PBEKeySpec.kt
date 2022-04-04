@@ -149,8 +149,8 @@ actual class PBEKeySpecCommon {
      */
     actual var password: CharArray?
         get() {
-            checkNotNull(password) { "password has been cleared" }
-            return password!!.copyOf()
+            checkNotNull(field) { "password has been cleared" }
+            return field!!.copyOf()
         }
     /**
      * Returns a copy of the salt or null if not specified.
@@ -164,8 +164,8 @@ actual class PBEKeySpecCommon {
      */
     actual var salt: ByteArray? = null
         get() {
-            return if (salt != null) {
-                salt!!.copyOf()
+            return if (field != null) {
+                field!!.copyOf()
             } else {
                 null
             }
