@@ -10,9 +10,9 @@ object Deps {
     }
 
     object Kotest : Version("5.2.2") {
-        val RUNNER =        "io.kotest:kotest-runner-junit5-jvm:$version"
-        val ASSERTIONS =    "io.kotest:kotest-assertions-core-jvm:$version"
-        val PROPERTY =      "io.kotest:kotest-property-jvm:$version"
+        val RUNNER =        "io.kotest:kotest-runner-junit5:$version"
+        val ASSERTIONS =    "io.kotest:kotest-assertions-core:$version"
+        val PROPERTY =      "io.kotest:kotest-property:$version"
     }
 
     object SquareMoshi : Version("1.13.0") {
