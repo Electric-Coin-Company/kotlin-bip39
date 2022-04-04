@@ -5,20 +5,11 @@ object Deps {
     // `Deps.Kotlin.version` directly
     const val kotlinVersion = "1.6.20-M1"
 
-    object Kotlin : Version(kotlinVersion) {
-        val STDLIB =        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
-    }
-
     object Kotest : Version("5.2.1") {
         val RUNNER =        "io.kotest:kotest-runner-junit5:$version"
         val ASSERTIONS =    "io.kotest:kotest-assertions-core:$version"
-        val FRAMEWORK_ENGINE =    "io.kotest:kotest-framework-engine:$version"
+        val FRAMEWORK_ENG = "io.kotest:kotest-framework-engine:$version"
         val PROPERTY =      "io.kotest:kotest-property:$version"
-    }
-
-    object SquareMoshi : Version("1.13.0") {
-        val MOSHI =         "com.squareup.moshi:moshi:$version"
-        val MOSHI_KOTLIN =  "com.squareup.moshi:moshi-kotlin:$version"
     }
 
     object SquareOkio : Version("3.0.0"){

@@ -5,6 +5,8 @@ plugins {
     kotlin("multiplatform")
     id("org.jetbrains.dokka") version "1.6.10"
     id("io.kotest.multiplatform")
+    kotlin("plugin.serialization")
+    id("dev.icerock.mobile.multiplatform-resources")
     id("com.vanniktech.maven.publish") version "0.14.2"
 }
 
@@ -20,12 +22,8 @@ kotlin {
         withJava()
     }
     js(IR) {
-        browser {
-            commonWebpackConfig {
-                cssSupport.enabled = true
-            }
-        }
-        binaries.executable()
+        browser() // to compile for the web
+        nodejs() // to compile against node
     }
     macosX64()
     macosArm64()
@@ -36,54 +34,85 @@ kotlin {
     sourceSets {
         all {
             languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
-            languageSettings.optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
         }
         val commonMain by getting {
             dependencies {
                 implementation("io.fluidsonic.locale:fluid-locale:0.11.0")
-                implementation(Deps.Kotlin.STDLIB)
                 implementation(Deps.SquareOkio.OKIO)
+                implementation("dev.icerock.moko:resources:0.19.0")
             }
         }
         val commonTest by getting {
             dependencies {
+                implementation(kotlin("test"))
                 implementation(Deps.Kotest.ASSERTIONS)
                 implementation(Deps.Kotest.PROPERTY)
-                implementation(Deps.Kotest.FRAMEWORK_ENGINE)
+                implementation(Deps.Kotest.FRAMEWORK_ENG)
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
             }
         }
 
         val jvmTest by getting {
             dependencies {
                 implementation(Deps.Kotest.RUNNER)
-                implementation(Deps.SquareMoshi.MOSHI)
-                implementation(Deps.SquareMoshi.MOSHI_KOTLIN)
             }
         }
         val nonJvmMain by creating {
             dependsOn(commonMain)
         }
-        val macosX64Main by getting {
-            dependsOn(nonJvmMain)
-        }
-        val macosArm64Main by getting {
-            dependsOn(nonJvmMain)
-        }
         val jsMain by getting {
             dependsOn(nonJvmMain)
         }
-        val iosArm64Main by getting {
+        val nativeMain by creating {
             dependsOn(nonJvmMain)
+        }
+        val nativeTest by creating {
+            dependsOn(commonTest)
+        }
+        val macosX64Main by getting {
+            dependsOn(nativeMain)
+        }
+        val macosArm64Main by getting {
+            dependsOn(nativeMain)
+        }
+        val iosArm64Main by getting {
+            dependsOn(nativeMain)
         }
         val iosX64Main by getting {
-            dependsOn(nonJvmMain)
+            dependsOn(nativeMain)
         }
+        val macosX64Test by getting {
+            dependsOn(nativeTest)
+        }
+        val macosArm64Test by getting {
+            dependsOn(nativeTest)
+        }
+        val iosArm64Test by getting {
+            dependsOn(nativeTest)
+        }
+        val iosX64Test by getting {
+            dependsOn(nativeTest)
+        }
+        
     }
 }
 
+multiplatformResources {
+    multiplatformResourcesPackage = "cash.z.ecc.android.bip39"
+}
 
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
+
+
+
+tasks.findByName("macosArm64ProcessResources")!!.dependsOn("generateMRcommonMain")
+tasks.findByName("macosArm64ProcessResources")!!.dependsOn("generateMRmacosArm64Main")
+
+
+
+tasks.withType<AbstractTestTask>().configureEach {
+    if (this is Test){
+        useJUnitPlatform()
+    }
     testLogging {
         showExceptions = true
         showStackTraces = true
@@ -92,3 +121,4 @@ tasks.withType<Test>().configureEach {
         showStandardStreams = true
     }
 }
+

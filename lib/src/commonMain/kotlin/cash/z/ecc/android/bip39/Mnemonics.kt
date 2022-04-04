@@ -25,6 +25,7 @@ object Mnemonics {
     const val KEY_SIZE = 512
 
     internal val secureRandom = SecureRandom()
+    @Suppress("VARIABLE_IN_SINGLETON_WITHOUT_THREAD_LOCAL")
     internal var cachedList = WordList()
 
     fun getCachedWords(languageCode: String): List<String> {

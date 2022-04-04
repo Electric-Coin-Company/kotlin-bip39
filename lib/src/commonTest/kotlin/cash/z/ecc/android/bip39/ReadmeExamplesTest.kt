@@ -7,6 +7,7 @@ import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import okio.use
 
 class ReadmeExamplesTest : ShouldSpec({
     val validPhrase =
@@ -69,9 +70,9 @@ class ReadmeExamplesTest : ShouldSpec({
             var seed: ByteArray
             charArrayOf('z', 'c', 'a', 's', 'h').let { passphrase ->
                 seed = MnemonicCode(validPhrase).toSeed(passphrase.joinToString())
-                String(passphrase) shouldBe "zcash"
+                passphrase.concatToString() shouldBe "zcash"
                 passphrase.fill('0')
-                String(passphrase) shouldBe "00000"
+                passphrase.concatToString() shouldBe "00000"
             }
             seed.size shouldBe 64
         }

@@ -5,6 +5,7 @@ import java.security.spec.KeySpec
 import javax.crypto.SecretKey
 import javax.crypto.SecretKeyFactory
 import javax.crypto.SecretKeyFactorySpi
+import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
 /**
@@ -50,7 +51,7 @@ actual class FallbackProvider : Provider(
 class Pbkdf2KeyFactory : SecretKeyFactorySpi() {
 
     override fun engineGenerateSecret(keySpec: KeySpec): SecretKey {
-        return (keySpec as PBEKeySpecCommon).run {
+        return (keySpec as PBEKeySpec).run {
             SecretKeySpec(Pbkdf2Sha512.derive(password!!, salt!!, iterationCount, keyLength), algorithm)
         }
     }

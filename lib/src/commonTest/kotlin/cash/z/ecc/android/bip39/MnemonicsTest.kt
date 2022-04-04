@@ -1,10 +1,7 @@
 package cash.z.ecc.android.bip39
 
 import cash.z.ecc.android.bip39.Mnemonics.MnemonicCode
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import io.fluidsonic.locale.Locale
 import io.kotest.assertions.asClue
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
@@ -14,14 +11,14 @@ import io.kotest.data.row
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import okio.buffer
-import okio.source
-import java.io.File
-import java.util.*
+import kotlinx.serialization.SerialName
+import okio.ByteString.Companion.decodeHex
+import okio.ByteString.Companion.toByteString
+
 
 class MnemonicsTest : BehaviorSpec({
     val validPhrase = "void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold"
-    val lang = Locale.ENGLISH.language
+    val lang = Locale.forLanguage("en").language!!
 
     Given("a valid, known mnemonic phrase") {
         When("it is converted into a seed") {
@@ -72,12 +69,12 @@ class MnemonicsTest : BehaviorSpec({
         Mnemonics.WordCount.values().forEach { wordCount ->
             When("a mnemonic phrase is created using the ${wordCount.name} enum value") {
                 MnemonicCode(wordCount).let { phrase ->
-                    String(phrase.chars).asClue { phraseString ->
+                    phrase.chars.concatToString().asClue { phraseString ->
                         Then("it has ${wordCount.count - 1} spaces") {
                             phrase.chars.count { it == ' ' } shouldBe wordCount.count - 1
                         }
                         And("when that is converted to a list of CharArrays") {
-                            phrase.words.map { String(it) }.asClue { words ->
+                            phrase.words.map { it.concatToString() }.asClue { words ->
                                 Then("It has ${wordCount.count} elements") {
                                     words.size shouldBe wordCount.count
                                 }
@@ -104,7 +101,7 @@ class MnemonicsTest : BehaviorSpec({
                     row(12, "0b01c3c0b0590faf45fc171da17cfb22", "arch asthma usual gaze movie stumble blood load buffalo armor disagree earth")
                 ) { count, entropy, mnemonic ->
                     val code = MnemonicCode(entropy.fromHex())
-                    String(code.chars) shouldBe mnemonic
+                    code.chars.concatToString() shouldBe mnemonic
                 }
             }
         }
@@ -119,7 +116,7 @@ class MnemonicsTest : BehaviorSpec({
                 testData!!.values.forEach {
                     val entropy = it[0].fromHex()
                     val mnemonic = it[1]
-                    String(MnemonicCode(entropy).chars) shouldBe mnemonic
+                    MnemonicCode(entropy).chars.concatToString() shouldBe mnemonic
                 }
             }
         }
@@ -222,28 +219,17 @@ class MnemonicsTest : BehaviorSpec({
 // Test Utilities
 //
 
-@JsonClass(generateAdapter = true)
+@kotlinx.serialization.Serializable
 data class TestDataSet (
-    @Json(name = "english") val values: List<List<String>>
+    @SerialName("english") val values: List<List<String>>
 )
 
 fun ByteArray.toHex(): String {
-    val sb = StringBuilder(size * 2)
-    for (b in this)
-        sb.append(String.format("%02x", b))
-    return sb.toString()
+    return toByteString().hex()
 }
 
 fun String.fromHex(): ByteArray {
-    val len = length
-    val data = ByteArray(len / 2)
-    var i = 0
-    while (i < len) {
-        data[i / 2] =
-            ((Character.digit(this[i], 16) shl 4) + Character.digit(this[i + 1], 16)).toByte()
-        i += 2
-    }
-    return data
+    return decodeHex().toByteArray()
 }
 
 fun String.swap(srcWord: Int, destWord: Int = srcWord + 1): String {
@@ -261,9 +247,6 @@ fun String.swap(srcWord: Int, destWord: Int = srcWord + 1): String {
     }
 }
 
-fun loadTestData(): TestDataSet? =
-    File("src/jvmTest/resources/data/BIP-0039-test-values.json").source().buffer()
-        .use { dataFile ->
-            Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-                .adapter(TestDataSet::class.java).fromJson(dataFile)
-        }
+expect suspend fun loadTestData(): TestDataSet
+
+
