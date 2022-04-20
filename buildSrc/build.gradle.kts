@@ -3,7 +3,7 @@ plugins {
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 // Per conversation in the KotlinLang Slack, Gradle uses Java 8 compatibility internally
