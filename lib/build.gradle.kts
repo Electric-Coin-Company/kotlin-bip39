@@ -8,6 +8,19 @@ plugins {
 group = project.property("GROUP").toString()
 version = project.property("VERSION_NAME").toString()
 
+sourceSets {
+    main {
+        java {
+            setSrcDirs(listOf("src/jvmMain/kotlin"))
+        }
+    }
+
+    test {
+        java {
+            setSrcDirs(listOf("src/jvmTest/kotlin", "src/jvmTest/resources"))
+        }
+    }
+}
 
 kotlin {
     jvmToolchain {

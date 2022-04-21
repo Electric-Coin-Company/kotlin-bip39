@@ -262,7 +262,7 @@ fun String.swap(srcWord: Int, destWord: Int = srcWord + 1): String {
 }
 
 fun loadTestData(): TestDataSet? =
-    Okio.buffer(Okio.source(File("src/test/resources/data/BIP-0039-test-values.json")))
+    Okio.buffer(Okio.source(File("src/jvmTest/resources/data/BIP-0039-test-values.json")))
         .use { dataFile ->
             Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
                 .adapter(TestDataSet::class.java).fromJson(dataFile)
