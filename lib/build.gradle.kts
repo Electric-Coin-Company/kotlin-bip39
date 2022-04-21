@@ -29,6 +29,7 @@ kotlin {
     macosArm64()
     iosX64()
     iosArm64()
+    iosSimulatorArm64()
 //    linuxX64()
 
     sourceSets {
@@ -81,6 +82,9 @@ kotlin {
         val iosX64Main by getting {
             dependsOn(nativeMain)
         }
+        val iosSimulatorArm64Main by getting {
+            dependsOn(nativeMain)
+        }
         val macosX64Test by getting {
             dependsOn(nativeTest)
         }
@@ -91,6 +95,9 @@ kotlin {
             dependsOn(nativeTest)
         }
         val iosX64Test by getting {
+            dependsOn(nativeTest)
+        }
+        val iosSimulatorArm64Test by getting {
             dependsOn(nativeTest)
         }
         
@@ -106,6 +113,11 @@ multiplatformResources {
 
 tasks.findByName("macosArm64ProcessResources")!!.dependsOn("generateMRcommonMain")
 tasks.findByName("macosArm64ProcessResources")!!.dependsOn("generateMRmacosArm64Main")
+tasks.findByName("macosArm64ProcessResources")!!.dependsOn("generateMRiosArm64Main")
+tasks.findByName("macosArm64ProcessResources")!!.dependsOn("generateMRiosSimulatorArm64Main")
+tasks.findByName("iosArm64SourcesJar")!!.dependsOn("generateMRcommonMain")
+tasks.findByName("dokkaHtml")!!.dependsOn("generateMRiosArm64Main")
+tasks.findByName("dokkaHtml")!!.dependsOn("generateMRcommonMain")
 
 
 
