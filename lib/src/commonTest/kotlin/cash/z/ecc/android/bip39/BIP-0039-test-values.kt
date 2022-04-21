@@ -1,3 +1,6 @@
+package cash.z.ecc.android.bip39
+
+const val BIP0039TestValues = """
 {
   "english": [
     [
@@ -146,3 +149,4 @@
     ]
   ]
 }
+"""

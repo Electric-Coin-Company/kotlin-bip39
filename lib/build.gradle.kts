@@ -6,7 +6,6 @@ plugins {
     id("org.jetbrains.dokka") version "1.6.10"
     id("io.kotest.multiplatform")
     kotlin("plugin.serialization")
-    id("dev.icerock.mobile.multiplatform-resources")
     id("com.vanniktech.maven.publish") version "0.19.0"
 }
 
@@ -40,7 +39,6 @@ kotlin {
             dependencies {
                 implementation("io.fluidsonic.locale:fluid-locale:0.11.0")
                 implementation(Deps.SquareOkio.OKIO)
-                implementation("dev.icerock.moko:resources:0.19.0")
             }
         }
         val commonTest by getting {
@@ -104,23 +102,6 @@ kotlin {
     }
 }
 
-multiplatformResources {
-    multiplatformResourcesPackage = "cash.z.ecc.android.bip39"
-}
-
-
-
-
-tasks.findByName("macosArm64ProcessResources")!!.dependsOn("generateMRcommonMain")
-tasks.findByName("macosArm64ProcessResources")!!.dependsOn("generateMRmacosArm64Main")
-tasks.findByName("macosArm64ProcessResources")!!.dependsOn("generateMRiosArm64Main")
-tasks.findByName("macosArm64ProcessResources")!!.dependsOn("generateMRiosSimulatorArm64Main")
-tasks.findByName("iosArm64SourcesJar")!!.dependsOn("generateMRcommonMain")
-tasks.findByName("dokkaHtml")!!.dependsOn("generateMRiosArm64Main")
-tasks.findByName("dokkaHtml")!!.dependsOn("generateMRcommonMain")
-
-
-
 tasks.withType<AbstractTestTask>().configureEach {
     if (this is Test){
         useJUnitPlatform()
@@ -134,18 +115,3 @@ tasks.withType<AbstractTestTask>().configureEach {
     }
 }
 
-
-// todo find a better way to fix these warnings
-tasks.findByName("macosArm64ProcessResources")!!.dependsOn("generateMRcommonMain")
-tasks.findByName("macosArm64ProcessResources")!!.dependsOn("generateMRmacosArm64Main")
-tasks.findByName("jvmProcessResources")!!.dependsOn("generateMRjvmMain")
-
-tasks.findByName("jvmSourcesJar")!!.dependsOn("generateMRjvmMain")
-tasks.findByName("macosArm64SourcesJar")!!.dependsOn("generateMRmacosArm64Main")
-tasks.findByName("macosX64SourcesJar")!!.dependsOn("generateMRmacosX64Main")
-tasks.findByName("iosX64SourcesJar")!!.dependsOn("generateMRiosX64Main")
-tasks.findByName("iosArm64SourcesJar")!!.dependsOn("generateMRiosArm64Main")
-
-tasks.findByName("dokkaHtml")!!.dependsOn("generateMRiosArm64Main")
-tasks.findByName("dokkaHtml")!!.dependsOn("generateMRiosX64Main")
-tasks.findByName("dokkaHtml")!!.dependsOn("generateMRcommonMain")

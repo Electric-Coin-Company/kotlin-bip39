@@ -12,6 +12,8 @@ import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import okio.ByteString.Companion.decodeHex
 import okio.ByteString.Companion.toByteString
 
@@ -109,7 +111,7 @@ class MnemonicsTest : BehaviorSpec({
 
     // uses test values from the original BIP : https://github.com/trezor/python-mnemonic/blob/master/vectors.json
     Given("The original BIP-0039 test data set") {
-        val testData: TestDataSet? = loadTestData()
+        val testData: TestDataSet? = testData
         testData shouldNotBe null
         When("each provided entropy is converted to a mnemonic phrase [entropy -> mnemonic]") {
             Then("each result matches the corresponding test mnemonic phrase") {
@@ -247,6 +249,5 @@ fun String.swap(srcWord: Int, destWord: Int = srcWord + 1): String {
     }
 }
 
-expect suspend fun loadTestData(): TestDataSet
-
+val testData: TestDataSet = Json.decodeFromString(BIP0039TestValues)
 
