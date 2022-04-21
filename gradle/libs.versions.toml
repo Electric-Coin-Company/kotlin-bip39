@@ -11,7 +11,7 @@ moshi-core = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 
 [plugins]
-kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 dokka = "org.jetbrains.dokka:1.6.20"
 versions = "com.github.ben-manes.versions:0.42.0"
 publish = "com.vanniktech.maven.publish:0.18.0"

@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.kotlin)
+    id("org.jetbrains.kotlin.multiplatform") version(libs.versions.kotlin.get())
     id("java-library")
     alias(libs.plugins.dokka)
     alias(libs.plugins.publish)
@@ -8,37 +8,32 @@ plugins {
 group = project.property("GROUP").toString()
 version = project.property("VERSION_NAME").toString()
 
-sourceSets {
-    main {
-        java {
-            setSrcDirs(listOf("src/jvmMain/kotlin"))
-        }
-    }
-
-    test {
-        java {
-            setSrcDirs(listOf("src/jvmTest/kotlin", "src/jvmTest/resources"))
-        }
-    }
-}
-
 kotlin {
-    jvmToolchain {
-        // This should be set lower for Android, although there's no compatible JVM for Apple Silicon
-        (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(11))
+    jvm()
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+            }
+        }
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
+        val jvmMain by getting {
+            dependencies {
+            }
+        }
+        val jvmTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation(libs.kotest.runner)
+                implementation(libs.kotest.assertion)
+                implementation(libs.kotest.property)
+                implementation(libs.moshi.core)
+                implementation(libs.moshi.kotlin)
+            }
+        }
     }
 }
 
-dependencies {
-    // Tests
-    testImplementation(kotlin("test"))
-    testImplementation(libs.kotest.runner)
-    testImplementation(libs.kotest.assertion)
-    testImplementation(libs.kotest.property)
-    testImplementation(libs.moshi.core)
-    testImplementation(libs.moshi.kotlin)
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
