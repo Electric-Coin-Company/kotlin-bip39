@@ -1,10 +1,8 @@
-import cash.z.ecc.android.Deps
-
 plugins {
-    id("org.jetbrains.kotlin.jvm")
-    id("org.jetbrains.dokka")
+    alias(libs.plugins.kotlin)
     id("java-library")
-    id("com.vanniktech.maven.publish")
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.publish)
 }
 
 group = project.property("GROUP").toString()
@@ -21,11 +19,11 @@ kotlin {
 dependencies {
     // Tests
     testImplementation(kotlin("test"))
-    testImplementation(Deps.Kotest.RUNNER)
-    testImplementation(Deps.Kotest.ASSERTIONS)
-    testImplementation(Deps.Kotest.PROPERTY)
-    testImplementation(Deps.Square.MOSHI)
-    testImplementation(Deps.Square.MOSHI_KOTLIN)
+    testImplementation(libs.kotest.runner)
+    testImplementation(libs.kotest.assertion)
+    testImplementation(libs.kotest.property)
+    testImplementation(libs.moshi.core)
+    testImplementation(libs.moshi.kotlin)
 }
 
 tasks.withType<Test> {
