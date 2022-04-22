@@ -7,8 +7,6 @@ Pull requests should adhere to our [Code Review Guidelines](CODE_REVIEW_GUIDELIN
 ## Getting Started
 Our backlog has many items [tagged with "good first issue"](https://github.com/zcash/kotlin-bip39/labels/good%20first%20issue).  If you'd like to pick one of these up, please fork the repo and make a pull request for us to review.
 
-Our [Architecture.md](Architecture.md) documentation is a good reference get oriented on the structure of the codebase.
-
 ## Developer's Certificate of Origin
 
 All contributions _will_ be licensed under the MIT license.
