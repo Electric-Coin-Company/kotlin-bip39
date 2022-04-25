@@ -11,7 +11,6 @@ import io.kotest.matchers.string.shouldContain
 class ReadmeExamplesTest : ShouldSpec({
     val validPhrase =
         "still champion voice habit trend flight survey between bitter process artefact blind carbon truly provide dizzy crush flush breeze blouse charge solid fish spread"
-    val validPhraseChars = validPhrase.toCharArray()
     context("Example: Create 24-word mnemonic phrase") {
         val mnemonicCode = MnemonicCode(WordCount.COUNT_24)
         should("result in a valid 24-word phrase") {

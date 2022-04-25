@@ -102,7 +102,7 @@ class MnemonicsTest : BehaviorSpec({
                     row(18, "d5bcbf62dea1a07ab1abb0144b299300137168a7939f3071f112b557", "stick tourist suffer run borrow diary shop invite begin flock gospel ability damage reform oxygen initial corn moon dwarf height image"),
                     row(15, "e06ce21369dc09eb2bda66510a76f65ab3f947cce90fcb10", "there grow luggage squirrel scene void quarter error extra father rural rely display physical crisp capable slam lumber"),
                     row(12, "0b01c3c0b0590faf45fc171da17cfb22", "arch asthma usual gaze movie stumble blood load buffalo armor disagree earth")
-                ) { count, entropy, mnemonic ->
+                ) { _, entropy, mnemonic ->
                     val code = MnemonicCode(entropy.fromHex())
                     String(code.chars) shouldBe mnemonic
                 }
