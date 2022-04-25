@@ -2,7 +2,6 @@ package cash.z.ecc.android.bip39
 
 import cash.z.ecc.android.bip39.Mnemonics.MnemonicCode
 import cash.z.ecc.android.bip39.Mnemonics.WordCount
-import io.kotest.assertions.asClue
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
@@ -16,7 +15,7 @@ class ReadmeExamplesTest : ShouldSpec({
         should("result in a valid 24-word phrase") {
             mnemonicCode.wordCount shouldBe 24
         }
-        should("result in a valid phrase"){
+        should("result in a valid phrase") {
             shouldNotThrowAny {
                 mnemonicCode.validate()
             }
@@ -28,7 +27,7 @@ class ReadmeExamplesTest : ShouldSpec({
             mnemonicCode.toSeed()
             mnemonicCode.wordCount shouldBe 24
         }
-        should("result in a valid phrase"){
+        should("result in a valid phrase") {
             shouldNotThrowAny {
                 mnemonicCode.validate()
             }
@@ -40,7 +39,7 @@ class ReadmeExamplesTest : ShouldSpec({
             mnemonicCode.toSeed()
             mnemonicCode.wordCount shouldBe 24
         }
-        should("result in a valid phrase"){
+        should("result in a valid phrase") {
             shouldNotThrowAny {
                 mnemonicCode.validate()
             }
@@ -52,7 +51,7 @@ class ReadmeExamplesTest : ShouldSpec({
             mnemonicCode.toSeed()
             mnemonicCode.wordCount shouldBe 24
         }
-        should("result in a valid phrase"){
+        should("result in a valid phrase") {
             shouldNotThrowAny {
                 mnemonicCode.validate()
             }
@@ -85,7 +84,7 @@ class ReadmeExamplesTest : ShouldSpec({
             }
             count shouldBe 24
         }
-        should("work with forEach"){
+        should("work with forEach") {
             var count = 0
             mnemonicCode.forEach { word ->
                 count++

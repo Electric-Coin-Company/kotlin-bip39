@@ -2100,7 +2100,8 @@ class WordList internal constructor(val languageCode: String) {
             zebra
             zero
             zone
-            zoo""".trimIndent().split("\n")
+            zoo
+            """.trimIndent().split("\n")
         }
     }
 }

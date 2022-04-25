@@ -11,7 +11,6 @@ import java.io.Closeable
 import java.nio.CharBuffer
 import java.nio.charset.Charset
 import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom
 import java.util.*
 import javax.crypto.SecretKeyFactory
@@ -36,7 +35,6 @@ object Mnemonics {
         }
         return cachedList.words
     }
-
 
     //
     // Inner Classes
@@ -78,12 +76,11 @@ object Mnemonics {
                         cursor = i + 1
                     }
                 }
-        }
+            }
 
         fun clear() = chars.fill(0.toChar())
 
         fun isEmpty() = chars.isEmpty()
-
 
         override fun iterator(): Iterator<String> = object : Iterator<String> {
             var cursor: Int = 0
@@ -196,7 +193,6 @@ object Mnemonics {
             return entropy
         }
 
-
         companion object {
 
             /**
@@ -243,7 +239,7 @@ object Mnemonics {
                 val checksum = entropy.toSha256()[0]
                 return (entropy + checksum).toBits().let { bits ->
                     // initial size of max char count, to minimize array copies (size * 3/32 * 8)
-                    ArrayList<Char>(entropy.size * 3/4).also { chars ->
+                    ArrayList<Char>(entropy.size * 3 / 4).also { chars ->
                         bits.forEach { processBit(it, chars) }
                         // trim final space to avoid the need to track the number of words completed
                         chars.removeAt(chars.lastIndex)
@@ -285,7 +281,6 @@ object Mnemonics {
         }
     }
 
-
     //
     // Typed Exceptions
     //
@@ -303,7 +298,6 @@ object Mnemonics {
         constructor(word: String) : super("Error: <$word> was not found in the word list.")
     }
 }
-
 
 //
 // Public Extensions
@@ -355,7 +349,6 @@ fun MnemonicCode.toSeed(
 fun WordCount.toEntropy(): ByteArray = ByteArray(bitLength / 8).apply {
     Mnemonics.secureRandom.nextBytes(this)
 }
-
 
 //
 // Private Extensions
