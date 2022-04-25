@@ -35,7 +35,7 @@ object Pbkdf2Sha512 {
         ByteArrayOutputStream().use { baos ->
             val dkLenBytes = dkLen / 8
             val pBytes = p.foldIndexed(ByteArray(p.size)) { i, acc, c ->
-                acc.apply { this[i] = c.toByte() }
+                acc.apply { this[i] = c.code.toByte() }
             }
             val hLen = 20.0
             // note: dropped length check because it's redundant, given the size of an int in kotlin
@@ -62,7 +62,7 @@ object Pbkdf2Sha512 {
             bU[s.size + j] = (i shr (24 - 8 * j)).toByte()
         }
 
-        var uXor = mac.doFinal(bU)
+        val uXor = mac.doFinal(bU)
         var uLast = uXor
         mac.reset()
 
