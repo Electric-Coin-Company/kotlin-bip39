@@ -62,7 +62,7 @@ object Pbkdf2Sha512 {
             bU[s.size + j] = (i shr (24 - 8 * j)).toByte()
         }
 
-        var uXor = mac.doFinal(bU)
+        val uXor = mac.doFinal(bU)
         var uLast = uXor
         mac.reset()
 

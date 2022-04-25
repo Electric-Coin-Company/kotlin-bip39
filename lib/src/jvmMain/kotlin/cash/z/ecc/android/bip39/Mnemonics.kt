@@ -87,7 +87,7 @@ object Mnemonics {
             override fun hasNext() = cursor < chars.size - 1
 
             override fun next(): String {
-                var nextSpaceIndex = nextSpaceIndex()
+                val nextSpaceIndex = nextSpaceIndex()
                 val word = String(chars, cursor, nextSpaceIndex - cursor)
                 cursor = nextSpaceIndex + 1
                 return word
@@ -218,7 +218,7 @@ object Mnemonics {
                 // initialize state
                 var index = 0
                 var bitsProcessed = 0
-                var words = getCachedWords(languageCode)
+                val words = getCachedWords(languageCode)
 
                 // inner function that updates the index and copies a word after every 11 bits
                 // Note: the excess bits of the checksum are intentionally ignored, per BIP-39
