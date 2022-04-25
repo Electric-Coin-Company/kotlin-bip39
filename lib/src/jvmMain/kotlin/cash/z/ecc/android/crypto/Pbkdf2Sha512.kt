@@ -33,7 +33,7 @@ object Pbkdf2Sha512 {
      */
     fun derive(p: CharArray, s: ByteArray, c: Int, dkLen: Int): ByteArray {
         ByteArrayOutputStream().use { baos ->
-            val dkLenBytes = dkLen/8
+            val dkLenBytes = dkLen / 8
             val pBytes = p.foldIndexed(ByteArray(p.size)) { i, acc, c ->
                 acc.apply { this[i] = c.toByte() }
             }
@@ -76,5 +76,4 @@ object Pbkdf2Sha512 {
         }
         return uXor
     }
-
 }

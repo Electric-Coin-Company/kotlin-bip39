@@ -14,7 +14,6 @@ import io.kotest.data.row
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.kotest.matchers.string.shouldContain
 import okio.Okio
 import java.io.File
 import java.util.*
@@ -217,13 +216,12 @@ class MnemonicsTest : BehaviorSpec({
     }
 })
 
-
 //
 // Test Utilities
 //
 
 @JsonClass(generateAdapter = true)
-data class TestDataSet (
+data class TestDataSet(
     @Json(name = "english") val values: List<List<String>>
 )
 
@@ -248,7 +246,7 @@ fun String.fromHex(): ByteArray {
 
 fun String.swap(srcWord: Int, destWord: Int = srcWord + 1): String {
     if (srcWord >= destWord) throw IllegalArgumentException("srcWord must be less than destWord")
-    if (destWord > count { it == ' '}) throw IllegalArgumentException("there aren't that many words")
+    if (destWord > count { it == ' ' }) throw IllegalArgumentException("there aren't that many words")
     return split(' ').let { words ->
         words.reduceIndexed { i, result, word ->
             val next = when (i) {

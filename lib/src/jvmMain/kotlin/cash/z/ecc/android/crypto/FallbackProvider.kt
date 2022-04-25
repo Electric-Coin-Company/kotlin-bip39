@@ -17,12 +17,12 @@ class FallbackProvider : Provider(
     "FallbackProvider",
     1.0,
     "Provides a bridge to a default implementation of the PBKDF2WithHmacSHA512 algorithm" +
-            " to use when one is not already available on the device."
+        " to use when one is not already available on the device."
 ) {
     override fun getService(type: String?, algorithm: String?): Service? {
         return ServiceProvider().takeIf {
-            SecretKeyFactory::class.java.simpleName.equals(type, true)
-                    && Pbkdf2KeyFactory.algorithm.equals(algorithm, true)
+            SecretKeyFactory::class.java.simpleName.equals(type, true) &&
+                Pbkdf2KeyFactory.algorithm.equals(algorithm, true)
         }
     }
 
@@ -63,4 +63,3 @@ class Pbkdf2KeyFactory : SecretKeyFactorySpi() {
         const val algorithm = "PBKDF2WithHmacSHA512"
     }
 }
-
