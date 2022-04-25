@@ -13,6 +13,9 @@ import javax.crypto.spec.SecretKeySpec
  * service provider. This provides a bridge to a commonly used Java implementation that has been
  * moderately adapted to Kotlin.
  */
+// Constructor was deprecated in Java 9, but for compatibility with Android (Java 8, effectively) the old constructor
+// must continue to be used.
+@Suppress("DEPRECATION")
 class FallbackProvider : Provider(
     "FallbackProvider",
     1.0,
