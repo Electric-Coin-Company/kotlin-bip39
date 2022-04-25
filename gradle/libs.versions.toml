@@ -1,6 +1,7 @@
 [versions]
-kotlin = "1.6.21"
+# Kotlin version is defined in gradle.properties
 kotest = "4.6.1"
+ktlint = "0.45.2"
 moshi = "1.9.2"
 
 [libraries]
@@ -11,7 +12,6 @@ moshi-core = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 
 [plugins]
-kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 dokka = "org.jetbrains.dokka:1.6.20"
 versions = "com.github.ben-manes.versions:0.42.0"
 publish = "com.vanniktech.maven.publish:0.18.0"

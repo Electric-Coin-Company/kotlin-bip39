@@ -21,5 +21,9 @@ java {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${libs.versions.kotlin.get()}")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${getRootProperties().getProperty("KOTLIN_VERSION")}")
 }
+
+// A slightly gross way to use the root gradle.properties as the single source of truth for version numbers
+fun getRootProperties() =
+    org.jetbrains.kotlin.konan.properties.loadProperties(File(project.projectDir.parentFile, "gradle.properties").path)

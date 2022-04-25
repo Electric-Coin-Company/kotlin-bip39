@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version(libs.versions.kotlin.get())
+    id("org.jetbrains.kotlin.multiplatform")
     id("java-library")
     alias(libs.plugins.dokka)
     alias(libs.plugins.publish)

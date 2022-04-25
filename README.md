@@ -153,3 +153,5 @@ val mnemonicCode = MnemonicCode(WordCount.COUNT_24, languageCode = Locale.ENGLIS
 ## License
 MIT
 
+## Known Issues
+1. The task `ktlintFormat` fails on Java 16 and greater.  As a workaround, the task is run under Java 11.  This requires that JDK 11 be installed, even if a newer JDK is also installed.  While this is configured to use the Java toolchain API, [toolchain support for Java 11 does not work on Apple Silicon](https://github.com/gradle/gradle/issues/19140).  [Azul Zulu](https://www.azul.com/downloads/?os=macos&architecture=arm-64-bit&package=jdk) does offer JDK 11, which must be installed manually to run this task from the command line on Apple Silicon.
