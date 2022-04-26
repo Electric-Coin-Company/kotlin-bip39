@@ -10,8 +10,6 @@ import cash.z.ecc.android.crypto.FallbackProvider
 import cash.z.ecc.android.crypto.PBEKeySpecCommon
 import cash.z.ecc.android.crypto.SecretKeyFactoryCommon
 import cash.z.ecc.android.random.SecureRandom
-import io.fluidsonic.locale.Locale
-import okio.ByteString.Companion.toByteString
 import okio.Closeable
 import kotlin.experimental.or
 
@@ -23,6 +21,7 @@ object Mnemonics {
     const val DEFAULT_PASSPHRASE = "mnemonic"
     const val INTERATION_COUNT = 2048
     const val KEY_SIZE = 512
+    const val DEFAULT_LANGUAGE_CODE = "en"
 
     internal val secureRandom = SecureRandom()
     @Suppress("VARIABLE_IN_SINGLETON_WITHOUT_THREAD_LOCAL")
@@ -40,22 +39,22 @@ object Mnemonics {
     // Inner Classes
     //
 
-    class MnemonicCode(val chars: CharArray, val languageCode: String = Locale.forLanguage("en").language!!) :
+    class MnemonicCode(val chars: CharArray, val languageCode: String = DEFAULT_LANGUAGE_CODE) :
         Closeable, Iterable<String> {
 
         constructor(
             phrase: String,
-            languageCode: String = Locale.forLanguage("en").language!!
+            languageCode: String = DEFAULT_LANGUAGE_CODE
         ) : this(phrase.toCharArray(), languageCode)
 
         constructor(
             entropy: ByteArray,
-            languageCode: String = Locale.forLanguage("en").language!!
+            languageCode: String = DEFAULT_LANGUAGE_CODE
         ) : this(computeSentence(entropy), languageCode)
 
         constructor(
             wordCount: WordCount,
-            languageCode: String = Locale.forLanguage("en").language!!
+            languageCode: String = DEFAULT_LANGUAGE_CODE
         ) : this(computeSentence(wordCount.toEntropy()), languageCode)
 
         override fun close() = clear()
@@ -215,7 +214,7 @@ object Mnemonics {
              */
             private fun computeSentence(
                 entropy: ByteArray,
-                languageCode: String = Locale.forLanguage("en").language!!
+                languageCode: String = DEFAULT_LANGUAGE_CODE
             ): CharArray {
                 // initialize state
                 var index = 0

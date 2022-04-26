@@ -1,7 +1,7 @@
 package cash.z.ecc.android.bip39
 
+import cash.z.ecc.android.bip39.Mnemonics.DEFAULT_LANGUAGE_CODE
 import cash.z.ecc.android.bip39.Mnemonics.MnemonicCode
-import io.fluidsonic.locale.Locale
 import io.kotest.assertions.asClue
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
@@ -20,7 +20,7 @@ import okio.ByteString.Companion.toByteString
 
 class MnemonicsTest : BehaviorSpec({
     val validPhrase = "void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold"
-    val lang = Locale.forLanguage("en").language!!
+    val lang = DEFAULT_LANGUAGE_CODE
 
     Given("a valid, known mnemonic phrase") {
         When("it is converted into a seed") {

@@ -34,7 +34,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("io.fluidsonic.locale:fluid-locale:0.11.0")
                 implementation(Deps.SquareOkio.OKIO)
             }
         }
