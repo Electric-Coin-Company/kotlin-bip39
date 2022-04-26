@@ -61,7 +61,7 @@ class ReadmeExamplesTest : ShouldSpec({
         }
     }
     context("Example: Generate seed with passphrase") {
-        val passphrase = "bitcoin"
+        val passphrase = "bitcoin".toCharArray()
         should("'normal way' results in a 64 byte seed") {
             val seed = MnemonicCode(validPhrase).toSeed(passphrase)
             seed.size shouldBe 64
@@ -69,7 +69,7 @@ class ReadmeExamplesTest : ShouldSpec({
         should("'private way' results in a 64 byte seed") {
             var seed: ByteArray
             charArrayOf('z', 'c', 'a', 's', 'h').let { passphrase ->
-                seed = MnemonicCode(validPhrase).toSeed(passphrase.joinToString())
+                seed = MnemonicCode(validPhrase).toSeed(passphrase)
                 passphrase.concatToString() shouldBe "zcash"
                 passphrase.fill('0')
                 passphrase.concatToString() shouldBe "00000"

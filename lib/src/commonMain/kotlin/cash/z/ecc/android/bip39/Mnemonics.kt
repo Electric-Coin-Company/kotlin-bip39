@@ -329,25 +329,27 @@ object Mnemonics {
  */
 fun MnemonicCode.toSeed(
     // expect: UTF-8 normalized with NFKD
-    passphrase: String = "",
+    passphrase: CharArray = charArrayOf(),
     validate: Boolean = true
 ): ByteArray {
     // we can skip validation when we know for sure that the code is valid
     // such as when it was just generated from new/correct entropy (common case for new seeds)
     if (validate) validate()
-    return (DEFAULT_PASSPHRASE + passphrase).encodeToByteArray().let { salt ->
-        PBEKeySpecCommon(chars, salt, INTERATION_COUNT, KEY_SIZE).let { pbeKeySpec ->
-            runCatching {
-                SecretKeyFactoryCommon.getInstance(PBE_ALGORITHM)
-            }.getOrElse {
-                SecretKeyFactoryCommon.getInstance(PBE_ALGORITHM, FallbackProvider())
-            }.let { keyFactory ->
-                keyFactory.generateSecret(pbeKeySpec).encoded.also {
-                    pbeKeySpec.clearPassword()
+    return (DEFAULT_PASSPHRASE.toCharArray() + passphrase)
+        .map { it.code.toByte() }.toByteArray()
+        .let { salt ->
+            PBEKeySpecCommon(chars, salt, INTERATION_COUNT, KEY_SIZE).let { pbeKeySpec ->
+                runCatching {
+                    SecretKeyFactoryCommon.getInstance(PBE_ALGORITHM)
+                }.getOrElse {
+                    SecretKeyFactoryCommon.getInstance(PBE_ALGORITHM, FallbackProvider())
+                }.let { keyFactory ->
+                    keyFactory.generateSecret(pbeKeySpec).encoded.also {
+                        pbeKeySpec.clearPassword()
+                    }
                 }
             }
         }
-    }
 }
 
 fun WordCount.toEntropy(): ByteArray = ByteArray(bitLength / 8).apply {

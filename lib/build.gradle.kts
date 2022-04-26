@@ -32,9 +32,6 @@ kotlin {
 //    linuxX64()
 
     sourceSets {
-        all {
-            languageSettings.optIn("kotlin.ExperimentalUnsignedTypes")
-        }
         val commonMain by getting {
             dependencies {
                 implementation("io.fluidsonic.locale:fluid-locale:0.11.0")

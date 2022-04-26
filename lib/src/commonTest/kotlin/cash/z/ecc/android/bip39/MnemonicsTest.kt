@@ -136,7 +136,7 @@ class MnemonicsTest : BehaviorSpec({
                 testData!!.values.forEach {
                     val mnemonic = it[1].toCharArray()
                     val seed = it[2]
-                    val passphrase = "TREZOR"
+                    val passphrase = "TREZOR".toCharArray()
                     MnemonicCode(mnemonic, lang).toSeed(passphrase).toHex() shouldBe seed
                 }
             }
