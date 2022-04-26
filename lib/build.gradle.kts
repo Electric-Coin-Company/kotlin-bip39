@@ -47,7 +47,6 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
             }
         }
-
         val jvmTest by getting {
             dependencies {
                 implementation(Deps.Kotest.RUNNER)
@@ -79,21 +78,6 @@ kotlin {
         }
         val iosSimulatorArm64Main by getting {
             dependsOn(nativeMain)
-        }
-        val macosX64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val macosArm64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val iosArm64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val iosX64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val iosSimulatorArm64Test by getting {
-            dependsOn(nativeTest)
         }
         
     }

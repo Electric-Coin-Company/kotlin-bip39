@@ -5,14 +5,14 @@ object Deps {
     // `Deps.Kotlin.version` directly
     const val kotlinVersion = "1.6.21"
 
-    object Kotest : Version("5.2.1") {
+    object Kotest : Version("5.2.3") {
         val RUNNER =        "io.kotest:kotest-runner-junit5:$version"
         val ASSERTIONS =    "io.kotest:kotest-assertions-core:$version"
         val FRAMEWORK_ENG = "io.kotest:kotest-framework-engine:$version"
         val PROPERTY =      "io.kotest:kotest-property:$version"
     }
 
-    object SquareOkio : Version("3.0.0"){
+    object SquareOkio : Version("3.1.0"){
         val OKIO =          "com.squareup.okio:okio:$version"
     }
 }
