@@ -19,6 +19,7 @@ val nativeTargets = if (enableNative) arrayOf(
     "iosArm64", "iosX64", "iosSimulatorArm64",
     "tvosArm64", "tvosX64", "tvosSimulatorArm64",
     "watchosArm32", "watchosArm64", "watchosX86", "watchosX64", "watchosSimulatorArm64",
+    "mingwX64"
 ) else arrayOf()
 
 kotlin {
@@ -65,9 +66,18 @@ kotlin {
         val nativeMain by creating {
             dependsOn(nonJvmMain)
         }
-        for (target in nativeTargets) {
-            getByName("${target}Main").dependsOn(nativeMain)
+        val unixMain by creating {
+            dependsOn(nonJvmMain)
         }
+        for (target in nativeTargets) {
+            when (target) {
+                "mingwX64" ->
+                    getByName("${target}Main").dependsOn(nativeMain)
+                else ->
+                    getByName("${target}Main").dependsOn(unixMain)
+            }
+        }
+
     }
 }
 
