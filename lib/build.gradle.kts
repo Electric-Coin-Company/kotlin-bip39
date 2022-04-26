@@ -12,6 +12,14 @@ plugins {
 group = project.property("GROUP")!!
 version = project.property("VERSION_NAME")!!
 
+val enableNative = project.property("NATIVE_TARGETS_ENABLED").toString().toBoolean()
+val nativeTargets = if (enableNative) arrayOf(
+    "linuxX64",
+    "macosX64", "macosArm64",
+    "iosArm64", "iosX64", "iosSimulatorArm64",
+    "tvosArm64", "tvosX64", "tvosSimulatorArm64",
+    "watchosArm32", "watchosArm64", "watchosX86", "watchosX64", "watchosSimulatorArm64",
+) else arrayOf()
 
 kotlin {
     jvm {
@@ -24,12 +32,9 @@ kotlin {
         browser() // to compile for the web
         nodejs() // to compile against node
     }
-    macosX64()
-    macosArm64()
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-//    linuxX64()
+    for (target in nativeTargets) {
+        targets.add(presets.getByName(target).createTarget(target))
+    }
 
     sourceSets {
         val commonMain by getting {
@@ -63,22 +68,9 @@ kotlin {
         val nativeTest by creating {
             dependsOn(commonTest)
         }
-        val macosX64Main by getting {
-            dependsOn(nativeMain)
+        for (target in nativeTargets) {
+            getByName("${target}Main").dependsOn(nativeMain)
         }
-        val macosArm64Main by getting {
-            dependsOn(nativeMain)
-        }
-        val iosArm64Main by getting {
-            dependsOn(nativeMain)
-        }
-        val iosX64Main by getting {
-            dependsOn(nativeMain)
-        }
-        val iosSimulatorArm64Main by getting {
-            dependsOn(nativeMain)
-        }
-        
     }
 }
 
