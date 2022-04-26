@@ -5,7 +5,6 @@ This code review checklist is intended to serve as a starting point for the auth
 - [ ] Self-review: Did you review your own code in GitHub's web interface? _Code often looks different when reviewing the diff in a browser, making it easier to spot potential bugs._
 - [ ] Automated tests: Did you add appropriate automated tests for any code changes?
 - [ ] Documentation: Did you update documentation as appropriate? (e.g [README.md](../blob/master/README.md), etc.)
-- [ ] Run the app: Did you run the demo app and try the changes?
 - [ ] Rebase and squash: Did you pull in the latest changes from the main branch and squash your commits before assigning a reviewer? _Having your code up to date and squashed will make it easier for others to review. Use best judgement when squashing commits, as some changes (such as refactoring) might be easier to review as a separate commit._
 
 
