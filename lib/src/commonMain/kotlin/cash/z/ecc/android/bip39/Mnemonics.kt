@@ -6,11 +6,11 @@ import cash.z.ecc.android.bip39.Mnemonics.KEY_SIZE
 import cash.z.ecc.android.bip39.Mnemonics.MnemonicCode
 import cash.z.ecc.android.bip39.Mnemonics.PBE_ALGORITHM
 import cash.z.ecc.android.bip39.Mnemonics.WordCount
+import cash.z.ecc.android.common.Closeable
 import cash.z.ecc.android.crypto.FallbackProvider
 import cash.z.ecc.android.crypto.PBEKeySpecCommon
 import cash.z.ecc.android.crypto.SecretKeyFactoryCommon
 import cash.z.ecc.android.random.SecureRandom
-import okio.Closeable
 import kotlin.experimental.or
 
 /**
