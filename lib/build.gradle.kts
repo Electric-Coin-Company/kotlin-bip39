@@ -3,13 +3,19 @@ plugins {
     id("java-library")
     alias(libs.plugins.dokka)
     alias(libs.plugins.publish)
+    id("bip39.kotlin-multiplatform-conventions")
+    id("bip39.dependency-conventions")
 }
 
 group = project.property("GROUP").toString()
 version = project.property("VERSION_NAME").toString()
 
 kotlin {
-    jvm()
+    jvm {
+        testRuns["test"].executionTask.configure {
+            useJUnitPlatform()
+        }
+    }
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -36,4 +42,3 @@ kotlin {
         }
     }
 }
-
