@@ -361,7 +361,7 @@ fun WordCount.toEntropy(): ByteArray = ByteArray(bitLength / 8).apply {
 // Private Extensions
 //
 
-private fun ByteArray.toSha256() : ByteArray = this.toByteString().sha256().toByteArray()
+internal expect fun ByteArray.toSha256() : ByteArray
 
 private fun ByteArray.toBits(): List<Boolean> = flatMap { it.toBits() }
 
