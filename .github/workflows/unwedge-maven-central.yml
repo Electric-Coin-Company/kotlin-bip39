@@ -1,0 +1,56 @@
+# Although our CI builds should automatically close and release repositories after publishing, sometimes
+# this process can fail.  This GitHub Action allows a team member to manually unwedge this stuck deployment.
+
+# Expected secrets
+# MAVEN_CENTRAL_USERNAME - Username for Maven Central
+# MAVEN_CENTRAL_PASSWORD - Password for Maven Central
+
+name: Close and release repository
+
+on:
+  workflow_dispatch:
+    inputs:
+      mavenCentralRepository:
+        description: 'Repository name to close'
+        required: true
+
+concurrency: deploy_release
+
+jobs:
+  validate_gradle_wrapper:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        timeout-minutes: 1
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+      # Gradle Wrapper validation can be flaky
+      # https://github.com/gradle/wrapper-validation-action/issues/40
+      - name: Gradle Wrapper Validation
+        timeout-minutes: 1
+        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+
+  unwedge:
+    environment: deployment
+    needs: validate_gradle_wrapper
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        timeout-minutes: 1
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+      - name: Setup
+        id: setup
+        timeout-minutes: 30
+        uses: ./.github/actions/setup
+      - name: Close and release repository
+        timeout-minutes: 8
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_IS_SNAPSHOT: true
+          ORG_GRADLE_PROJECT_RELEASE_SIGNING_ENABLED: false
+        run: |
+          ./gradlew closeAndReleaseRepository --repository="${{ github.event.inputs.mavenCentralRepository }}" --no-parallel
