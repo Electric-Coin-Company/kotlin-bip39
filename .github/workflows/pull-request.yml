@@ -42,40 +42,40 @@ jobs:
         timeout-minutes: 15
         uses: ./.github/actions/setup
 
-#  static_analysis_detekt:
-#    needs: prime_cache
-#    runs-on: ubuntu-latest
-#    permissions:
-#      contents: read
-#    steps:
-#      - name: Checkout
-#        timeout-minutes: 1
-#        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
-#      - name: Setup
-#        id: setup
-#        timeout-minutes: 5
-#        uses: ./.github/actions/setup
-#      - name: Detekt
-#        timeout-minutes: 4
-#        run: |
-#          ./gradlew detektAll
-#      - name: Collect Artifacts
-#        timeout-minutes: 1
-#        if: ${{ always() }}
-#        env:
-#          ARTIFACTS_DIR_PATH: ${{ format('{0}/artifacts', env.home) }}
-#          REPORTS_ZIP_PATH: ${{ format('{0}/artifacts/static_analysis_detekt.zip', env.home) }}
-#        run: |
-#          mkdir ${ARTIFACTS_DIR_PATH}
-#
-#          zip -r ${REPORTS_ZIP_PATH} . -i build/reports/detekt/\*
-#      - name: Upload Artifacts
-#        if: ${{ always() }}
-#        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
-#        timeout-minutes: 1
-#        with:
-#          name: Detekt static analysis results
-#          path: ~/artifacts
+  static_analysis_detekt:
+    needs: prime_cache
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        timeout-minutes: 1
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+      - name: Setup
+        id: setup
+        timeout-minutes: 5
+        uses: ./.github/actions/setup
+      - name: Detekt
+        timeout-minutes: 4
+        run: |
+          ./gradlew detektAll
+      - name: Collect Artifacts
+        timeout-minutes: 1
+        if: ${{ always() }}
+        env:
+          ARTIFACTS_DIR_PATH: ${{ format('{0}/artifacts', env.home) }}
+          REPORTS_ZIP_PATH: ${{ format('{0}/artifacts/static_analysis_detekt.zip', env.home) }}
+        run: |
+          mkdir ${ARTIFACTS_DIR_PATH}
+
+          zip -r ${REPORTS_ZIP_PATH} . -i build/reports/detekt/\*
+      - name: Upload Artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
+        timeout-minutes: 1
+        with:
+          name: Detekt static analysis results
+          path: ~/artifacts
 
   static_analysis_ktlint:
     needs: prime_cache
