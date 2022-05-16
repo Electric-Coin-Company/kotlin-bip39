@@ -144,7 +144,7 @@ val mnemonicCode = MnemonicCode(WordCount.COUNT_24, languageCode = Locale.ENGLIS
 
 
 ## Credits
-* [zcash/ebfull](https://github.com/ebfull) - Zcash core dev and BIP-0039 co-author who inspired me to create this library
+* [zcash/ebfull](https://github.com/ebfull) - Zcash core dev and BIP-0039 co-author who inspired creation of this library
 * [bitcoinj](https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/crypto/MnemonicCode.java) - Java implementation from which much of this code was adapted
 * [Trezor](https://github.com/trezor/python-mnemonic/blob/master/vectors.json) - for their OG [test data set](https://github.com/trezor/python-mnemonic/blob/master/vectors.json) that has excellent edge cases
 * [Cole Barnes](http://cryptofreek.org/2012/11/29/pbkdf2-pure-java-implementation/) - whose PBKDF2SHA512 Java implementation is floating around _everywhere_ online
@@ -152,6 +152,3 @@ val mnemonicCode = MnemonicCode(WordCount.COUNT_24, languageCode = Locale.ENGLIS
 
 ## License
 MIT
-
-## Known Issues
-1. The task `ktlintFormat` fails on Java 16 and greater.  As a workaround, the task is run under Java 11.  This requires that JDK 11 be installed, even if a newer JDK is also installed.  While this is configured to use the Java toolchain API, [toolchain support for Java 11 does not work on Apple Silicon](https://github.com/gradle/gradle/issues/19140).  [Azul Zulu](https://www.azul.com/downloads/?os=macos&architecture=arm-64-bit&package=jdk) does offer JDK 11, which must be installed manually to run this task from the command line on Apple Silicon.
