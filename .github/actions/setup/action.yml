@@ -10,7 +10,7 @@ runs:
     - name: Set up Java
       uses: actions/setup-java@4fe61d24fe5472910b93bdeffb8aad49f979d862
       with:
-        distribution: 'zulu'
+        distribution: 'temurin'
         java-version: 17
     - name: Disable Gradle Daemon
       shell: bash
