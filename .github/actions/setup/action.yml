@@ -20,13 +20,13 @@ runs:
         echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
     - name: Gradle Wrapper Cache
       id: gradle-wrapper-cache
-      uses: actions/cache@48af2dc4a9e8278b89d7fa154b955c30c6aaab09
+      uses: actions/cache@30f413bfed0a2bc738fdfd409e5a9e96b24545fd
       with:
         path: ~/.gradle/wrapper
         key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles(format('{0}{1}', github.workspace, '/gradle/wrapper/gradle-wrapper.properties')) }}
     - name: Gradle Dependency Cache
       id: gradle-dependency-cache
-      uses: actions/cache@48af2dc4a9e8278b89d7fa154b955c30c6aaab09
+      uses: actions/cache@30f413bfed0a2bc738fdfd409e5a9e96b24545fd
       with:
         path: ~/.gradle/caches/modules-2
         key: ${{ runner.os }}-gradle-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/gradle.properties')) }}
@@ -37,7 +37,7 @@ runs:
     - name: Gradle Build Cache Main
       id: gradle-build-cache-main
       if: github.event.pull_request.head.sha == ''
-      uses: actions/cache@48af2dc4a9e8278b89d7fa154b955c30c6aaab09
+      uses: actions/cache@30f413bfed0a2bc738fdfd409e5a9e96b24545fd
       with:
         path: |
           ~/.gradle/caches/build-cache-1
@@ -48,7 +48,7 @@ runs:
     - name: Gradle Build Cache Pull Request
       id: gradle-build-cache-pr
       if: github.event.pull_request.head.sha != ''
-      uses: actions/cache@48af2dc4a9e8278b89d7fa154b955c30c6aaab09
+      uses: actions/cache@30f413bfed0a2bc738fdfd409e5a9e96b24545fd
       with:
         path: |
           ~/.gradle/caches/build-cache-1
