@@ -13,6 +13,6 @@ moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "mosh
 
 [plugins]
 detekt = "io.gitlab.arturbosch.detekt:1.20.0"
-dokka = "org.jetbrains.dokka:1.6.20"
+dokka = "org.jetbrains.dokka:1.6.21"
 publish = "com.vanniktech.maven.publish:0.18.0"
 versions = "com.github.ben-manes.versions:0.42.0"
