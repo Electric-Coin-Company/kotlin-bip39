@@ -11,6 +11,7 @@ dependencyLocking {
 plugins {
     id("bip39.ktlint-conventions")
     alias(libs.plugins.detekt)
+    alias(libs.plugins.versions)
 }
 
 tasks {
@@ -28,4 +29,26 @@ tasks {
         baseline.set(file("$rootDir/tools/detekt-baseline.xml"))
         buildUponDefaultConfig = true
     }
+
+    withType<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask> {
+        gradleReleaseChannel = "current"
+
+        resolutionStrategy {
+            componentSelection {
+                all {
+                    if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
+                        reject("Unstable")
+                    }
+                }
+            }
+        }
+    }
+}
+
+val unstableKeywords = listOf("alpha", "beta", "rc", "m", "ea", "build")
+
+fun isNonStable(version: String): Boolean {
+    val versionLowerCase = version.toLowerCase()
+
+    return unstableKeywords.any { versionLowerCase.contains(it) }
 }

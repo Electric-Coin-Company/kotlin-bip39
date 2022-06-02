@@ -1,6 +1,8 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
+com.github.ben-manes.versions:com.github.ben-manes.versions.gradle.plugin:0.42.0=classpath
+com.github.ben-manes:gradle-versions-plugin:0.42.0=classpath
 com.github.gundy:semver4j:0.16.4=classpath
 com.google.code.findbugs:jsr305:3.0.2=classpath
 com.google.code.gson:gson:2.8.9=classpath
@@ -9,8 +11,10 @@ com.google.guava:failureaccess:1.0.1=classpath
 com.google.guava:guava:29.0-jre=classpath
 com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava=classpath
 com.google.j2objc:j2objc-annotations:1.3=classpath
+com.thoughtworks.xstream:xstream:1.4.17=classpath
 de.undercouch:gradle-download-task:4.1.1=classpath
 io.github.detekt.sarif4k:sarif4k:0.0.1=classpath
+io.github.x-stream:mxparser:1.2.1=classpath
 io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.20.0=classpath
 io.gitlab.arturbosch.detekt:detekt-utils:1.20.0=classpath
 io.gitlab.arturbosch.detekt:io.gitlab.arturbosch.detekt.gradle.plugin:1.20.0=classpath
@@ -45,4 +49,5 @@ org.jetbrains.kotlinx:kotlinx-serialization-core:1.1.0=classpath
 org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.1.0=classpath
 org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0=classpath
 org.jetbrains:annotations:13.0=classpath
+xmlpull:xmlpull:1.1.3.1=classpath
 empty=
