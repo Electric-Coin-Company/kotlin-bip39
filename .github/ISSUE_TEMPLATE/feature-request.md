@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for the Secant wallet.
+about: Suggest an idea for Kotlin BIP-39.
 title: ''
 labels: 'use case'
 assignees: ''
