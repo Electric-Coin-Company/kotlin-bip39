@@ -11,6 +11,7 @@ dependencyLocking {
 plugins {
     id("bip39.ktlint-conventions")
     alias(libs.plugins.detekt)
+    alias(libs.plugins.kover)
     alias(libs.plugins.versions)
 }
 
@@ -45,8 +46,12 @@ tasks {
     }
 }
 
-val unstableKeywords = listOf("alpha", "beta", "rc", "m", "ea", "build")
+kover {
+    isDisabled = !project.property("BIP39_IS_COVERAGE_ENABLED").toString().toBoolean()
+    jacocoEngineVersion.set(libs.versions.jacoco.get())
+}
 
+val unstableKeywords = listOf("alpha", "beta", "rc", "m", "ea", "build")
 fun isNonStable(version: String): Boolean {
     val versionLowerCase = version.toLowerCase()
 
