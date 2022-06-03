@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master
+      - main
     paths-ignore:
       - '.github/ISSUE_TEMPLATE/*'
       - '.github/PULL_REQUEST_TEMPLATE.md'
