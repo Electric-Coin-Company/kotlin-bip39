@@ -16,6 +16,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "kotlin-bip39"
-include(":lib")
+include(":bip39-lib")
 
-includeBuild("build-conventions")
+includeBuild("build-conventions-bip39")
