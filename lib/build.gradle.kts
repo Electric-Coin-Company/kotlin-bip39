@@ -7,8 +7,14 @@ plugins {
     id("bip39.dependency-conventions")
 }
 
-group = project.property("GROUP").toString()
-version = project.property("VERSION_NAME").toString()
+project.group = project.property("GROUP").toString()
+
+val libraryVersion = project.property("VERSION_NAME").toString()
+project.version = if (project.property("IS_SNAPSHOT").toString().toBoolean()) {
+    "$version-SNAPSHOT"
+} else {
+    version
+}
 
 kotlin {
     jvm {
