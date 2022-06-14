@@ -57,7 +57,7 @@ Automated production releases still require a manual trigger.  To do a productio
 See [ci.md](ci.md), which describes the continuous integration workflow for deployment and describes the secrets that would need to be configured in a repository fork.
 
 ## One time only
-* Set up environment to [compile the SDK](https://github.com/zcash/zcash-android-wallet-sdk/#compiling-sources)
+* Set up environment to compile the library
 * Copy the GPG key to a directory with proper permissions (chmod 600). Note: If you'd like to quickly publish locally without subsequently publishing to Maven Central, configure a Gradle property `RELEASE_SIGNING_ENABLED=false`
 * Create file `~/.gradle/gradle.properties` per the [instructions in this guide](https://proandroiddev.com/publishing-a-maven-artifact-3-3-step-by-step-instructions-to-mavencentral-publishing-bd661081645d)
   * add your sonotype credentials with these properties
