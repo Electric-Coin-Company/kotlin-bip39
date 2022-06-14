@@ -2,8 +2,8 @@
 We aim for the main branch of the repository to always be in a releasable state.
 
 Two types of artifacts can be published:
-1. Snapshot — An unstable release of the SDK for testing
-1. Release — A stable release of the SDK
+1. Snapshot — An unstable release of the library for testing
+1. Release — A stable release of the library
 
 Control of these modes of release is managed with a Gradle property `IS_SNAPSHOT`.
 
