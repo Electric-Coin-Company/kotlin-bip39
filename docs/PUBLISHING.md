@@ -47,7 +47,7 @@ Because Gradle caches dependencies and because multiple snapshots can be deploye
 Production releases can be consumed using the instructions in the [README.MD](../README.md).  Note that production releases can include alpha or beta designations.
 
 Automated production releases still require a manual trigger.  To do a production release:
-1. Update the CHANGELOG and MIGRATIONS.md for any new changes since the last production release.
+1. Update the [CHANGELOG.MD](../CHANGELOG.md) for any new changes since the last production release.
 1. Run the [release deployment](https://github.com/zcash/kotlin-bip39/actions/workflows/deploy-release.yml).
 1. Confirm deployment succeeded by modifying the [Secant Android Wallet](https://github.com/zcash/secant-android-wallet) to consume the new version.
 1. Create a new Git tag for the new release in this repository.
@@ -69,7 +69,7 @@ See [ci.md](ci.md), which describes the continuous integration workflow for depl
      * `signing.secretKeyRingFile`
 
 ## Every time
-1. Update the [build number](https://github.com/zcash/zcash-android-wallet-sdk/blob/master/gradle.properties) and the [CHANGELOG](https://github.com/zcash/zcash-android-wallet-sdk/blob/master/CHANGELOG.md).  For release builds, suffix the Gradle invocations below with `-PIS_SNAPSHOT=false`.
+1. Update the [build number](https://github.com/zcash/kotlin-bip39/blob/main/gradle.properties) and the [CHANGELOG](https://github.com/zcash/kotlin-bip39/blob/main/CHANGELOG.md).  For release builds, suffix the Gradle invocations below with `-PIS_SNAPSHOT=false`.
 3. Build locally
     * This will install the files in your local maven repo at `~/.m2/repository/cash/z/ecc/android/`
 ```zsh
