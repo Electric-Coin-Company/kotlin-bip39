@@ -53,6 +53,7 @@ jobs:
   deploy_snapshot:
     if: needs.check_secrets.outputs.has-secrets == 'true'
     needs: [validate_gradle_wrapper, check_secrets]
+    environment: deployment
     runs-on: ubuntu-latest
     permissions:
       contents: read
