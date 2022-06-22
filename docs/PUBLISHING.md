@@ -67,12 +67,12 @@ See [ci.md](ci.md), which describes the continuous integration workflow for depl
 
 ## Every time
 1. Update the [build number](https://github.com/zcash/kotlin-bip39/blob/main/gradle.properties) and the [CHANGELOG](https://github.com/zcash/kotlin-bip39/blob/main/CHANGELOG.md).  For release builds, suffix the Gradle invocations below with `-PIS_SNAPSHOT=false`.
-3. Build locally
+2. Build locally
     * This will install the files in your local maven repo at `~/.m2/repository/cash/z/ecc/android/`
 ```zsh
 ./gradlew publishKotlinMultiplatformPublicationToMavenLocalRepository --no-parallel
 ```
-4. Publish via the following command:
+3. Publish via the following command:
     1. Snapshot: `./gradlew publishKotlinMultiplatformPublicationToMavenCentralRepository -PIS_SNAPSHOT=true`
     2. Release
         1. `./gradlew publishKotlinMultiplatformPublicationToMavenCentralRepository -PIS_SNAPSHOT=false`

@@ -1,9 +1,13 @@
 Change Log
 ==========
 
-Upcoming Version 1.0.3
+Version 1.0.4
 ------------------------------------
-- Kotlin 1.7.0
+- Fixed Maven publishing error in 1.0.3 release
+
+Version 1.0.3
+------------------------------------
+- Kotlin 1.7.10
 - Internal changes to support multiplatform in the future (consumers using Maven instead of Gradle may need to suffix -jvm to the artifact name)
 - Snapshot builds are available prior to final release
 

@@ -1,7 +1,6 @@
 # kotlin-bip39
 [![license](https://img.shields.io/github/license/zcash/kotlin-bip39.svg?maxAge=2592000&style=plastic)](https://github.com/zcash/kotlin-bip39/blob/master/LICENSE)
-[![@gmale](https://img.shields.io/badge/contact-android@z.cash-5AA9E7.svg?style=plastic)](https://github.com/gmale)
-![Bintray](https://img.shields.io/maven-central/v/cash.z.ecc.android/kotlin-bip39?color=success&style=plastic)
+![maven](https://img.shields.io/maven-central/v/cash.z.ecc.android/kotlin-bip39?color=success&style=plastic)
 
 
 ## Introduction
@@ -26,7 +25,7 @@ Plus, it uses a permissive MIT license and no dependencies beyond Kotlin's stdli
 ## Getting Started
 ### Gradle
 
-Add dependencies (see bintray badge, above, for latest version number such as `1.0.1`):
+Add dependencies (see Maven badge above for latest version number):
 
 ```groovy
 dependencies {
