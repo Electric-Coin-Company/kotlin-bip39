@@ -3,8 +3,8 @@ Change Log
 
 Upcoming Version 1.0.3
 ------------------------------------
-- Kotlin 1.6.21
-- Internal changes to support multiplatform in the future
+- Kotlin 1.7.0
+- Internal changes to support multiplatform in the future (consumers using Maven instead of Gradle may need to suffix -jvm to the artifact name)
 - Snapshot builds are available prior to final release
 
 Version 1.0.2
