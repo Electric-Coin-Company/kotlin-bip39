@@ -1,9 +1,7 @@
 # Expected secrets
 # MAVEN_CENTRAL_USERNAME - Username for Maven Central.
 # MAVEN_CENTRAL_PASSWORD - Password for Maven Central.
-# MAVEN_SIGNING_KEYRING_FILE_BASE64 - Base64 encoded GPG keyring file.
-# MAVEN_SIGNING_KEY_ID - ID for the key in the GPG keyring file.
-# MAVEN_SIGNING_PASSWORD - Password for the key in the GPG keyring file.
+# MAVEN_SIGNING_KEY_ASCII - GPG key without a password which has ASCII-armored and then BASE64-encoded.
 
 name: Deploy Release
 
@@ -39,10 +37,8 @@ jobs:
         env:
           MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-          MAVEN_SIGNING_KEYRING_FILE_BASE64: ${{ secrets.MAVEN_SIGNING_KEYRING_FILE_BASE64 }}
-          MAVEN_SIGNING_KEY_ID: ${{ secrets.MAVEN_SIGNING_KEY_ID }}
-          MAVEN_SIGNING_PASSWORD: ${{ secrets.MAVEN_SIGNING_PASSWORD }}
-        if: "${{ env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_SIGNING_KEYRING_FILE_BASE64 != '' && env.MAVEN_SIGNING_KEY_ID != '' && env.MAVEN_SIGNING_PASSWORD != '' }}"
+          MAVEN_SIGNING_KEY: ${{ secrets.MAVEN_SIGNING_KEY_ASCII }}
+        if: "${{ env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_SIGNING_KEY != '' }}"
         run: echo "::set-output name=defined::true"
 
   deploy_release:
@@ -60,13 +56,6 @@ jobs:
         id: setup
         timeout-minutes: 30
         uses: ./.github/actions/setup
-      - name: Export Maven Signing Key
-        env:
-          MAVEN_SIGNING_KEYRING_FILE_BASE64: ${{ secrets.MAVEN_SIGNING_KEYRING_FILE_BASE64 }}
-          GPG_KEY_PATH: ${{ format('{0}/keyring.gpg', env.home) }}
-        shell: bash
-        run: |
-          echo ${MAVEN_SIGNING_KEYRING_FILE_BASE64} | base64 --decode > ${GPG_KEY_PATH}
       # While not strictly necessary, this sanity checks the build before attempting to upload.
       # This adds minimal additional build time, since most of the work is cached and re-used
       # in the next step.
@@ -74,22 +63,19 @@ jobs:
         timeout-minutes: 25
         env:
           ORG_GRADLE_PROJECT_IS_SNAPSHOT: false
-          ORG_GRADLE_PROJECT_RELEASE_SIGNING_ENABLED: false
+          ORG_GRADLE_PROJECT_IS_RELEASE_SIGNING_ENABLED: true
         run: |
-          ./gradlew publishToMavenLocal --no-parallel
+          ./gradlew publishKotlinMultiplatformPublicationToMavenLocalRepository --no-parallel
       - name: Deploy to Maven Central
-        timeout-minutes: 8
+        timeout-minutes: 5
         env:
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_ZCASH_MAVEN_PUBLISH_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_ZCASH_MAVEN_PUBLISH_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_ZCASH_ASCII_GPG_KEY: ${{ secrets.MAVEN_SIGNING_KEY_ASCII }}
           ORG_GRADLE_PROJECT_IS_SNAPSHOT: false
-          ORG_GRADLE_PROJECT_RELEASE_SIGNING_ENABLED: true
-          GPG_KEY_PATH: ${{ format('{0}/keyring.gpg', env.home) }}
-          GPG_KEY_ID: ${{ secrets.MAVEN_SIGNING_KEY_ID }}
-          GPG_PASSWORD: ${{ secrets.MAVEN_SIGNING_PASSWORD }}
+          ORG_GRADLE_PROJECT_IS_RELEASE_SIGNING_ENABLED: true
         run: |
-          ./gradlew publish -Psigning.secretKeyRingFile=$GPG_KEY_PATH -Psigning.keyId=$GPG_KEY_ID -Psigning.password=$GPG_PASSWORD --no-parallel
-          ./gradlew closeAndReleaseRepository --no-parallel
+          ./gradlew publishKotlinMultiplatformPublicationToMavenCentralRepository --no-parallel
       - name: Collect Artifacts
         timeout-minutes: 1
         if: ${{ always() }}
