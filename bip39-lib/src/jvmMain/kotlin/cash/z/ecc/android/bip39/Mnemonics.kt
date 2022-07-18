@@ -313,7 +313,6 @@ object Mnemonics {
  * iteration count is set to 2048 and HMAC-SHA512 is used as the pseudo-random function. The
  * length of the derived key is 512 bits (= 64 bytes).
  *
- * @param mnemonic the mnemonic to convert into a seed
  * @param passphrase an optional password to protect the phrase. Defaults to an empty string. This
  * gets added to the salt. Note: it is expected that the passphrase has been normalized via a call
  * to something like `Normalizer.normalize(passphrase, Normalizer.Form.NFKD)` but this only becomes

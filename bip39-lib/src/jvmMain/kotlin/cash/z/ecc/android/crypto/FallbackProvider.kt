@@ -29,7 +29,7 @@ class FallbackProvider : Provider(
         }
     }
 
-    inner class ServiceProvider : Provider.Service(
+    inner class ServiceProvider : Service(
         this@FallbackProvider,
         SecretKeyFactory::class.java.simpleName,
         Pbkdf2KeyFactory.algorithm,
