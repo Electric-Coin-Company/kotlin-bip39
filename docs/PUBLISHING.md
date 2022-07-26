@@ -73,9 +73,9 @@ See [ci.md](ci.md), which describes the continuous integration workflow for depl
 ./gradlew publishKotlinMultiplatformPublicationToMavenLocalRepository --no-parallel
 ```
 4. Publish via the following command:
-    1. Snapshot: `./gradlew publishKotlinMultiplatformPublicationToMavenCentralRepository -PIS_SNAPSHOT=true -PIS_RELEASE_SIGNING_ENABLED=false`
+    1. Snapshot: `./gradlew publishKotlinMultiplatformPublicationToMavenCentralRepository -PIS_SNAPSHOT=true`
     2. Release
-        1. `./gradlew publishKotlinMultiplatformPublicationToMavenCentralRepository -PIS_SNAPSHOT=false  -PIS_RELEASE_SIGNING_ENABLED=true`
+        1. `./gradlew publishKotlinMultiplatformPublicationToMavenCentralRepository -PIS_SNAPSHOT=false`
         2. Log into the Sonatype portal to complete the process of closing and releasing the repository.
 
 Note:
