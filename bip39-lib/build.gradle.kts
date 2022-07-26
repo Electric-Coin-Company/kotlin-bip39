@@ -129,8 +129,8 @@ publishing {
 }
 
 signing {
-    // Although signing is decoupled from snapshot status, note that Maven Central requires signing for non-snapshots.
-    isRequired = properties["IS_RELEASE_SIGNING_ENABLED"].toString().toBoolean()
+    // Maven Central requires signing for non-snapshots
+    isRequired = !isSnapshot
 
     val signingKey = run {
         val base64EncodedKey = project.property("ZCASH_ASCII_GPG_KEY").toString()
