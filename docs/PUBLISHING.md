@@ -70,12 +70,12 @@ See [ci.md](ci.md), which describes the continuous integration workflow for depl
 2. Build locally
     * This will install the files in your local maven repo at `~/.m2/repository/cash/z/ecc/android/`
 ```zsh
-./gradlew publishKotlinMultiplatformPublicationToMavenLocalRepository --no-parallel
+./gradlew publishAllPublicationsToMavenLocalRepository
 ```
 3. Publish via the following command:
-    1. Snapshot: `./gradlew publishKotlinMultiplatformPublicationToMavenCentralRepository -PIS_SNAPSHOT=true`
+    1. Snapshot: `./gradlew publishAllPublicationsToMavenCentralRepository -PIS_SNAPSHOT=true`
     2. Release
-        1. `./gradlew publishKotlinMultiplatformPublicationToMavenCentralRepository -PIS_SNAPSHOT=false`
+        1. `./gradlew publishAllPublicationsToMavenCentralRepository -PIS_SNAPSHOT=false`
         2. Log into the Sonatype portal to complete the process of closing and releasing the repository.
 
 Note:

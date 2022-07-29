@@ -65,7 +65,7 @@ jobs:
           ORG_GRADLE_PROJECT_IS_SNAPSHOT: false
           ORG_GRADLE_PROJECT_ZCASH_ASCII_GPG_KEY: ${{ secrets.MAVEN_SIGNING_KEY_ASCII }}
         run: |
-          ./gradlew publishKotlinMultiplatformPublicationToMavenLocalRepository --no-parallel
+          ./gradlew publishAllPublicationsToMavenLocalRepository --no-parallel
       - name: Deploy to Maven Central
         timeout-minutes: 5
         env:
@@ -74,7 +74,7 @@ jobs:
           ORG_GRADLE_PROJECT_ZCASH_ASCII_GPG_KEY: ${{ secrets.MAVEN_SIGNING_KEY_ASCII }}
           ORG_GRADLE_PROJECT_IS_SNAPSHOT: false
         run: |
-          ./gradlew publishKotlinMultiplatformPublicationToMavenCentralRepository --no-parallel
+          ./gradlew publishAllPublicationsToMavenCentralRepository --no-parallel
       - name: Collect Artifacts
         timeout-minutes: 1
         if: ${{ always() }}
