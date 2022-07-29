@@ -138,9 +138,8 @@ val mnemonicCode = MnemonicCode(WordCount.COUNT_24, languageCode = Locale.GERMAN
 val mnemonicCode = MnemonicCode(WordCount.COUNT_24, languageCode = Locale.ENGLISH.language)
 ```
 
-## Test Results
-![Screenshot from 2020-06-06 15-14-39](https://user-images.githubusercontent.com/1699841/83952728-afbfaa80-a808-11ea-988c-3fb764dc4970.png)
-
+# Known issues
+ * When publishing the library, a Gradle warning will be printed. This is a [known issue](https://youtrack.jetbrains.com/issue/KT-46466) in Kotlin Multiplatform and can be safely ignored.
 
 ## Credits
 * [zcash/ebfull](https://github.com/ebfull) - Zcash core dev and BIP-0039 co-author who inspired creation of this library
@@ -148,6 +147,3 @@ val mnemonicCode = MnemonicCode(WordCount.COUNT_24, languageCode = Locale.ENGLIS
 * [Trezor](https://github.com/trezor/python-mnemonic/blob/master/vectors.json) - for their OG [test data set](https://github.com/trezor/python-mnemonic/blob/master/vectors.json) that has excellent edge cases
 * [Cole Barnes](http://cryptofreek.org/2012/11/29/pbkdf2-pure-java-implementation/) - whose PBKDF2SHA512 Java implementation is floating around _everywhere_ online
 * [Ken Sedgwick](https://github.com/ksedgwic) - who adapted Cole Barnes' work to use SHA-512
-
-## License
-MIT

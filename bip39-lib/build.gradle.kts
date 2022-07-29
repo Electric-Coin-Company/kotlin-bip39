@@ -71,7 +71,9 @@ publishing {
         withType<MavenPublication> {
             artifact(tasks.getByName("javadocJar"))
 
-            artifactId = myArtifactId
+            // Artifact id is tricky.  Gradle uses the project name by default, but Kotlin multiplatform needs to add
+            // platform specific suffixes.  Doing a partial replacement is the way to rename the artifact.
+            artifactId = artifactId.replace(project.name, myArtifactId)
             groupId = "cash.z.ecc.android"
             version = if (isSnapshot) {
                 "$myVersion-SNAPSHOT"
