@@ -20,13 +20,13 @@ runs:
         echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
     - name: Gradle Wrapper Cache
       id: gradle-wrapper-cache
-      uses: actions/cache@0865c47f36e68161719c5b124609996bb5c40129
+      uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c
       with:
         path: ~/.gradle/wrapper
         key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles(format('{0}{1}', github.workspace, '/gradle/wrapper/gradle-wrapper.properties')) }}
     - name: Gradle Dependency Cache
       id: gradle-dependency-cache
-      uses: actions/cache@0865c47f36e68161719c5b124609996bb5c40129
+      uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c
       with:
         path: ~/.gradle/caches/modules-2
         key: ${{ runner.os }}-gradle-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/gradle.properties'), format('{0}{1}', github.workspace, '/gradle/libs.versions.toml')) }}
@@ -34,7 +34,7 @@ runs:
           ${{ runner.os }}-gradle-deps-
     - name: Kotlin Dependency Cache
       id: kotlin-dependency-cache
-      uses: actions/cache@0865c47f36e68161719c5b124609996bb5c40129
+      uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c
       with:
         path: |
           ~/.konan
@@ -44,7 +44,7 @@ runs:
 # 2. Relying on the sha for an exact match so that the prime_cache job is re-used by all dependent jobs in a single workflow run
     - name: Gradle Build Cache
       id: gradle-build-cache
-      uses: actions/cache@0865c47f36e68161719c5b124609996bb5c40129
+      uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c
       with:
         path: |
           ~/.gradle/caches/build-cache-1
