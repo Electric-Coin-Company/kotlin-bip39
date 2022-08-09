@@ -141,9 +141,11 @@ object Mnemonics {
          * Get the original entropy that was used to create this MnemonicCode. This call will fail
          * if the words have an invalid length or checksum.
          *
+         * @InvalidWordException If any word isn't in the word list
          * @throws WordCountException when the word count is zero or not a multiple of 3.
          * @throws ChecksumException if the checksum does not match the expected value.
          */
+        @Suppress("ThrowsCount", "NestedBlockDepth")
         fun toEntropy(): ByteArray {
             wordCount.let { if (it <= 0 || it % 3 > 0) throw WordCountException(wordCount) }
 

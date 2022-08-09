@@ -50,6 +50,7 @@ class WordList internal constructor(val languageCode: String) {
          *
          * @return a list of words matching the given language code.
          */
+        @Suppress("LongMethod")
         private fun fetchWords(languageCode: String): List<String> {
             validate(languageCode)
             return """
