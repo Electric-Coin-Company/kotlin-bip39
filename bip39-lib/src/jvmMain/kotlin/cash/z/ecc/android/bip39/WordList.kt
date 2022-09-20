@@ -37,9 +37,11 @@ class WordList internal constructor(val languageCode: String) {
          * Throws an error when the given language code is not supported.
          */
         fun validate(languageCode: String) {
-            if (!isSupported(languageCode)) throw UnsupportedOperationException(
-                "The language <$languageCode> is not currently supported"
-            )
+            if (!isSupported(languageCode)) {
+                throw UnsupportedOperationException(
+                    "The language <$languageCode> is not currently supported"
+                )
+            }
         }
 
         /**
