@@ -24,6 +24,9 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation(libs.kotest.framework.engine)
+                implementation(libs.kotest.assertion)
+                implementation(libs.kotest.property)
             }
         }
         val jvmMain by getting {
@@ -33,11 +36,7 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation(libs.kotest.runner)
-                implementation(libs.kotest.assertion)
-                implementation(libs.kotest.property)
-                implementation(libs.moshi.core)
-                implementation(libs.moshi.kotlin)
+                implementation(libs.kotest.runner.junit5)
             }
         }
     }
