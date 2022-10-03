@@ -1,6 +1,6 @@
 package cash.z.ecc.android.crypto
 
-import cash.z.ecc.android.bip39.toHex
+import cash.z.ecc.android.bip39.utils.toHex
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.data.forAll
 import io.kotest.data.row

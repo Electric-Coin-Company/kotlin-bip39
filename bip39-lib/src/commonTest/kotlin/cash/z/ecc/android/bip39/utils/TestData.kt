@@ -1,4 +1,4 @@
-package cash.z.ecc.android.bip39
+package cash.z.ecc.android.bip39.utils
 
 val englishTestData = listOf(
     listOf(
