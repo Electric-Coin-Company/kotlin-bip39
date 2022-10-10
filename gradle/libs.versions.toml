@@ -3,14 +3,12 @@
 jacoco = "0.8.8"
 kotest = "4.6.1"
 ktlint = "0.47.1"
-moshi = "1.9.2"
 
 [libraries]
-kotest-runner = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
-kotest-assertion = { module = "io.kotest:kotest-assertions-core-jvm", version.ref = "kotest" }
-kotest-property = { module = "io.kotest:kotest-property-jvm", version.ref = "kotest" }
-moshi-core = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
-moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
+kotest-assertion = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 
 [plugins]
 detekt = "io.gitlab.arturbosch.detekt:1.21.0"

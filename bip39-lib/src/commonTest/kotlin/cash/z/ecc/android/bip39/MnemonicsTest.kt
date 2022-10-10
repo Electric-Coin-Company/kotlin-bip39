@@ -1,10 +1,10 @@
 package cash.z.ecc.android.bip39
 
 import cash.z.ecc.android.bip39.Mnemonics.MnemonicCode
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import cash.z.ecc.android.bip39.utils.englishTestData
+import cash.z.ecc.android.bip39.utils.fromHex
+import cash.z.ecc.android.bip39.utils.swap
+import cash.z.ecc.android.bip39.utils.toHex
 import io.kotest.assertions.asClue
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
@@ -14,13 +14,12 @@ import io.kotest.data.row
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import okio.Okio
-import java.io.File
-import java.util.*
+
+private const val DEFAULT_LANGUAGE_CODE = "en"
 
 class MnemonicsTest : BehaviorSpec({
-    val validPhrase = "void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold"
-    val lang = Locale.ENGLISH.language
+    val validPhrase =
+        "void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold"
 
     Given("a valid, known mnemonic phrase") {
         When("it is converted into a seed") {
@@ -97,10 +96,26 @@ class MnemonicsTest : BehaviorSpec({
         When("it is converted to a mnemonic phrase") {
             Then("it should match the expected phrase") {
                 forAll(
-                    row(24, "b893a6b0da8fc9b73d709bda939e818a677aa376c266949378300b65a34b8e52", "review outdoor promote relax wish swear volume beach surround ostrich parrot below jeans faculty swallow error nest orange army bitter focus place deer fat"),
-                    row(18, "d5bcbf62dea1a07ab1abb0144b299300137168a7939f3071f112b557", "stick tourist suffer run borrow diary shop invite begin flock gospel ability damage reform oxygen initial corn moon dwarf height image"),
-                    row(15, "e06ce21369dc09eb2bda66510a76f65ab3f947cce90fcb10", "there grow luggage squirrel scene void quarter error extra father rural rely display physical crisp capable slam lumber"),
-                    row(12, "0b01c3c0b0590faf45fc171da17cfb22", "arch asthma usual gaze movie stumble blood load buffalo armor disagree earth")
+                    row(
+                        24,
+                        "b893a6b0da8fc9b73d709bda939e818a677aa376c266949378300b65a34b8e52",
+                        "review outdoor promote relax wish swear volume beach surround ostrich parrot below jeans faculty swallow error nest orange army bitter focus place deer fat"
+                    ),
+                    row(
+                        18,
+                        "d5bcbf62dea1a07ab1abb0144b299300137168a7939f3071f112b557",
+                        "stick tourist suffer run borrow diary shop invite begin flock gospel ability damage reform oxygen initial corn moon dwarf height image"
+                    ),
+                    row(
+                        15,
+                        "e06ce21369dc09eb2bda66510a76f65ab3f947cce90fcb10",
+                        "there grow luggage squirrel scene void quarter error extra father rural rely display physical crisp capable slam lumber"
+                    ),
+                    row(
+                        12,
+                        "0b01c3c0b0590faf45fc171da17cfb22",
+                        "arch asthma usual gaze movie stumble blood load buffalo armor disagree earth"
+                    )
                 ) { _, entropy, mnemonic ->
                     val code = MnemonicCode(entropy.fromHex())
                     String(code.chars) shouldBe mnemonic
@@ -111,11 +126,9 @@ class MnemonicsTest : BehaviorSpec({
 
     // uses test values from the original BIP : https://github.com/trezor/python-mnemonic/blob/master/vectors.json
     Given("The original BIP-0039 test data set") {
-        val testData: TestDataSet? = loadTestData()
-        testData shouldNotBe null
         When("each provided entropy is converted to a mnemonic phrase [entropy -> mnemonic]") {
             Then("each result matches the corresponding test mnemonic phrase") {
-                testData!!.values.forEach {
+                englishTestData.forEach {
                     val entropy = it[0].fromHex()
                     val mnemonic = it[1]
                     String(MnemonicCode(entropy).chars) shouldBe mnemonic
@@ -124,7 +137,7 @@ class MnemonicsTest : BehaviorSpec({
         }
         When("each provided mnemonic phrase is reverted to entropy [mnemonic -> entropy]") {
             Then("each result matches the corresponding test entropy") {
-                testData!!.values.forEach {
+                englishTestData.forEach {
                     val entropy = it[0]
                     val mnemonic = it[1]
                     MnemonicCode(mnemonic).toEntropy().toHex() shouldBe entropy
@@ -133,11 +146,11 @@ class MnemonicsTest : BehaviorSpec({
         }
         When("each provided mnemonic phrase is converted into a seed [mnemonic -> seed]") {
             Then("each result matches the corresponding test seed") {
-                testData!!.values.forEach {
+                englishTestData.forEach {
                     val mnemonic = it[1].toCharArray()
                     val seed = it[2]
                     val passphrase = "TREZOR".toCharArray()
-                    MnemonicCode(mnemonic, lang).toSeed(passphrase).toHex() shouldBe seed
+                    MnemonicCode(mnemonic, DEFAULT_LANGUAGE_CODE).toSeed(passphrase).toHex() shouldBe seed
                 }
             }
         }
@@ -215,53 +228,3 @@ class MnemonicsTest : BehaviorSpec({
         }
     }
 })
-
-//
-// Test Utilities
-//
-
-@JsonClass(generateAdapter = true)
-data class TestDataSet(
-    @Json(name = "english") val values: List<List<String>>
-)
-
-fun ByteArray.toHex(): String {
-    val sb = StringBuilder(size * 2)
-    for (b in this)
-        sb.append(String.format("%02x", b))
-    return sb.toString()
-}
-
-fun String.fromHex(): ByteArray {
-    val len = length
-    val data = ByteArray(len / 2)
-    var i = 0
-    while (i < len) {
-        data[i / 2] =
-            ((Character.digit(this[i], 16) shl 4) + Character.digit(this[i + 1], 16)).toByte()
-        i += 2
-    }
-    return data
-}
-
-fun String.swap(srcWord: Int, destWord: Int = srcWord + 1): String {
-    if (srcWord >= destWord) throw IllegalArgumentException("srcWord must be less than destWord")
-    if (destWord > count { it == ' ' }) throw IllegalArgumentException("there aren't that many words")
-    return split(' ').let { words ->
-        words.reduceIndexed { i, result, word ->
-            val next = when (i) {
-                srcWord -> words[destWord]
-                destWord -> words[srcWord]
-                else -> word
-            }
-            if (srcWord == 0 && i == 1) "${words[destWord]} $next" else "$result $next"
-        }
-    }
-}
-
-fun loadTestData(): TestDataSet? =
-    Okio.buffer(Okio.source(File("src/jvmTest/resources/data/BIP-0039-test-values.json")))
-        .use { dataFile ->
-            Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-                .adapter(TestDataSet::class.java).fromJson(dataFile)
-        }
