@@ -5,7 +5,7 @@ import cash.z.ecc.android.bip39.utils.toHex
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 
-class UtilsTest :  ShouldSpec({
+class UtilsTest : ShouldSpec({
     should("convert ByteArray to hex String") {
         val byteArray = byteArrayOf(-128, -16, 0, 16, 127)
         byteArray.toHex() shouldBe "80f000107f"
