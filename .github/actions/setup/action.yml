@@ -8,7 +8,7 @@ runs:
       run: |
         echo "home=${HOME}" >> "$GITHUB_ENV"
     - name: Set up Java
-      uses: actions/setup-java@de1bb2b0c5634f0fc4438d7aa9944e68f9bf86cc
+      uses: actions/setup-java@1df8dbefe2a8cbc99770194893dd902763bee34b
       with:
         distribution: 'temurin'
         java-version: 17
