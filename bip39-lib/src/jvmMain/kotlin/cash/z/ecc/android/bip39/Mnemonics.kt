@@ -260,6 +260,9 @@ object Mnemonics {
      *
      * @param count the number of words in the resulting mnemonic
      */
+    // TODO [129]: Ktlint 0.48.1 (remove this suppress)
+    // TODO [129]: https://github.com/zcash/kotlin-bip39/issues/129
+    @Suppress("ktlint:no-semi")
     enum class WordCount(val count: Int) {
 
         COUNT_12(12), COUNT_15(15), COUNT_18(18), COUNT_21(21), COUNT_24(24);

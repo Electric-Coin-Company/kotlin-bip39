@@ -2,7 +2,7 @@
 # Kotlin version is defined in gradle.properties
 jacoco = "0.8.8"
 kotest = "4.6.1"
-ktlint = "0.47.1"
+ktlint = "0.48.0"
 
 [libraries]
 kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
