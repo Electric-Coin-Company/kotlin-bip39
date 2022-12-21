@@ -12,6 +12,6 @@ kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest"
 
 [plugins]
 detekt = "io.gitlab.arturbosch.detekt:1.22.0"
-dokka = "org.jetbrains.dokka:1.7.10"
+dokka = "org.jetbrains.dokka:1.7.20"
 kover = "org.jetbrains.kotlinx.kover:0.5.1"
 versions = "com.github.ben-manes.versions:0.42.0"
