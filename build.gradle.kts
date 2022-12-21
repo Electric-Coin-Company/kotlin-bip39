@@ -47,8 +47,8 @@ tasks {
 }
 
 kover {
-    isDisabled = !project.property("BIP39_IS_COVERAGE_ENABLED").toString().toBoolean()
-    jacocoEngineVersion.set(libs.versions.jacoco.get())
+    isDisabled.set(!project.property("BIP39_IS_COVERAGE_ENABLED").toString().toBoolean())
+    engine.set(kotlinx.kover.api.JacocoEngine(libs.versions.jacoco.get()))
 }
 
 val unstableKeywords = listOf("alpha", "beta", "rc", "m", "ea", "build")
