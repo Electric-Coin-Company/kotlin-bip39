@@ -1,7 +1,7 @@
 [versions]
 # Kotlin version is defined in gradle.properties
 jacoco = "0.8.8"
-kotest = "4.6.1"
+kotest = "5.5.4"
 ktlint = "0.48.0"
 
 [libraries]
