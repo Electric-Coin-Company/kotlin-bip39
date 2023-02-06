@@ -12,17 +12,12 @@ dependencyLocking {
     lockAllConfigurations()
 }
 
-// Per conversation in the KotlinLang Slack, Gradle uses Java 8 compatibility internally
-// for all build scripts.
-// https://kotlinlang.slack.com/archives/C19FD9681/p1636632870122900?thread_ts=1636572288.117000&cid=C19FD9681
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 dependencies {
     val rootProperties = getRootProperties()
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProperties.getProperty("KOTLIN_VERSION")}")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProperties.getProperty("KOTLIN_VERSION")}") {
+        // https://youtrack.jetbrains.com/issue/KT-56414/Dependency-locking-and-failed-builds-with-Kotlin-1.8.10
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-build-common")
+    }
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${rootProperties.getProperty("DETEKT_VERSION")}")
 }
 
