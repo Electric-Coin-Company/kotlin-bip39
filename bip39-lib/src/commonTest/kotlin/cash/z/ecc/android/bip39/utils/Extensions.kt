@@ -24,8 +24,9 @@ fun String.fromHex(): ByteArray {
 }
 
 fun String.swap(srcWord: Int, destWord: Int = srcWord + 1): String {
-    if (srcWord >= destWord) throw IllegalArgumentException("srcWord must be less than destWord")
-    if (destWord > count { it == ' ' }) throw IllegalArgumentException("there aren't that many words")
+    require(srcWord < destWord) { "srcWord must be less than destWord" }
+    require(destWord <= count { it == ' ' }) { "there aren't that many words" }
+
     return split(' ').let { words ->
         words.reduceIndexed { i, result, word ->
             val next = when (i) {

@@ -11,7 +11,6 @@ com.thoughtworks.xstream:xstream:1.4.19=classpath
 io.github.detekt.sarif4k:sarif4k:0.0.1=classpath
 io.github.x-stream:mxparser:1.2.2=classpath
 io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.22.0=classpath
-io.gitlab.arturbosch.detekt:io.gitlab.arturbosch.detekt.gradle.plugin:1.22.0=classpath
 net.java.dev.jna:jna:5.6.0=classpath
 org.jetbrains.intellij.deps:trove4j:1.0.20200330=classpath
 org.jetbrains.kotlin:kotlin-android-extensions:1.8.0=classpath
