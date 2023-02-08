@@ -1,7 +1,6 @@
 package cash.z.ecc.android.bip39
 
-import java.lang.UnsupportedOperationException
-import java.util.*
+import cash.z.ecc.android.bip39.Mnemonics.DEFAULT_LANGUAGE_CODE
 
 /**
  * A Cached list of words. This serves as an abstraction, allowing collaborators to be agnostic
@@ -9,8 +8,7 @@ import java.util.*
  * but, eventually, they will come from the file system and library users should not have to change
  * any code.
  */
-class WordList internal constructor(val languageCode: String) {
-    constructor(locale: Locale = Locale.ENGLISH) : this(locale.language)
+class WordList internal constructor(val languageCode: String = DEFAULT_LANGUAGE_CODE) {
 
     init {
         validate(languageCode)
@@ -31,7 +29,7 @@ class WordList internal constructor(val languageCode: String) {
          * Returns true when the given language code (like "en") is supported. Currently, only
          * English is supported but this will change in future versions.
          */
-        fun isSupported(languageCode: String): Boolean = languageCode == Locale.ENGLISH.language
+        fun isSupported(languageCode: String): Boolean = languageCode == DEFAULT_LANGUAGE_CODE
 
         /**
          * Throws an error when the given language code is not supported.
