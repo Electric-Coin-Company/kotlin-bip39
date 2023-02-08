@@ -1,0 +1,70 @@
+name: 'Setup Java and Dependency Cache'
+description: "Configures the build environment and caches Gradle, dependencies, and build outputs."
+runs:
+  using: "composite"
+  steps:
+    - name: Set Env
+      shell: bash
+      run: |
+        echo "home=${HOME}" >> "$GITHUB_ENV"
+    - name: Set up Java
+      uses: actions/setup-java@1df8dbefe2a8cbc99770194893dd902763bee34b
+      with:
+        distribution: 'temurin'
+        java-version: 17
+    - name: Disable Gradle Daemon
+      shell: bash
+      run: |
+        mkdir ~/.gradle
+
+        echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
+    - name: Gradle Wrapper Cache
+      id: gradle-wrapper-cache
+      uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920
+      with:
+        path: ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles(format('{0}{1}', github.workspace, '/gradle/wrapper/gradle-wrapper.properties')) }}
+    - name: Gradle Dependency Cache
+      id: gradle-dependency-cache
+      uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920
+      with:
+        path: ~/.gradle/caches/modules-2
+        key: ${{ runner.os }}-gradle-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/gradle.properties'), format('{0}{1}', github.workspace, '/gradle/libs.versions.toml')) }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-deps-
+    - name: Kotlin Dependency Cache
+      id: kotlin-dependency-cache
+      uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920
+      with:
+        path: |
+          ~/.konan
+        key: ${{ runner.os }}-kotlin-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/gradle.properties')) }}
+# The build cache is doing two things:
+# 1. Relying on the most recent main branch build to provide a partial cache for both main branch and PR builds.
+# 2. Relying on the sha for an exact match so that the prime_cache job is re-used by all dependent jobs in a single workflow run
+    - name: Gradle Build Cache
+      id: gradle-build-cache
+      uses: actions/cache@627f0f41f6904a5b1efbaed9f96d9eb58e92e920
+      with:
+        path: |
+          ~/.gradle/caches/build-cache-1
+          ~/.gradle/caches/transforms-3
+          .gradle/configuration-cache
+        key: ${{ runner.os }}-gradle-build-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-build-
+    - name: Download Gradle
+      if: steps.gradle-wrapper-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        ./gradlew --version
+    - name: Download Gradle Dependencies
+      if: steps.gradle-dependency-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        ./gradlew dependencies :bip39-lib:dependencies
+    - name: Compile
+      if: steps.gradle-build-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        ./gradlew assemble testClasses

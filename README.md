@@ -1,7 +1,6 @@
 # kotlin-bip39
 [![license](https://img.shields.io/github/license/zcash/kotlin-bip39.svg?maxAge=2592000&style=plastic)](https://github.com/zcash/kotlin-bip39/blob/master/LICENSE)
-[![@gmale](https://img.shields.io/badge/contact-android@z.cash-5AA9E7.svg?style=plastic)](https://github.com/gmale)
-![Bintray](https://img.shields.io/maven-central/v/cash.z.ecc.android/kotlin-bip39?color=success&style=plastic)
+![maven](https://img.shields.io/maven-central/v/cash.z.ecc.android/kotlin-bip39?color=success&style=plastic)
 
 
 ## Introduction
@@ -26,7 +25,7 @@ Plus, it uses a permissive MIT license and no dependencies beyond Kotlin's stdli
 ## Getting Started
 ### Gradle
 
-Add dependencies (see bintray badge, above, for latest version number such as `1.0.1`):
+Add dependencies (see Maven badge above for latest version number):
 
 ```groovy
 dependencies {
@@ -34,7 +33,7 @@ dependencies {
 }
 
 repository {
-    jcenter()
+    mavenCentral()
 }
 ```
 ***
@@ -139,17 +138,12 @@ val mnemonicCode = MnemonicCode(WordCount.COUNT_24, languageCode = Locale.GERMAN
 val mnemonicCode = MnemonicCode(WordCount.COUNT_24, languageCode = Locale.ENGLISH.language)
 ```
 
-## Test Results
-![Screenshot from 2020-06-06 15-14-39](https://user-images.githubusercontent.com/1699841/83952728-afbfaa80-a808-11ea-988c-3fb764dc4970.png)
-
+# Known issues
+ * When publishing the library, a Gradle warning will be printed. This is a [known issue](https://youtrack.jetbrains.com/issue/KT-46466) in Kotlin Multiplatform and can be safely ignored.
 
 ## Credits
-* [zcash/ebfull](https://github.com/ebfull) - Zcash core dev and BIP-0039 co-author who inspired me to create this library
+* [zcash/ebfull](https://github.com/ebfull) - Zcash core dev and BIP-0039 co-author who inspired creation of this library
 * [bitcoinj](https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/crypto/MnemonicCode.java) - Java implementation from which much of this code was adapted
 * [Trezor](https://github.com/trezor/python-mnemonic/blob/master/vectors.json) - for their OG [test data set](https://github.com/trezor/python-mnemonic/blob/master/vectors.json) that has excellent edge cases
 * [Cole Barnes](http://cryptofreek.org/2012/11/29/pbkdf2-pure-java-implementation/) - whose PBKDF2SHA512 Java implementation is floating around _everywhere_ online
 * [Ken Sedgwick](https://github.com/ksedgwic) - who adapted Cole Barnes' work to use SHA-512
-
-## License
-MIT
-

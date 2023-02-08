@@ -1,0 +1,101 @@
+# Expected secrets
+# MAVEN_CENTRAL_USERNAME - Username for Maven Central
+# MAVEN_CENTRAL_PASSWORD - Password for Maven Central
+
+# Note that snapshot releases do not require GPG signing
+
+name: Deploy Snapshot
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '.github/ISSUE_TEMPLATE/*'
+      - '.github/PULL_REQUEST_TEMPLATE.md'
+      - 'LICENSE'
+      - 'README.md'
+      - 'docs/**'
+
+concurrency: deploy_snapshot
+
+jobs:
+  validate_gradle_wrapper:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        timeout-minutes: 1
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+      # Gradle Wrapper validation can be flaky
+      # https://github.com/gradle/wrapper-validation-action/issues/40
+      - name: Gradle Wrapper Validation
+        timeout-minutes: 1
+        uses: gradle/wrapper-validation-action@55e685c48d84285a5b0418cd094606e199cca3b6
+
+  check_secrets:
+    environment: deployment
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    outputs:
+      has-secrets: ${{ steps.check_secrets.outputs.defined }}
+    steps:
+      - id: check_secrets
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+        if: "${{ env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' }}"
+        run: echo "::set-output name=defined::true"
+
+  deploy_snapshot:
+    if: needs.check_secrets.outputs.has-secrets == 'true'
+    needs: [validate_gradle_wrapper, check_secrets]
+    environment: deployment
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        timeout-minutes: 1
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+      - name: Setup
+        id: setup
+        timeout-minutes: 30
+        uses: ./.github/actions/setup
+      # While not strictly necessary, this sanity checks the build before attempting to upload.
+      # This adds minimal additional build time, since most of the work is cached and re-used
+      # in the next step.
+      - name: Deploy to Maven Local
+        timeout-minutes: 25
+        env:
+          ORG_GRADLE_PROJECT_IS_SNAPSHOT: true
+        run: |
+          ./gradlew publishAllPublicationsToMavenLocalRepository --no-parallel
+      - name: Deploy to Maven Central
+        timeout-minutes: 5
+        env:
+          ORG_GRADLE_PROJECT_ZCASH_MAVEN_PUBLISH_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_ZCASH_MAVEN_PUBLISH_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_IS_SNAPSHOT: true
+        run: |
+          ./gradlew publishAllPublicationsToMavenCentralRepository --no-parallel
+      - name: Collect Artifacts
+        timeout-minutes: 1
+        if: ${{ always() }}
+        env:
+          ARTIFACTS_DIR_PATH: ${{ format('{0}/artifacts', env.home) }}
+          BINARIES_ZIP_PATH: ${{ format('{0}/artifacts/snapshot_binaries.zip', env.home) }}
+        run: |
+          mkdir ${ARTIFACTS_DIR_PATH}
+
+          zip -r ${BINARIES_ZIP_PATH} . -i *build/libs/*
+      - name: Upload Artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce
+        timeout-minutes: 1
+        with:
+          name: Snapshot binaries
+          path: ~/artifacts

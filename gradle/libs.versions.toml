@@ -1,0 +1,18 @@
+[versions]
+# Kotlin version is defined in gradle.properties
+jacoco = "0.8.8"
+kotest = "5.5.4"
+ktlint = "0.48.2"
+okio = "3.3.0"
+
+[libraries]
+com-squareup-okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
+kotest-assertion = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
+
+[plugins]
+dokka = "org.jetbrains.dokka:1.7.20"
+kover = "org.jetbrains.kotlinx.kover:0.6.1"
+versions = "com.github.ben-manes.versions:0.44.0"

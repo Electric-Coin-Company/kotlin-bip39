@@ -1,0 +1,147 @@
+name: Pull Request
+
+on:
+  pull_request:
+    paths-ignore:
+      - '.github/ISSUE_TEMPLATE/*'
+      - '.github/PULL_REQUEST_TEMPLATE.md'
+      - 'LICENSE'
+      - 'README.md'
+      - 'docs/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate_gradle_wrapper:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        timeout-minutes: 1
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+      # Gradle Wrapper validation can be flaky
+      # https://github.com/gradle/wrapper-validation-action/issues/40
+      - name: Gradle Wrapper Validation
+        timeout-minutes: 1
+        uses: gradle/wrapper-validation-action@55e685c48d84285a5b0418cd094606e199cca3b6
+
+  prime_cache:
+    runs-on: ubuntu-latest
+    needs: validate_gradle_wrapper
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        timeout-minutes: 1
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+      - name: Setup
+        id: setup
+        timeout-minutes: 15
+        uses: ./.github/actions/setup
+
+  static_analysis_detekt:
+    needs: prime_cache
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        timeout-minutes: 1
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+      - name: Setup
+        id: setup
+        timeout-minutes: 5
+        uses: ./.github/actions/setup
+      - name: Detekt
+        timeout-minutes: 4
+        run: |
+          ./gradlew detektAll
+      - name: Collect Artifacts
+        timeout-minutes: 1
+        if: ${{ always() }}
+        env:
+          ARTIFACTS_DIR_PATH: ${{ format('{0}/artifacts', env.home) }}
+          REPORTS_ZIP_PATH: ${{ format('{0}/artifacts/static_analysis_detekt.zip', env.home) }}
+        run: |
+          mkdir ${ARTIFACTS_DIR_PATH}
+
+          zip -r ${REPORTS_ZIP_PATH} . -i build/reports/detekt/\*
+      - name: Upload Artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce
+        timeout-minutes: 1
+        with:
+          name: Detekt static analysis results
+          path: ~/artifacts
+
+  static_analysis_ktlint:
+    needs: prime_cache
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        timeout-minutes: 1
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+      - name: Setup
+        id: setup
+        timeout-minutes: 5
+        uses: ./.github/actions/setup
+      - name: Ktlint
+        timeout-minutes: 4
+        run: |
+          ./gradlew ktlint
+      - name: Collect Artifacts
+        timeout-minutes: 1
+        if: ${{ always() }}
+        env:
+          ARTIFACTS_DIR_PATH: ${{ format('{0}/artifacts', env.home) }}
+          REPORTS_ZIP_PATH: ${{ format('{0}/artifacts/static_analysis_ktlint.zip', env.home) }}
+        run: |
+          mkdir ${ARTIFACTS_DIR_PATH}
+
+          zip -r ${REPORTS_ZIP_PATH} . -i build/reports/ktlint/\*
+      - name: Upload Artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce
+        timeout-minutes: 1
+        with:
+          name: Ktlint static analysis results
+          path: ~/artifacts
+
+  test:
+    needs: prime_cache
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        timeout-minutes: 1
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+      - name: Setup
+        timeout-minutes: 5
+        uses: ./.github/actions/setup
+      - name: Test
+        timeout-minutes: 12
+        run: |
+          ./gradlew check
+      - name: Collect Artifacts
+        timeout-minutes: 1
+        if: ${{ always() }}
+        env:
+          ARTIFACTS_DIR_PATH: ${{ format('{0}/artifacts', env.home) }}
+          TEST_RESULTS_ZIP_PATH: ${{ format('{0}/artifacts/test_results.zip', env.home) }}
+        run: |
+          mkdir ${ARTIFACTS_DIR_PATH}
+          
+          zip -r ${TEST_RESULTS_ZIP_PATH} . -i build/reports/\* \*/build/reports/\*
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce
+        timeout-minutes: 1
+        if: ${{ always() }}
+        with:
+          name: Test results
+          path: ~/artifacts

@@ -1,24 +1,45 @@
-
 buildscript {
-    repositories {
-        mavenLocal()
-        google()
-        mavenCentral()
+    dependencyLocking {
+        lockAllConfigurations()
     }
+}
 
+dependencyLocking {
+    lockAllConfigurations()
 }
 
 plugins {
-    kotlin("multiplatform").version(cash.z.ecc.android.Deps.kotlinVersion) apply false
-    id("io.kotest.multiplatform") version cash.z.ecc.android.Deps.Kotest.version apply false
-    kotlin("plugin.serialization") version cash.z.ecc.android.Deps.kotlinVersion apply false
-    id("com.jfrog.bintray").version("1.+")
+    id("bip39.detekt-conventions")
+    id("bip39.ktlint-conventions")
+    alias(libs.plugins.kover)
+    alias(libs.plugins.versions)
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
+tasks {
+
+    withType<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask> {
+        gradleReleaseChannel = "current"
+
+        resolutionStrategy {
+            componentSelection {
+                all {
+                    if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
+                        reject("Unstable")
+                    }
+                }
+            }
+        }
     }
+}
+
+kover {
+    isDisabled.set(!project.property("BIP39_IS_COVERAGE_ENABLED").toString().toBoolean())
+    engine.set(kotlinx.kover.api.JacocoEngine(libs.versions.jacoco.get()))
+}
+
+val unstableKeywords = listOf("alpha", "beta", "rc", "m", "ea", "build")
+fun isNonStable(version: String): Boolean {
+    val versionLowerCase = version.toLowerCase()
+
+    return unstableKeywords.any { versionLowerCase.contains(it) }
 }
