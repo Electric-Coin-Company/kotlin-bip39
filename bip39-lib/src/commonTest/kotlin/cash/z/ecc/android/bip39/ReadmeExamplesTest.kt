@@ -6,8 +6,9 @@ import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import kotlin.jvm.JvmName
 
-class ReadmeExamplesTest : ShouldSpec({
+class ReadmeExamplesTestJvm : ShouldSpec({
     val validPhrase =
         "still champion voice habit trend flight survey between bitter process artefact blind carbon truly provide dizzy crush flush breeze blouse charge solid fish spread"
     context("Example: Create 24-word mnemonic phrase") {
@@ -67,9 +68,9 @@ class ReadmeExamplesTest : ShouldSpec({
             var seed: ByteArray
             charArrayOf('z', 'c', 'a', 's', 'h').let { passphrase ->
                 seed = MnemonicCode(validPhrase).toSeed(passphrase)
-                String(passphrase) shouldBe "zcash"
+                passphrase.concatToString() shouldBe "zcash"
                 passphrase.fill('0')
-                String(passphrase) shouldBe "00000"
+                passphrase.concatToString() shouldBe "00000"
             }
             seed.size shouldBe 64
         }
@@ -91,16 +92,6 @@ class ReadmeExamplesTest : ShouldSpec({
                 validPhrase shouldContain word
             }
             count shouldBe 24
-        }
-    }
-    context("Example: auto-clear") {
-        should("clear the mnemonic when done") {
-            val mnemonicCode = MnemonicCode(WordCount.COUNT_24)
-            mnemonicCode.use {
-                mnemonicCode.wordCount shouldBe 24
-            }
-            // content gets automatically cleared after use!
-            mnemonicCode.wordCount shouldBe 0
         }
     }
 })

@@ -70,12 +70,12 @@ class MnemonicsTest : BehaviorSpec({
         Mnemonics.WordCount.values().forEach { wordCount ->
             When("a mnemonic phrase is created using the ${wordCount.name} enum value") {
                 MnemonicCode(wordCount).let { phrase ->
-                    String(phrase.chars).asClue { phraseString ->
+                    phrase.chars.concatToString().asClue { phraseString ->
                         Then("it has ${wordCount.count - 1} spaces") {
                             phrase.chars.count { it == ' ' } shouldBe wordCount.count - 1
                         }
                         And("when that is converted to a list of CharArrays") {
-                            phrase.words.map { String(it) }.asClue { words ->
+                            phrase.words.map { it.concatToString() }.asClue { words ->
                                 Then("It has ${wordCount.count} elements") {
                                     words.size shouldBe wordCount.count
                                 }
@@ -118,7 +118,7 @@ class MnemonicsTest : BehaviorSpec({
                     )
                 ) { _, entropy, mnemonic ->
                     val code = MnemonicCode(entropy.fromHex())
-                    String(code.chars) shouldBe mnemonic
+                    code.chars.concatToString() shouldBe mnemonic
                 }
             }
         }
@@ -131,7 +131,7 @@ class MnemonicsTest : BehaviorSpec({
                 englishTestData.forEach {
                     val entropy = it[0].fromHex()
                     val mnemonic = it[1]
-                    String(MnemonicCode(entropy).chars) shouldBe mnemonic
+                    MnemonicCode(entropy).chars.concatToString() shouldBe mnemonic
                 }
             }
         }

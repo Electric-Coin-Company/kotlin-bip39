@@ -9,11 +9,28 @@ plugins {
     id("signing")
 }
 
+val enableNative = project.property("NATIVE_TARGETS_ENABLED").toString().toBoolean()
+val nativeTargets = if (enableNative) arrayOf(
+    "linuxX64",
+    "macosX64", "macosArm64",
+    "iosArm64", "iosX64", "iosSimulatorArm64",
+    "tvosArm64", "tvosX64", "tvosSimulatorArm64",
+    "watchosArm32", "watchosArm64", "watchosX86", "watchosX64", "watchosSimulatorArm64",
+    "mingwX64"
+) else arrayOf()
+
 kotlin {
     jvm {
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
         }
+    }
+    js(IR) {
+        browser() // to compile for the web
+        nodejs() // to compile against node
+    }
+    for (target in nativeTargets) {
+        targets.add(presets.getByName(target).createTarget(target))
     }
 
     sourceSets {
@@ -37,6 +54,29 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(libs.kotest.runner.junit5)
+            }
+        }
+        val nonJvmMain by creating {
+            dependsOn(commonMain)
+            dependencies {
+                implementation(libs.com.squareup.okio)
+            }
+        }
+        val jsMain by getting {
+            dependsOn(nonJvmMain)
+        }
+        val nativeMain by creating {
+            dependsOn(nonJvmMain)
+        }
+        val unixMain by creating {
+            dependsOn(nonJvmMain)
+        }
+        for (target in nativeTargets) {
+            when (target) {
+                "mingwX64" ->
+                    getByName("${target}Main").dependsOn(nativeMain)
+                else ->
+                    getByName("${target}Main").dependsOn(unixMain)
             }
         }
     }

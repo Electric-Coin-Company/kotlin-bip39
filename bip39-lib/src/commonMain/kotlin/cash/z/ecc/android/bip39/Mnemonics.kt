@@ -6,15 +6,11 @@ import cash.z.ecc.android.bip39.Mnemonics.KEY_SIZE
 import cash.z.ecc.android.bip39.Mnemonics.MnemonicCode
 import cash.z.ecc.android.bip39.Mnemonics.PBE_ALGORITHM
 import cash.z.ecc.android.bip39.Mnemonics.WordCount
+import cash.z.ecc.android.common.Closeable
 import cash.z.ecc.android.crypto.FallbackProvider
-import java.io.Closeable
-import java.nio.CharBuffer
-import java.nio.charset.Charset
-import java.security.MessageDigest
-import java.security.SecureRandom
-import java.util.*
-import javax.crypto.SecretKeyFactory
-import javax.crypto.spec.PBEKeySpec
+import cash.z.ecc.android.crypto.PBEKeySpecCommon
+import cash.z.ecc.android.crypto.SecretKeyFactoryCommon
+import cash.z.ecc.android.random.SecureRandom
 import kotlin.experimental.or
 
 /**
@@ -25,8 +21,10 @@ object Mnemonics {
     const val DEFAULT_PASSPHRASE = "mnemonic"
     const val INTERATION_COUNT = 2048
     const val KEY_SIZE = 512
+    const val DEFAULT_LANGUAGE_CODE = "en"
 
     internal val secureRandom = SecureRandom()
+    @Suppress("VARIABLE_IN_SINGLETON_WITHOUT_THREAD_LOCAL")
     internal var cachedList = WordList()
 
     fun getCachedWords(languageCode: String): List<String> {
@@ -36,26 +34,27 @@ object Mnemonics {
         return cachedList.words
     }
 
+
     //
     // Inner Classes
     //
 
-    class MnemonicCode(val chars: CharArray, val languageCode: String = Locale.ENGLISH.language) :
+    class MnemonicCode(val chars: CharArray, val languageCode: String = DEFAULT_LANGUAGE_CODE) :
         Closeable, Iterable<String> {
 
         constructor(
             phrase: String,
-            languageCode: String = Locale.ENGLISH.language
+            languageCode: String = DEFAULT_LANGUAGE_CODE
         ) : this(phrase.toCharArray(), languageCode)
 
         constructor(
             entropy: ByteArray,
-            languageCode: String = Locale.ENGLISH.language
+            languageCode: String = DEFAULT_LANGUAGE_CODE
         ) : this(computeSentence(entropy), languageCode)
 
         constructor(
             wordCount: WordCount,
-            languageCode: String = Locale.ENGLISH.language
+            languageCode: String = DEFAULT_LANGUAGE_CODE
         ) : this(computeSentence(wordCount.toEntropy()), languageCode)
 
         override fun close() = clear()
@@ -88,7 +87,7 @@ object Mnemonics {
 
             override fun next(): String {
                 val nextSpaceIndex = nextSpaceIndex()
-                val word = String(chars, cursor, nextSpaceIndex - cursor)
+                val word = chars.concatToString(cursor, cursor + (nextSpaceIndex - cursor))
                 cursor = nextSpaceIndex + 1
                 return word
             }
@@ -141,11 +140,9 @@ object Mnemonics {
          * Get the original entropy that was used to create this MnemonicCode. This call will fail
          * if the words have an invalid length or checksum.
          *
-         * @InvalidWordException If any word isn't in the word list
          * @throws WordCountException when the word count is zero or not a multiple of 3.
          * @throws ChecksumException if the checksum does not match the expected value.
          */
-        @Suppress("ThrowsCount", "NestedBlockDepth")
         fun toEntropy(): ByteArray {
             wordCount.let { if (it <= 0 || it % 3 > 0) throw WordCountException(wordCount) }
 
@@ -215,7 +212,7 @@ object Mnemonics {
              */
             private fun computeSentence(
                 entropy: ByteArray,
-                languageCode: String = Locale.ENGLISH.language
+                languageCode: String = DEFAULT_LANGUAGE_CODE
             ): CharArray {
                 // initialize state
                 var index = 0
@@ -286,6 +283,7 @@ object Mnemonics {
         }
     }
 
+
     //
     // Typed Exceptions
     //
@@ -335,19 +333,21 @@ fun MnemonicCode.toSeed(
     // we can skip validation when we know for sure that the code is valid
     // such as when it was just generated from new/correct entropy (common case for new seeds)
     if (validate) validate()
-    return (DEFAULT_PASSPHRASE.toCharArray() + passphrase).toBytes().let { salt ->
-        PBEKeySpec(chars, salt, INTERATION_COUNT, KEY_SIZE).let { pbeKeySpec ->
-            runCatching {
-                SecretKeyFactory.getInstance(PBE_ALGORITHM)
-            }.getOrElse {
-                SecretKeyFactory.getInstance(PBE_ALGORITHM, FallbackProvider())
-            }.let { keyFactory ->
-                keyFactory.generateSecret(pbeKeySpec).encoded.also {
-                    pbeKeySpec.clearPassword()
+    return (DEFAULT_PASSPHRASE.toCharArray() + passphrase)
+        .map { it.code.toByte() }.toByteArray()
+        .let { salt ->
+            PBEKeySpecCommon(chars, salt, INTERATION_COUNT, KEY_SIZE).let { pbeKeySpec ->
+                runCatching {
+                    SecretKeyFactoryCommon.getInstance(PBE_ALGORITHM)
+                }.getOrElse {
+                    SecretKeyFactoryCommon.getInstance(PBE_ALGORITHM, FallbackProvider())
+                }.let { keyFactory ->
+                    keyFactory.generateSecret(pbeKeySpec).encoded.also {
+                        pbeKeySpec.clearPassword()
+                    }
                 }
             }
         }
-    }
 }
 
 fun WordCount.toEntropy(): ByteArray = ByteArray(bitLength / 8).apply {
@@ -358,13 +358,9 @@ fun WordCount.toEntropy(): ByteArray = ByteArray(bitLength / 8).apply {
 // Private Extensions
 //
 
-private fun ByteArray?.toSha256() = MessageDigest.getInstance("SHA-256").digest(this)
+internal expect fun ByteArray.toSha256() : ByteArray
 
 private fun ByteArray.toBits(): List<Boolean> = flatMap { it.toBits() }
 
 private fun Byte.toBits(): List<Boolean> = (7 downTo 0).map { (toInt() and (1 shl it)) != 0 }
 
-private fun CharArray.toBytes(): ByteArray {
-    val byteBuffer = CharBuffer.wrap(this).let { Charset.forName("UTF-8").encode(it) }
-    return byteBuffer.array().copyOfRange(byteBuffer.position(), byteBuffer.limit())
-}
