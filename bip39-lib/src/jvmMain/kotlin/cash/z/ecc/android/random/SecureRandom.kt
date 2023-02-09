@@ -1,6 +1,6 @@
 package cash.z.ecc.android.random
 
-actual class SecureRandom actual constructor() {
+actual class SecureRandom {
     val secureRandom = java.security.SecureRandom()
 
     actual fun nextBytes(bytes: ByteArray) {

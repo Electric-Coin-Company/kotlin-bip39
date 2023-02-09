@@ -1,5 +1,5 @@
 package cash.z.ecc.android.random
 
-expect class SecureRandom() {
+expect class SecureRandom {
     fun nextBytes(bytes: ByteArray)
 }
