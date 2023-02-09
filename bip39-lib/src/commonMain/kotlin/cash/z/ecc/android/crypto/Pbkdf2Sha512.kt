@@ -15,7 +15,7 @@ package cash.z.ecc.android.crypto
  * Modified to use SHA-512 - Ken Sedgwick ken@bonsai.com
  * Modified to for Kotlin - Kevin Gorham anothergmale@gmail.com
  */
-expect object Pbkdf2Sha512 {
+internal expect object Pbkdf2Sha512 {
 
     /**
      * Generate a derived key from the given parameters.

@@ -16,7 +16,7 @@ import javax.crypto.spec.SecretKeySpec
 // Constructor was deprecated in Java 9, but for compatibility with Android (Java 8, effectively) the old constructor
 // must continue to be used.
 @Suppress("DEPRECATION")
-actual class FallbackProvider : Provider(
+internal actual class FallbackProvider : Provider(
     "FallbackProvider",
     1.0,
     "Provides a bridge to a default implementation of the PBKDF2WithHmacSHA512 algorithm" +

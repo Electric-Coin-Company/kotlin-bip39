@@ -1,3 +1,3 @@
 package cash.z.ecc.android.crypto
 
-expect class FallbackProvider()
+internal expect class FallbackProvider()

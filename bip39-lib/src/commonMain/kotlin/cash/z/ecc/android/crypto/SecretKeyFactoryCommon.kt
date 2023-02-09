@@ -1,6 +1,6 @@
 package cash.z.ecc.android.crypto
 
-expect class SecretKeyFactoryCommon {
+internal expect class SecretKeyFactoryCommon {
     fun generateSecret(pbeKeySpec: PBEKeySpecCommon): SecretKeyCommon
 
     companion object {

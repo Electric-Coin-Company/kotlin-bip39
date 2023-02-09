@@ -1,5 +1,5 @@
 package cash.z.ecc.android.crypto
 
-expect class SecretKeyCommon {
+internal expect class SecretKeyCommon {
     val encoded: ByteArray
 }
