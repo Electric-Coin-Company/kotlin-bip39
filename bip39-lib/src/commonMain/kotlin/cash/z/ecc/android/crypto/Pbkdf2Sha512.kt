@@ -28,5 +28,4 @@ expect object Pbkdf2Sha512 {
     fun derive(p: CharArray, s: ByteArray, c: Int, dkLen: Int): ByteArray
 
     internal fun F(p: ByteArray, s: ByteArray, c: Int, i: Int): ByteArray
-
 }
