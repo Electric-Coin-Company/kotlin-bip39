@@ -1,6 +1,6 @@
 package cash.z.ecc.android.crypto
 
-internal expect class PBEKeySpecCommon(password: CharArray?, salt: ByteArray?, iterationCount: Int, keyLength: Int) {
+internal expect class PBEKeySpecCommon(password: CharArray?, salt: ByteArray, iterationCount: Int, keyLength: Int) {
 
     var password: CharArray?
     var salt: ByteArray?
