@@ -1,8 +1,8 @@
 package cash.z.ecc.android.crypto
 
-import java.io.ByteArrayOutputStream
-import javax.crypto.Mac
-import javax.crypto.spec.SecretKeySpec
+import okio.Buffer
+import okio.ByteString.Companion.toByteString
+import okio.use
 import kotlin.experimental.xor
 import kotlin.math.ceil
 
@@ -20,6 +20,7 @@ import kotlin.math.ceil
  * http://cryptofreek.org/2012/11/29/pbkdf2-pure-java-implementation/<br></br>
  * Modified to use SHA-512 - Ken Sedgwick ken@bonsai.com
  * Modified to for Kotlin - Kevin Gorham anothergmale@gmail.com
+ * Modified to for Kotlin Multiplatform w/ okio - Luca Spinazzola anothergmale@gmail.com
  */
 internal actual object Pbkdf2Sha512 {
 
@@ -32,7 +33,7 @@ internal actual object Pbkdf2Sha512 {
      * @param dkLen the key length in bits
      */
     actual fun derive(p: CharArray, s: ByteArray, c: Int, dkLen: Int): ByteArray {
-        ByteArrayOutputStream().use { baos ->
+        Buffer().use { baos ->
             val dkLenBytes = dkLen / 8
             val pBytes = p.foldIndexed(ByteArray(p.size)) { i, acc, c ->
                 acc.apply { this[i] = c.code.toByte() }
@@ -46,29 +47,31 @@ internal actual object Pbkdf2Sha512 {
                 }
             }
             return ByteArray(dkLenBytes).apply {
-                System.arraycopy(baos.toByteArray(), 0, this, 0, size)
+                baos.read(this)
             }
         }
     }
 
-    private fun f(p: ByteArray, s: ByteArray, c: Int, i: Int): ByteArray {
-        val key = SecretKeySpec(p, "HmacSHA512")
-        val mac = Mac.getInstance(key.algorithm).apply { init(key) }
+    private fun f(
+        p: ByteArray,
+        s: ByteArray,
+        c: Int,
+        i: Int
+    ): ByteArray {
+        val key = p.toByteString()
         val bU = ByteArray(s.size + 4)
 
         // concat s and i into array bU w/o additional allocations
-        System.arraycopy(s, 0, bU, 0, s.size)
+        s.copyInto(bU, 0, 0, s.size)
         repeat(4) { j ->
             bU[s.size + j] = (i shr (24 - 8 * j)).toByte()
         }
 
-        val uXor = mac.doFinal(bU)
+        val uXor = bU.toByteString().hmacSha512(key).toByteArray()
         var uLast = uXor
-        mac.reset()
 
         repeat(c - 1) {
-            val baU = mac.doFinal(uLast)
-            mac.reset()
+            val baU = uLast.toByteString().hmacSha512(key).toByteArray()
             uXor.forEachIndexed { k, b ->
                 uXor[k] = (b.xor(baU[k]))
             }

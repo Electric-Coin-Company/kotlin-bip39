@@ -24,7 +24,9 @@ object Mnemonics {
     const val DEFAULT_LANGUAGE_CODE = "en"
 
     internal val secureRandom = SecureRandom()
-    internal var cachedList = WordList()
+
+    @Suppress("VARIABLE_IN_SINGLETON_WITHOUT_THREAD_LOCAL")
+    var cachedList = WordList()
 
     fun getCachedWords(languageCode: String): List<String> {
         if (cachedList.languageCode != languageCode) {
