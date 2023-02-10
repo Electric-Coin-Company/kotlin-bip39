@@ -21,7 +21,7 @@ import kotlin.math.ceil
  * Modified to use SHA-512 - Ken Sedgwick ken@bonsai.com
  * Modified to for Kotlin - Kevin Gorham anothergmale@gmail.com
  */
-object Pbkdf2Sha512 {
+internal actual object Pbkdf2Sha512 {
 
     /**
      * Generate a derived key from the given parameters.
@@ -31,7 +31,7 @@ object Pbkdf2Sha512 {
      * @param c the iteration count
      * @param dkLen the key length in bits
      */
-    fun derive(p: CharArray, s: ByteArray, c: Int, dkLen: Int): ByteArray {
+    actual fun derive(p: CharArray, s: ByteArray, c: Int, dkLen: Int): ByteArray {
         ByteArrayOutputStream().use { baos ->
             val dkLenBytes = dkLen / 8
             val pBytes = p.foldIndexed(ByteArray(p.size)) { i, acc, c ->

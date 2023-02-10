@@ -67,9 +67,9 @@ class ReadmeExamplesTest : ShouldSpec({
             var seed: ByteArray
             charArrayOf('z', 'c', 'a', 's', 'h').let { passphrase ->
                 seed = MnemonicCode(validPhrase).toSeed(passphrase)
-                String(passphrase) shouldBe "zcash"
+                passphrase.concatToString() shouldBe "zcash"
                 passphrase.fill('0')
-                String(passphrase) shouldBe "00000"
+                passphrase.concatToString() shouldBe "00000"
             }
             seed.size shouldBe 64
         }
@@ -91,16 +91,6 @@ class ReadmeExamplesTest : ShouldSpec({
                 validPhrase shouldContain word
             }
             count shouldBe 24
-        }
-    }
-    context("Example: auto-clear") {
-        should("clear the mnemonic when done") {
-            val mnemonicCode = MnemonicCode(WordCount.COUNT_24)
-            mnemonicCode.use {
-                mnemonicCode.wordCount shouldBe 24
-            }
-            // content gets automatically cleared after use!
-            mnemonicCode.wordCount shouldBe 0
         }
     }
 })
