@@ -3,17 +3,31 @@ import java.util.Base64
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
     alias(libs.plugins.dokka)
+    alias(libs.plugins.kotest)
     id("bip39.kotlin-multiplatform-conventions")
     id("bip39.dependency-conventions")
     id("maven-publish")
     id("signing")
 }
 
+val enableNative = project.property("NATIVE_TARGETS_ENABLED").toString().toBoolean()
+val nativeTargets = if (enableNative) arrayOf(
+    "linuxX64",
+    "macosX64", "macosArm64",
+    "iosArm64", "iosX64", "iosSimulatorArm64",
+    "tvosArm64", "tvosX64", "tvosSimulatorArm64",
+    "watchosArm32", "watchosArm64", "watchosX64", "watchosSimulatorArm64",
+    "mingwX64"
+) else arrayOf()
+
 kotlin {
     jvm {
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
         }
+    }
+    for (target in nativeTargets) {
+        targets.add(presets.getByName(target).createTarget(target))
     }
 
     sourceSets {
@@ -35,8 +49,31 @@ kotlin {
         }
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("test"))
                 implementation(libs.kotest.runner.junit5)
+            }
+        }
+        if (enableNative) {
+            val nonJvmMain by creating {
+                dependsOn(commonMain)
+                dependencies {
+                    implementation(libs.com.squareup.okio)
+                }
+            }
+            val mingwMain by creating {
+                dependsOn(nonJvmMain)
+            }
+            val unixMain by creating {
+                dependsOn(nonJvmMain)
+            }
+            for (target in nativeTargets) {
+                when (target) {
+                    "mingwX64" ->
+                        getByName("${target}Main").dependsOn(mingwMain)
+
+                    else ->
+                        getByName("${target}Main").dependsOn(unixMain)
+                }
+                getByName("${target}Test").dependsOn(commonTest)
             }
         }
     }
