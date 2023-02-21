@@ -1,8 +1,6 @@
 package cash.z.ecc.android.crypto
 
-import okio.Buffer
 import okio.ByteString.Companion.toByteString
-import okio.use
 import kotlin.experimental.xor
 import kotlin.math.ceil
 
@@ -25,6 +23,11 @@ import kotlin.math.ceil
 internal actual object Pbkdf2Sha512 {
 
     /**
+     * The size of Tn in bytes. Which will always be 64 bytes, as it is the xor of hmacSha512.
+     */
+    private const val tnLen = 64
+
+    /**
      * Generate a derived key from the given parameters.
      *
      * @param p the password
@@ -33,23 +36,20 @@ internal actual object Pbkdf2Sha512 {
      * @param dkLen the key length in bits
      */
     actual fun derive(p: CharArray, s: ByteArray, c: Int, dkLen: Int): ByteArray {
-        Buffer().use { baos ->
-            val dkLenBytes = dkLen / 8
-            val pBytes = p.foldIndexed(ByteArray(p.size)) { i, acc, c ->
-                acc.apply { this[i] = c.code.toByte() }
-            }
-            val hLen = 20.0
-            // note: dropped length check because it's redundant, given the size of an int in kotlin
-            val l = ceil(dkLenBytes / hLen).toInt()
-            for (i in 1..l) {
-                f(pBytes, s, c, i).let { Tn ->
-                    baos.write(Tn)
-                }
-            }
-            return ByteArray(dkLenBytes).apply {
-                baos.read(this)
+        val dkLenBytes = dkLen / 8
+        val pBytes = p.foldIndexed(ByteArray(p.size)) { i, acc, cc ->
+            acc.apply { this[i] = cc.code.toByte() }
+        }
+        val hLen = 20.0
+        // note: dropped length check because it's redundant, given the size of an int in kotlin
+        val l = ceil(dkLenBytes / hLen).toInt()
+        val baos = ByteArray(l * tnLen)
+        for (i in 1..l) {
+            f(pBytes, s, c, i).let { Tn ->
+                Tn.copyInto(baos, (i - 1) * tnLen)
             }
         }
+        return baos.sliceArray(0 until dkLenBytes)
     }
 
     private fun f(
