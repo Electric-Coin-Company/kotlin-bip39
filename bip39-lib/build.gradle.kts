@@ -51,24 +51,27 @@ kotlin {
                 implementation(libs.kotest.runner.junit5)
             }
         }
-        val nonJvmMain by creating {
-            dependsOn(commonMain)
-            dependencies {
-                implementation(libs.com.squareup.okio)
+        if (enableNative) {
+            val nonJvmMain by creating {
+                dependsOn(commonMain)
+                dependencies {
+                    implementation(libs.com.squareup.okio)
+                }
             }
-        }
-        val mingwMain by creating {
-            dependsOn(nonJvmMain)
-        }
-        val unixMain by creating {
-            dependsOn(nonJvmMain)
-        }
-        for (target in nativeTargets) {
-            when (target) {
-                "mingwX64" ->
-                    getByName("${target}Main").dependsOn(mingwMain)
-                else ->
-                    getByName("${target}Main").dependsOn(unixMain)
+            val mingwMain by creating {
+                dependsOn(nonJvmMain)
+            }
+            val unixMain by creating {
+                dependsOn(nonJvmMain)
+            }
+            for (target in nativeTargets) {
+                when (target) {
+                    "mingwX64" ->
+                        getByName("${target}Main").dependsOn(mingwMain)
+
+                    else ->
+                        getByName("${target}Main").dependsOn(unixMain)
+                }
             }
         }
     }
