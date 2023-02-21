@@ -3,6 +3,7 @@ import java.util.Base64
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
     alias(libs.plugins.dokka)
+    alias(libs.plugins.kotest)
     id("bip39.kotlin-multiplatform-conventions")
     id("bip39.dependency-conventions")
     id("maven-publish")
@@ -72,6 +73,7 @@ kotlin {
                     else ->
                         getByName("${target}Main").dependsOn(unixMain)
                 }
+                getByName("${target}Test").dependsOn(commonTest)
             }
         }
     }
