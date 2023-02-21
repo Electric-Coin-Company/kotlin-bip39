@@ -52,10 +52,17 @@ jobs:
       - name: Checkout
         timeout-minutes: 1
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-      - name: Setup
-        id: setup
-        timeout-minutes: 30
-        uses: ./.github/actions/setup
+      - name: Set up Java
+        uses: actions/setup-java@3f07048e3d294f56e9b90ac5ea2c6f74e9ad0f98
+        timeout-minutes: 1
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f
+        timeout-minutes: 10
+        with:
+          gradle-home-cache-cleanup: true
       # While not strictly necessary, this sanity checks the build before attempting to upload.
       # This adds minimal additional build time, since most of the work is cached and re-used
       # in the next step.
@@ -78,10 +85,10 @@ jobs:
       - name: Collect Artifacts
         timeout-minutes: 1
         if: ${{ always() }}
-        env:
-          ARTIFACTS_DIR_PATH: ${{ format('{0}/artifacts', env.home) }}
-          BINARIES_ZIP_PATH: ${{ format('{0}/artifacts/release_binaries.zip', env.home) }}
         run: |
+          export ARTIFACTS_DIR_PATH=~/artifacts
+          export BINARIES_ZIP_PATH=${ARTIFACTS_DIR_PATH}/release_binaries.zip
+          
           mkdir ${ARTIFACTS_DIR_PATH}
 
           zip -r ${BINARIES_ZIP_PATH} . -i *build/libs/*
