@@ -56,14 +56,13 @@ internal actual class PBEKeySpecCommon {
      * @param salt the salt.
      * @param iterationCount the iteration count.
      * @param keyLength the to-be-derived key length.
-     * @exception NullPointerException if `salt` is null.
      * @exception IllegalArgumentException if `salt` is empty,
      * i.e. 0-length, `iterationCount` or
      * `keyLength` is not positive.
      */
     actual constructor(
         password: CharArray?,
-        salt: ByteArray?,
+        salt: ByteArray,
         iterationCount: Int,
         keyLength: Int
     ) {
@@ -72,16 +71,8 @@ internal actual class PBEKeySpecCommon {
         } else {
             this.password = password.copyOf()
         }
-        if (salt == null) {
-            throw NullPointerException(
-                "the salt parameter " +
-                    "must be non-null"
-            )
-        } else {
-            require(salt.isNotEmpty()) {
-                "the salt parameter " +
-                    "must not be empty"
-            }
+        require(salt.isNotEmpty()) {
+            "the salt parameter must not be empty"
         }
         this.salt = salt.copyOf()
         require(iterationCount > 0) { "invalid iterationCount value" }
@@ -103,26 +94,17 @@ internal actual class PBEKeySpecCommon {
      * @param password the password.
      * @param salt the salt.
      * @param iterationCount the iteration count.
-     * @exception NullPointerException if `salt` is null.
      * @exception IllegalArgumentException if `salt` is empty,
      * i.e. 0-length, or `iterationCount` is not positive.
      */
-    constructor(password: CharArray?, salt: ByteArray?, iterationCount: Int) {
+    constructor(password: CharArray?, salt: ByteArray, iterationCount: Int) {
         if (password == null || password.isEmpty()) {
             this.password = CharArray(0)
         } else {
             this.password = password.copyOf()
         }
-        if (salt == null) {
-            throw NullPointerException(
-                "the salt parameter " +
-                    "must be non-null"
-            )
-        } else {
-            require(salt.isNotEmpty()) {
-                "the salt parameter " +
-                    "must not be empty"
-            }
+        require(salt.isNotEmpty()) {
+            "the salt parameter must not be empty"
         }
         this.salt = salt.copyOf()
         require(iterationCount > 0) { "invalid iterationCount value" }
