@@ -10,6 +10,11 @@ import platform.posix.open
 import platform.posix.read
 
 actual class SecureRandom {
+
+    /**
+     * Implementation based on:
+     * https://stackoverflow.com/a/2572373/1363742
+     */
     @OptIn(UnsafeNumber::class)
     actual fun nextBytes(bytes: ByteArray) = memScoped {
         val randomData = open("/dev/urandom", O_RDONLY)
@@ -19,7 +24,7 @@ actual class SecureRandom {
             val result = bytes.usePinned {
                 read(randomData, it.addressOf(0), bytes.size.convert())
             }
-            check(result < 0) {
+            check(result >= 0) {
                 "Could not get random number from /dev/urandom"
             }
         }
