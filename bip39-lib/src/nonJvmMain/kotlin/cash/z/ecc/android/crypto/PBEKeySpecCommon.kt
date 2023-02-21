@@ -34,7 +34,7 @@ internal actual class PBEKeySpecCommon {
      * @param password the password.
      */
     constructor(password: CharArray?) {
-        if (password == null || password.size == 0) {
+        if (password == null || password.isEmpty()) {
             this.password = CharArray(0)
         } else {
             this.password = password.copyOf()
@@ -67,7 +67,7 @@ internal actual class PBEKeySpecCommon {
         iterationCount: Int,
         keyLength: Int
     ) {
-        if (password == null || password.size == 0) {
+        if (password == null || password.isEmpty()) {
             this.password = CharArray(0)
         } else {
             this.password = password.copyOf()
@@ -78,7 +78,7 @@ internal actual class PBEKeySpecCommon {
                     "must be non-null"
             )
         } else {
-            require(salt.size != 0) {
+            require(salt.isNotEmpty()) {
                 "the salt parameter " +
                     "must not be empty"
             }
@@ -108,7 +108,7 @@ internal actual class PBEKeySpecCommon {
      * i.e. 0-length, or `iterationCount` is not positive.
      */
     constructor(password: CharArray?, salt: ByteArray?, iterationCount: Int) {
-        if (password == null || password.size == 0) {
+        if (password == null || password.isEmpty()) {
             this.password = CharArray(0)
         } else {
             this.password = password.copyOf()
@@ -119,7 +119,7 @@ internal actual class PBEKeySpecCommon {
                     "must be non-null"
             )
         } else {
-            require(salt.size != 0) {
+            require(salt.isNotEmpty()) {
                 "the salt parameter " +
                     "must not be empty"
             }
@@ -134,10 +134,8 @@ internal actual class PBEKeySpecCommon {
      *
      */
     actual fun clearPassword() {
-        if (password != null) {
-            password!!.fill(' ')
-            password = null
-        }
+        password?.fill(' ')
+        password = null
     }
 
     /**
