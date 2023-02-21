@@ -26,7 +26,7 @@ object Mnemonics {
     internal val secureRandom = SecureRandom()
 
     @Suppress("VARIABLE_IN_SINGLETON_WITHOUT_THREAD_LOCAL")
-    var cachedList = WordList()
+    internal var cachedList = WordList()
 
     fun getCachedWords(languageCode: String): List<String> {
         if (cachedList.languageCode != languageCode) {
