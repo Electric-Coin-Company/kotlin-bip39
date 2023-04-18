@@ -14,10 +14,7 @@ dependencyLocking {
 
 dependencies {
     val rootProperties = getRootProperties()
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProperties.getProperty("KOTLIN_VERSION")}") {
-        // https://youtrack.jetbrains.com/issue/KT-56414/Dependency-locking-and-failed-builds-with-Kotlin-1.8.10
-        exclude(group = "org.jetbrains.kotlin", module = "kotlin-build-common")
-    }
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProperties.getProperty("KOTLIN_VERSION")}")
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${rootProperties.getProperty("DETEKT_VERSION")}")
 }
 
