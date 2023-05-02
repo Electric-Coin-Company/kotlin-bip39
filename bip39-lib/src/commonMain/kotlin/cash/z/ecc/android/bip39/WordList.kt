@@ -2102,7 +2102,7 @@ class WordList internal constructor(val languageCode: String = DEFAULT_LANGUAGE_
             zero
             zone
             zoo
-            """.trimIndent().split("\n")
+                """.trimIndent().split("\n")
         }
     }
 }
