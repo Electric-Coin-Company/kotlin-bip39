@@ -21,40 +21,31 @@ jobs:
     steps:
       - name: Checkout
         timeout-minutes: 1
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
       # Gradle Wrapper validation can be flaky
       # https://github.com/gradle/wrapper-validation-action/issues/40
       - name: Gradle Wrapper Validation
         timeout-minutes: 1
-        uses: gradle/wrapper-validation-action@55e685c48d84285a5b0418cd094606e199cca3b6
-
-  prime_cache:
-    runs-on: ubuntu-latest
-    needs: validate_gradle_wrapper
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout
-        timeout-minutes: 1
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-      - name: Setup
-        id: setup
-        timeout-minutes: 15
-        uses: ./.github/actions/setup
+        uses: gradle/wrapper-validation-action@8d49e559aae34d3e0eb16cde532684bc9702762b
 
   static_analysis_detekt:
-    needs: prime_cache
+    needs: validate_gradle_wrapper
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - name: Checkout
         timeout-minutes: 1
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-      - name: Setup
-        id: setup
-        timeout-minutes: 5
-        uses: ./.github/actions/setup
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+      - name: Set up Java
+        uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2
+        timeout-minutes: 1
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
+        timeout-minutes: 3
       - name: Detekt
         timeout-minutes: 4
         run: |
@@ -62,10 +53,10 @@ jobs:
       - name: Collect Artifacts
         timeout-minutes: 1
         if: ${{ always() }}
-        env:
-          ARTIFACTS_DIR_PATH: ${{ format('{0}/artifacts', env.home) }}
-          REPORTS_ZIP_PATH: ${{ format('{0}/artifacts/static_analysis_detekt.zip', env.home) }}
         run: |
+          export ARTIFACTS_DIR_PATH=~/artifacts
+          export REPORTS_ZIP_PATH=${ARTIFACTS_DIR_PATH}/static_analysis_detekt.zip
+          
           mkdir ${ARTIFACTS_DIR_PATH}
 
           zip -r ${REPORTS_ZIP_PATH} . -i build/reports/detekt/\*
@@ -78,18 +69,23 @@ jobs:
           path: ~/artifacts
 
   static_analysis_ktlint:
-    needs: prime_cache
+    needs: validate_gradle_wrapper
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - name: Checkout
         timeout-minutes: 1
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-      - name: Setup
-        id: setup
-        timeout-minutes: 5
-        uses: ./.github/actions/setup
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+      - name: Set up Java
+        uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2
+        timeout-minutes: 1
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
+        timeout-minutes: 3
       - name: Ktlint
         timeout-minutes: 4
         run: |
@@ -97,10 +93,10 @@ jobs:
       - name: Collect Artifacts
         timeout-minutes: 1
         if: ${{ always() }}
-        env:
-          ARTIFACTS_DIR_PATH: ${{ format('{0}/artifacts', env.home) }}
-          REPORTS_ZIP_PATH: ${{ format('{0}/artifacts/static_analysis_ktlint.zip', env.home) }}
         run: |
+          export ARTIFACTS_DIR_PATH=~/artifacts
+          export REPORTS_ZIP_PATH=${ARTIFACTS_DIR_PATH}/static_analysis_ktlint.zip
+
           mkdir ${ARTIFACTS_DIR_PATH}
 
           zip -r ${REPORTS_ZIP_PATH} . -i build/reports/ktlint/\*
@@ -113,17 +109,23 @@ jobs:
           path: ~/artifacts
 
   test:
-    needs: prime_cache
+    needs: validate_gradle_wrapper
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - name: Checkout
         timeout-minutes: 1
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-      - name: Setup
-        timeout-minutes: 5
-        uses: ./.github/actions/setup
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+      - name: Set up Java
+        uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2
+        timeout-minutes: 1
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
+        timeout-minutes: 3
       - name: Test
         timeout-minutes: 12
         run: |
@@ -131,10 +133,10 @@ jobs:
       - name: Collect Artifacts
         timeout-minutes: 1
         if: ${{ always() }}
-        env:
-          ARTIFACTS_DIR_PATH: ${{ format('{0}/artifacts', env.home) }}
-          TEST_RESULTS_ZIP_PATH: ${{ format('{0}/artifacts/test_results.zip', env.home) }}
         run: |
+          export ARTIFACTS_DIR_PATH=~/artifacts
+          export TEST_RESULTS_ZIP_PATH=${ARTIFACTS_DIR_PATH}/test_results.zip
+          
           mkdir ${ARTIFACTS_DIR_PATH}
           
           zip -r ${TEST_RESULTS_ZIP_PATH} . -i build/reports/\* \*/build/reports/\*

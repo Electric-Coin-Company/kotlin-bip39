@@ -18,12 +18,12 @@ jobs:
     steps:
       - name: Checkout
         timeout-minutes: 1
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
       # Gradle Wrapper validation can be flaky
       # https://github.com/gradle/wrapper-validation-action/issues/40
       - name: Gradle Wrapper Validation
         timeout-minutes: 1
-        uses: gradle/wrapper-validation-action@55e685c48d84285a5b0418cd094606e199cca3b6
+        uses: gradle/wrapper-validation-action@8d49e559aae34d3e0eb16cde532684bc9702762b
 
   check_secrets:
     environment: deployment
@@ -51,11 +51,18 @@ jobs:
     steps:
       - name: Checkout
         timeout-minutes: 1
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-      - name: Setup
-        id: setup
-        timeout-minutes: 30
-        uses: ./.github/actions/setup
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+      - name: Set up Java
+        uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2
+        timeout-minutes: 1
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
+        timeout-minutes: 10
+        with:
+          gradle-home-cache-cleanup: true
       # While not strictly necessary, this sanity checks the build before attempting to upload.
       # This adds minimal additional build time, since most of the work is cached and re-used
       # in the next step.
@@ -78,10 +85,10 @@ jobs:
       - name: Collect Artifacts
         timeout-minutes: 1
         if: ${{ always() }}
-        env:
-          ARTIFACTS_DIR_PATH: ${{ format('{0}/artifacts', env.home) }}
-          BINARIES_ZIP_PATH: ${{ format('{0}/artifacts/release_binaries.zip', env.home) }}
         run: |
+          export ARTIFACTS_DIR_PATH=~/artifacts
+          export BINARIES_ZIP_PATH=${ARTIFACTS_DIR_PATH}/release_binaries.zip
+          
           mkdir ${ARTIFACTS_DIR_PATH}
 
           zip -r ${BINARIES_ZIP_PATH} . -i *build/libs/*
