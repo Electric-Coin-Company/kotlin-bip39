@@ -1,11 +1,17 @@
 import java.util.Base64
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform")
+    // https://github.com/gradle/gradle/issues/20084#issuecomment-1060822638
+    id(libs.plugins.kotlin.multiplatform.get().pluginId)
     alias(libs.plugins.dokka)
     alias(libs.plugins.kotest)
     id("bip39.kotlin-multiplatform-conventions")
     id("bip39.dependency-conventions")
+
+    // https://github.com/gradle/gradle/issues/20084#issuecomment-1060822638
+    id(libs.plugins.kotlinx.kover.get().pluginId)
+    id("bip39.coverage-conventions")
+
     id("maven-publish")
     id("signing")
 }
