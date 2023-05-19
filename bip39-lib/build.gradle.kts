@@ -16,8 +16,8 @@ plugins {
     id("signing")
 }
 
-val enableNative = project.property("NATIVE_TARGETS_ENABLED").toString().toBoolean()
-val nativeTargets = if (enableNative) arrayOf(
+val enableNonJvm = project.property("NONJVM_TARGETS_ENABLED").toString().toBoolean()
+val nativeTargets = if (enableNonJvm) arrayOf(
     "linuxX64",
     "macosX64", "macosArm64",
     "iosArm64", "iosX64", "iosSimulatorArm64",
@@ -30,6 +30,12 @@ kotlin {
     jvm {
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
+        }
+    }
+    if (enableNonJvm) {
+        js(IR) {
+            browser() // to compile for the web
+            nodejs() // to compile against node
         }
     }
     for (target in nativeTargets) {
@@ -58,12 +64,15 @@ kotlin {
                 implementation(libs.kotest.runner.junit5)
             }
         }
-        if (enableNative) {
+        if (enableNonJvm) {
             val nonJvmMain by creating {
                 dependsOn(commonMain)
                 dependencies {
                     implementation(libs.com.squareup.okio)
                 }
+            }
+            val jsMain by getting {
+                dependsOn(nonJvmMain)
             }
             val mingwMain by creating {
                 dependsOn(nonJvmMain)
