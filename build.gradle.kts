@@ -33,7 +33,7 @@ tasks {
 
 val unstableKeywords = listOf("alpha", "beta", "rc", "m", "ea", "build")
 fun isNonStable(version: String): Boolean {
-    val versionLowerCase = version.toLowerCase()
+    val versionLowerCase = version.lowercase()
 
     return unstableKeywords.any { versionLowerCase.contains(it) }
 }
