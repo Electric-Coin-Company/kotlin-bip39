@@ -5,7 +5,6 @@ naming:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     functionPattern: '[a-z][a-zA-Z0-9]*'
     excludeClassPattern: '$^'
-    ignoreOverridden: true
     ignoreAnnotated:
       - 'Composable'
 
@@ -19,13 +18,9 @@ style:
       - 'TODO:'
     allowedPatterns: '\[[^\]]\d+\]'
     customMessage: 'Include issue number prefix for TODO comments, e.g. `TODO [#123]: Fix this later`'
-  MaxLineLength:
-    active: false
   NewLineAtEndOfFile:
     active: false
   UnusedPrivateMember:
     active: true
     allowedNames: '(_|ignored|expected|serialVersionUID)'
     excludes: [ '**/*.kts' ]
-  WildcardImport:
-    active: false
