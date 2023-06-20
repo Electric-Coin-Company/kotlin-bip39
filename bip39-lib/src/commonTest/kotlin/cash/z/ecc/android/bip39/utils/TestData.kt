@@ -1,5 +1,6 @@
 package cash.z.ecc.android.bip39.utils
 
+@Suppress("MaxLineLength")
 val englishTestData = listOf(
     listOf(
         "00000000000000000000000000000000",

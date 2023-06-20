@@ -12,6 +12,7 @@ internal actual class SecretKeyFactoryCommon() {
     actual companion object {
         actual fun getInstance(algorithm: String): SecretKeyFactoryCommon = SecretKeyFactoryCommon()
 
-        actual fun getInstance(algorithm: String, provider: FallbackProvider): SecretKeyFactoryCommon = SecretKeyFactoryCommon()
+        actual fun getInstance(algorithm: String, provider: FallbackProvider): SecretKeyFactoryCommon =
+            SecretKeyFactoryCommon()
     }
 }

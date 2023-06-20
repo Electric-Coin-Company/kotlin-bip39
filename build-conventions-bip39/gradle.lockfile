@@ -1,8 +1,7 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
-io.github.detekt.sarif4k:sarif4k:0.0.1=runtimeClasspath
-io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.22.0=compileClasspath,runtimeClasspath
+io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.0=compileClasspath,runtimeClasspath
 net.java.dev.jna:jna:5.6.0=kotlinCompilerClasspath,runtimeClasspath
 org.jetbrains.intellij.deps:trove4j:1.0.20200330=kotlinCompilerClasspath,runtimeClasspath
 org.jetbrains.kotlin:kotlin-android-extensions:1.8.21=runtimeClasspath
@@ -39,11 +38,9 @@ org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:1.8.10=kotlinComp
 org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:1.8.21=runtimeClasspath
 org.jetbrains.kotlin:kotlin-scripting-jvm:1.8.10=kotlinCompilerPluginClasspathMain
 org.jetbrains.kotlin:kotlin-scripting-jvm:1.8.21=runtimeClasspath
-org.jetbrains.kotlin:kotlin-stdlib-common:1.4.31=runtimeClasspath
 org.jetbrains.kotlin:kotlin-stdlib-common:1.8.10=compileClasspath,kotlinCompilerClasspath,kotlinCompilerPluginClasspathMain
 org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10=compileClasspath
 org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10=compileClasspath
-org.jetbrains.kotlin:kotlin-stdlib:1.4.31=runtimeClasspath
 org.jetbrains.kotlin:kotlin-stdlib:1.8.10=compileClasspath,kotlinCompilerClasspath,kotlinCompilerPluginClasspathMain
 org.jetbrains.kotlin:kotlin-tooling-core:1.8.10=kotlinCompilerPluginClasspathMain
 org.jetbrains.kotlin:kotlin-tooling-core:1.8.21=compileClasspath,runtimeClasspath
@@ -52,10 +49,6 @@ org.jetbrains.kotlin:kotlin-util-io:1.8.21=compileClasspath,runtimeClasspath
 org.jetbrains.kotlin:kotlin-util-klib:1.8.21=runtimeClasspath
 org.jetbrains.kotlinx.kover:org.jetbrains.kotlinx.kover.gradle.plugin:0.7.0=compileClasspath,runtimeClasspath
 org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.5.0=runtimeClasspath
-org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.1.0=runtimeClasspath
-org.jetbrains.kotlinx:kotlinx-serialization-core:1.1.0=runtimeClasspath
-org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.1.0=runtimeClasspath
-org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0=runtimeClasspath
 org.jetbrains.kotlinx:kover-gradle-plugin:0.7.0=compileClasspath,runtimeClasspath
-org.jetbrains:annotations:13.0=compileClasspath,kotlinCompilerClasspath,kotlinCompilerPluginClasspathMain,runtimeClasspath
+org.jetbrains:annotations:13.0=compileClasspath,kotlinCompilerClasspath,kotlinCompilerPluginClasspathMain
 empty=annotationProcessor,kotlinScriptDefExtensions

@@ -2,7 +2,12 @@ package cash.z.ecc.android.crypto
 
 import javax.crypto.spec.PBEKeySpec
 
-internal actual class PBEKeySpecCommon actual constructor(password: CharArray?, salt: ByteArray, iterationCount: Int, keyLength: Int) {
+internal actual class PBEKeySpecCommon actual constructor(
+    password: CharArray?,
+    salt: ByteArray,
+    iterationCount: Int,
+    keyLength: Int
+) {
     val wrappedPbeKeySpec = PBEKeySpec(password, salt, iterationCount, keyLength)
 
     actual var password: CharArray? = null

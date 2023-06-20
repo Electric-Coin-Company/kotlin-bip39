@@ -18,8 +18,8 @@ import io.kotest.matchers.shouldNotBe
 private const val DEFAULT_LANGUAGE_CODE = "en"
 
 class MnemonicsTest : BehaviorSpec({
-    val validPhrase =
-        "void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold"
+    val validPhrase = "void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing" +
+        " screen patrol group space point ten exist slush involve unfold"
 
     Given("a valid, known mnemonic phrase") {
         When("it is converted into a seed") {
@@ -99,17 +99,20 @@ class MnemonicsTest : BehaviorSpec({
                     row(
                         24,
                         "b893a6b0da8fc9b73d709bda939e818a677aa376c266949378300b65a34b8e52",
-                        "review outdoor promote relax wish swear volume beach surround ostrich parrot below jeans faculty swallow error nest orange army bitter focus place deer fat"
+                        "review outdoor promote relax wish swear volume beach surround ostrich parrot below jeans" +
+                            " faculty swallow error nest orange army bitter focus place deer fat"
                     ),
                     row(
                         18,
                         "d5bcbf62dea1a07ab1abb0144b299300137168a7939f3071f112b557",
-                        "stick tourist suffer run borrow diary shop invite begin flock gospel ability damage reform oxygen initial corn moon dwarf height image"
+                        "stick tourist suffer run borrow diary shop invite begin flock gospel ability damage reform" +
+                            " oxygen initial corn moon dwarf height image"
                     ),
                     row(
                         15,
                         "e06ce21369dc09eb2bda66510a76f65ab3f947cce90fcb10",
-                        "there grow luggage squirrel scene void quarter error extra father rural rely display physical crisp capable slam lumber"
+                        "there grow luggage squirrel scene void quarter error extra father rural rely display" +
+                            " physical crisp capable slam lumber"
                     ),
                     row(
                         12,
