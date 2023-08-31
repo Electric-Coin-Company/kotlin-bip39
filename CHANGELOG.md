@@ -1,5 +1,8 @@
 # Change Log
 
+## Unreleased
+- Gradle 8.3
+
 ## 1.0.5
 - Improved performance and memory usage
 - Kotlin 1.8.21

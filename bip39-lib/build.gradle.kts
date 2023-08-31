@@ -88,7 +88,7 @@ kotlin {
 }
 
 tasks {
-    val dokkaOutputDir = File(buildDir, "dokka")
+    val dokkaOutputDir = layout.buildDirectory.dir("dokka").get().asFile
 
     dokkaHtml.configure {
         outputDirectory.set(dokkaOutputDir)
