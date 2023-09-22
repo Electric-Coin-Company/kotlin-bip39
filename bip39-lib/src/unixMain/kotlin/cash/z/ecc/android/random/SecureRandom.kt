@@ -1,5 +1,6 @@
 package cash.z.ecc.android.random
 
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.UnsafeNumber
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.convert
@@ -15,7 +16,7 @@ actual class SecureRandom {
      * Implementation based on:
      * https://stackoverflow.com/a/2572373/1363742
      */
-    @OptIn(UnsafeNumber::class)
+    @OptIn(UnsafeNumber::class, ExperimentalForeignApi::class)
     actual fun nextBytes(bytes: ByteArray) = memScoped {
         val randomData = open("/dev/urandom", O_RDONLY)
         if (randomData < 0) {
