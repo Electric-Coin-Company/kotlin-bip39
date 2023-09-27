@@ -17,7 +17,7 @@ kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.
 kotlinx-kover-gradle = { module = "org.jetbrains.kotlinx.kover:org.jetbrains.kotlinx.kover.gradle.plugin", version.ref = "kotlinx-kover" }
 
 [plugins]
-dokka = "org.jetbrains.dokka:1.8.20"
+dokka = "org.jetbrains.dokka:1.9.0"
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 versions = "com.github.ben-manes.versions:0.48.0"
 kotest = { id = "io.kotest.multiplatform", version.ref = "kotest" }
