@@ -44,7 +44,7 @@ jobs:
           distribution: 'temurin'
           java-version: 17
       - name: Set up Gradle
-        uses: gradle/gradle-build-action@b5126f31dbc19dd434c3269bf8c28c315e121da2
+        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a
         timeout-minutes: 3
       - name: Detekt
         timeout-minutes: 4
@@ -84,7 +84,7 @@ jobs:
           distribution: 'temurin'
           java-version: 17
       - name: Set up Gradle
-        uses: gradle/gradle-build-action@b5126f31dbc19dd434c3269bf8c28c315e121da2
+        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a
         timeout-minutes: 3
       - name: Ktlint
         timeout-minutes: 4
@@ -124,7 +124,7 @@ jobs:
           distribution: 'temurin'
           java-version: 17
       - name: Set up Gradle
-        uses: gradle/gradle-build-action@b5126f31dbc19dd434c3269bf8c28c315e121da2
+        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a
         timeout-minutes: 3
       - name: Test
         timeout-minutes: 12
