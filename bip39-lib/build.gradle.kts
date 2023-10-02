@@ -194,3 +194,17 @@ signing {
 
     sign(publishing.publications)
 }
+
+// Workaround for:
+// - https://youtrack.jetbrains.com/issue/KT-46466
+// - https://github.com/gradle/gradle/issues/26091
+// A problem was found with the configuration of task ':bip39-lib:signKotlinMultiplatformPublication' (type 'Sign').
+// Gradle detected a problem with the following location:
+// '/home/runner/work/kotlin-bip39/kotlin-bip39/bip39-lib/build/libs/bip39-lib-javadoc.jar.asc'.
+// Reason: Task ':bip39-lib:publishJvmPublicationToMavenLocalRepository' uses this output of task
+// ':bip39-lib:signKotlinMultiplatformPublication' without declaring an explicit or implicit
+// dependency. This can lead to incorrect results being produced, depending on what order the tasks are executed.
+val signingTasks = tasks.withType<Sign>()
+tasks.withType<AbstractPublishToMaven>().configureEach {
+    dependsOn(signingTasks)
+}
