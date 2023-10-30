@@ -37,9 +37,9 @@ kotlin {
             browser() // to compile for the web
             nodejs() // to compile against node
         }
-    }
-    for (target in nativeTargets) {
-        targets.add(presets.getByName(target).createTarget(target))
+        for (target in nativeTargets) {
+            targets.add(presets.getByName(target).createTarget(target))
+        }
     }
 
     sourceSets {
@@ -127,7 +127,7 @@ publishing {
             // Artifact id is tricky.  Gradle uses the project name by default, but Kotlin multiplatform needs to add
             // platform specific suffixes.  Doing a partial replacement is the way to rename the artifact.
             artifactId = artifactId.replace(project.name, myArtifactId)
-            groupId = "cash.z.ecc.android"
+            groupId = "io.github.luca992.cash.z.ecc.android"
             version = if (isSnapshot) {
                 "$myVersion-SNAPSHOT"
             } else {
