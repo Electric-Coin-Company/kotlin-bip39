@@ -22,7 +22,6 @@ import kotlin.math.ceil
  * Modified to for Kotlin - Kevin Gorham anothergmale@gmail.com
  */
 internal actual object Pbkdf2Sha512 {
-
     /**
      * Generate a derived key from the given parameters.
      *
@@ -31,12 +30,18 @@ internal actual object Pbkdf2Sha512 {
      * @param c the iteration count
      * @param dkLen the key length in bits
      */
-    actual fun derive(p: CharArray, s: ByteArray, c: Int, dkLen: Int): ByteArray {
+    actual fun derive(
+        p: CharArray,
+        s: ByteArray,
+        c: Int,
+        dkLen: Int
+    ): ByteArray {
         ByteArrayOutputStream().use { baos ->
             val dkLenBytes = dkLen / 8
-            val pBytes = p.foldIndexed(ByteArray(p.size)) { i, acc, c ->
-                acc.apply { this[i] = c.code.toByte() }
-            }
+            val pBytes =
+                p.foldIndexed(ByteArray(p.size)) { i, acc, c ->
+                    acc.apply { this[i] = c.code.toByte() }
+                }
             val hLen = 20.0
             // note: dropped length check because it's redundant, given the size of an int in kotlin
             val l = ceil(dkLenBytes / hLen).toInt()
@@ -51,7 +56,12 @@ internal actual object Pbkdf2Sha512 {
         }
     }
 
-    private fun f(p: ByteArray, s: ByteArray, c: Int, i: Int): ByteArray {
+    private fun f(
+        p: ByteArray,
+        s: ByteArray,
+        c: Int,
+        i: Int
+    ): ByteArray {
         val key = SecretKeySpec(p, "HmacSHA512")
         val mac = Mac.getInstance(key.algorithm).apply { init(key) }
         val bU = ByteArray(s.size + 4)

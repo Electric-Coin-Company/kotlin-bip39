@@ -5,6 +5,10 @@ internal expect class SecretKeyFactoryCommon {
 
     companion object {
         fun getInstance(algorithm: String): SecretKeyFactoryCommon
-        fun getInstance(algorithm: String, provider: FallbackProvider): SecretKeyFactoryCommon
+
+        fun getInstance(
+            algorithm: String,
+            provider: FallbackProvider
+        ): SecretKeyFactoryCommon
     }
 }

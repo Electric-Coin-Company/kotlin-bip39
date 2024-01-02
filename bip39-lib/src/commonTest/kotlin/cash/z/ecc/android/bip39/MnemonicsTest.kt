@@ -18,8 +18,9 @@ import io.kotest.matchers.shouldNotBe
 private const val DEFAULT_LANGUAGE_CODE = "en"
 
 class MnemonicsTest : BehaviorSpec({
-    val validPhrase = "void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing" +
-        " screen patrol group space point ten exist slush involve unfold"
+    val validPhrase =
+        "void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing" +
+            " screen patrol group space point ten exist slush involve unfold"
 
     Given("a valid, known mnemonic phrase") {
         When("it is converted into a seed") {
@@ -186,9 +187,10 @@ class MnemonicsTest : BehaviorSpec({
             }
         }
         When("it contains an invalid word") {
-            val mnemonicPhrase = validPhrase.split(' ').let { words ->
-                validPhrase.replace(words[23], "convincee")
-            }
+            val mnemonicPhrase =
+                validPhrase.split(' ').let { words ->
+                    validPhrase.replace(words[23], "convincee")
+                }
             mnemonicPhrase.asClue {
                 Then("validate() fails with a word validation error") {
                     shouldThrow<Mnemonics.InvalidWordException> {
