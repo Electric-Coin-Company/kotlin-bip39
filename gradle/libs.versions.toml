@@ -3,8 +3,8 @@ detekt = "1.23.0"
 kotest = "5.7.2"
 kotlin = "1.9.10"
 kotlinx-kover = "0.7.0"
-ktlint = "0.50.0"
-okio = "3.5.0"
+ktlint = "1.1.0"
+okio = "3.7.0"
 
 [libraries]
 com-squareup-okio = { module = "com.squareup.okio:okio", version.ref = "okio" }

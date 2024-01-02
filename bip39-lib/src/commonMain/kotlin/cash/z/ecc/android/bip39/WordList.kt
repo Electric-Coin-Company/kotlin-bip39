@@ -9,7 +9,6 @@ import cash.z.ecc.android.bip39.Mnemonics.DEFAULT_LANGUAGE_CODE
  * any code.
  */
 class WordList internal constructor(val languageCode: String = DEFAULT_LANGUAGE_CODE) {
-
     init {
         validate(languageCode)
     }
@@ -24,7 +23,6 @@ class WordList internal constructor(val languageCode: String = DEFAULT_LANGUAGE_
     val words get() = _words
 
     companion object {
-
         private const val WORD_LIST_ELEMENT_COUNT = 2048
 
         /**

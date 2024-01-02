@@ -21,11 +21,10 @@ import kotlin.math.ceil
  * Modified to for Kotlin Multiplatform w/ okio - Luca Spinazzola anothergmale@gmail.com
  */
 internal actual object Pbkdf2Sha512 {
-
     /**
      * The size of Tn in bytes. Which will always be 64 bytes, as it is the xor of hmacSha512.
      */
-    private const val tnLen = 64
+    private const val TN_LENGTH = 64
 
     /**
      * Generate a derived key from the given parameters.
@@ -35,18 +34,24 @@ internal actual object Pbkdf2Sha512 {
      * @param c the iteration count
      * @param dkLen the key length in bits
      */
-    actual fun derive(p: CharArray, s: ByteArray, c: Int, dkLen: Int): ByteArray {
+    actual fun derive(
+        p: CharArray,
+        s: ByteArray,
+        c: Int,
+        dkLen: Int
+    ): ByteArray {
         val dkLenBytes = dkLen / 8
-        val pBytes = p.foldIndexed(ByteArray(p.size)) { i, acc, cc ->
-            acc.apply { this[i] = cc.code.toByte() }
-        }
+        val pBytes =
+            p.foldIndexed(ByteArray(p.size)) { i, acc, cc ->
+                acc.apply { this[i] = cc.code.toByte() }
+            }
         val hLen = 20.0
         // note: dropped length check because it's redundant, given the size of an int in kotlin
         val l = ceil(dkLenBytes / hLen).toInt()
-        val baos = ByteArray(l * tnLen)
+        val baos = ByteArray(l * TN_LENGTH)
         for (i in 1..l) {
             f(pBytes, s, c, i).let { Tn ->
-                Tn.copyInto(baos, (i - 1) * tnLen)
+                Tn.copyInto(baos, (i - 1) * TN_LENGTH)
             }
         }
         return baos.sliceArray(0 until dkLenBytes)
