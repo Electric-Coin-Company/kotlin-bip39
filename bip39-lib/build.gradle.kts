@@ -1,4 +1,4 @@
-import java.util.Base64
+import java.util.*
 
 plugins {
     // https://github.com/gradle/gradle/issues/20084#issuecomment-1060822638
@@ -16,8 +16,9 @@ plugins {
     id("signing")
 }
 
-val enableNonJvm = project.property("NONJVM_TARGETS_ENABLED").toString().toBoolean()
-val nativeTargets = if (enableNonJvm) arrayOf(
+val enableNative = project.property("NATIVE_TARGETS_ENABLED").toString().toBoolean()
+val enableJs = project.property("JS_TARGET_ENABLED").toString().toBoolean()
+val nativeTargets = if (enableNative) arrayOf(
     "linuxX64",
     "macosX64", "macosArm64",
     "iosArm64", "iosX64", "iosSimulatorArm64",
@@ -32,11 +33,13 @@ kotlin {
             useJUnitPlatform()
         }
     }
-    if (enableNonJvm) {
+    if (enableJs) {
         js(IR) {
             browser() // to compile for the web
             nodejs() // to compile against node
         }
+    }
+    if (enableNative) {
         for (target in nativeTargets) {
             targets.add(presets.getByName(target).createTarget(target))
         }
@@ -55,42 +58,50 @@ kotlin {
                 implementation(libs.kotest.property)
             }
         }
+
         @Suppress("UnusedPrivateProperty")
         val jvmMain by getting {
             dependencies {
             }
         }
+
         @Suppress("UnusedPrivateProperty")
         val jvmTest by getting {
             dependencies {
                 implementation(libs.kotest.runner.junit5)
             }
         }
-        if (enableNonJvm) {
+        if (enableNative || enableJs) {
             val nonJvmMain by creating {
                 dependsOn(commonMain)
                 dependencies {
                     implementation(libs.com.squareup.okio)
                 }
             }
-            val jsMain by getting {
-                dependsOn(nonJvmMain)
-            }
-            val mingwMain by creating {
-                dependsOn(nonJvmMain)
-            }
-            val unixMain by creating {
-                dependsOn(nonJvmMain)
-            }
-            for (target in nativeTargets) {
-                when (target) {
-                    "mingwX64" ->
-                        getByName("${target}Main").dependsOn(mingwMain)
 
-                    else ->
-                        getByName("${target}Main").dependsOn(unixMain)
+            if (enableJs) {
+                val jsMain by getting {
+                    dependsOn(nonJvmMain)
                 }
-                getByName("${target}Test").dependsOn(commonTest)
+            }
+
+            if (enableNative) {
+                val mingwMain by creating {
+                    dependsOn(nonJvmMain)
+                }
+                val unixMain by creating {
+                    dependsOn(nonJvmMain)
+                }
+                for (target in nativeTargets) {
+                    when (target) {
+                        "mingwX64" ->
+                            getByName("${target}Main").dependsOn(mingwMain)
+
+                        else ->
+                            getByName("${target}Main").dependsOn(unixMain)
+                    }
+                    getByName("${target}Test").dependsOn(commonTest)
+                }
             }
         }
     }
