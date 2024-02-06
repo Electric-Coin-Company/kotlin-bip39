@@ -12,15 +12,16 @@ import platform.windows.CMC_STATUS_SUCCESS
 actual class SecureRandom {
     @OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
     actual fun nextBytes(bytes: ByteArray) {
-        val result = bytes.usePinned {
-            @Suppress("UNCHECKED_CAST")
-            BCryptGenRandom(
-                null,
-                it.addressOf(0) as CPointer<UByteVar>,
-                bytes.size.convert(),
-                BCRYPT_USE_SYSTEM_PREFERRED_RNG.toUInt()
-            )
-        }
+        val result =
+            bytes.usePinned {
+                @Suppress("UNCHECKED_CAST")
+                BCryptGenRandom(
+                    null,
+                    it.addressOf(0) as CPointer<UByteVar>,
+                    bytes.size.convert(),
+                    BCRYPT_USE_SYSTEM_PREFERRED_RNG.toUInt()
+                )
+            }
         check(result != CMC_STATUS_SUCCESS) {
             "Could not get random number from BCryptGenRandom"
         }

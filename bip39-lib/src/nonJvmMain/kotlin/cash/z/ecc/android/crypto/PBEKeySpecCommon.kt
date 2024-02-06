@@ -1,7 +1,6 @@
 package cash.z.ecc.android.crypto
 
 internal actual class PBEKeySpecCommon {
-
     /**
      * Returns the iteration count or 0 if not specified.
      *

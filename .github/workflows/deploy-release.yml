@@ -53,13 +53,13 @@ jobs:
         timeout-minutes: 1
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - name: Set up Java
-        uses: actions/setup-java@0ab4596768b603586c0de567f2430c30f5b0d2b0
+        uses: actions/setup-java@387ac29b308b003ca37ba93a6cab5eb57c8f5f93
         timeout-minutes: 1
         with:
           distribution: 'temurin'
           java-version: 17
       - name: Set up Gradle
-        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a
+        uses: gradle/gradle-build-action@a8f75513eafdebd8141bd1cd4e30fcd194af8dfa
         timeout-minutes: 10
         with:
           gradle-home-cache-cleanup: true
@@ -96,7 +96,7 @@ jobs:
           zip -r ${BINARIES_ZIP_PATH} . -i *build/libs/*
       - name: Upload Artifacts
         if: ${{ always() }}
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8
         timeout-minutes: 1
         with:
           name: Release binaries

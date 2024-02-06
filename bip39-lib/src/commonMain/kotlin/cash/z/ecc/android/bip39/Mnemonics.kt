@@ -41,7 +41,6 @@ object Mnemonics {
 
     class MnemonicCode(val chars: CharArray, val languageCode: String = DEFAULT_LANGUAGE_CODE) :
         Closeable, Iterable<String> {
-
         constructor(
             phrase: String,
             languageCode: String = DEFAULT_LANGUAGE_CODE
@@ -67,39 +66,42 @@ object Mnemonics {
          * chars can be enough.
          */
         val words: List<CharArray>
-            get() = ArrayList<CharArray>(wordCount).apply {
-                var cursor = 0
-                chars.forEachIndexed { i, c ->
-                    if (c == ' ' || i == chars.lastIndex) {
-                        add(chars.copyOfRange(cursor, if (chars[i].isWhitespace()) i else i + 1))
-                        cursor = i + 1
+            get() =
+                ArrayList<CharArray>(wordCount).apply {
+                    var cursor = 0
+                    chars.forEachIndexed { i, c ->
+                        if (c == ' ' || i == chars.lastIndex) {
+                            add(chars.copyOfRange(cursor, if (chars[i].isWhitespace()) i else i + 1))
+                            cursor = i + 1
+                        }
                     }
                 }
-            }
 
         fun clear() = chars.fill(0.toChar())
 
         fun isEmpty() = chars.isEmpty()
 
-        override fun iterator(): Iterator<String> = object : Iterator<String> {
-            var cursor: Int = 0
-            override fun hasNext() = cursor < chars.size - 1
+        override fun iterator(): Iterator<String> =
+            object : Iterator<String> {
+                var cursor: Int = 0
 
-            override fun next(): String {
-                val nextSpaceIndex = nextSpaceIndex()
-                val word = chars.concatToString(cursor, cursor + (nextSpaceIndex - cursor))
-                cursor = nextSpaceIndex + 1
-                return word
-            }
+                override fun hasNext() = cursor < chars.size - 1
 
-            private fun nextSpaceIndex(): Int {
-                var i = cursor
-                while (i < chars.size - 1) {
-                    if (chars[i].isWhitespace()) return i else i++
+                override fun next(): String {
+                    val nextSpaceIndex = nextSpaceIndex()
+                    val word = chars.concatToString(cursor, cursor + (nextSpaceIndex - cursor))
+                    cursor = nextSpaceIndex + 1
+                    return word
                 }
-                return chars.size
+
+                private fun nextSpaceIndex(): Int {
+                    var i = cursor
+                    while (i < chars.size - 1) {
+                        if (chars[i].isWhitespace()) return i else i++
+                    }
+                    return chars.size
+                }
             }
-        }
 
         fun validate() {
             // verify: word count is supported
@@ -195,7 +197,6 @@ object Mnemonics {
         }
 
         companion object {
-
             /**
              * Utility function to create a mnemonic code as a character array from the given
              * entropy. Typically, new mnemonic codes are created starting with a WordCount
@@ -223,7 +224,10 @@ object Mnemonics {
 
                 // inner function that updates the index and copies a word after every 11 bits
                 // Note: the excess bits of the checksum are intentionally ignored, per BIP-39
-                fun processBit(bit: Boolean, chars: ArrayList<Char>) {
+                fun processBit(
+                    bit: Boolean,
+                    chars: ArrayList<Char>
+                ) {
                     // update the index
                     index = index shl 1
                     if (bit) index = index or 1
@@ -272,7 +276,6 @@ object Mnemonics {
         val bitLength = count / 3 * 32
 
         companion object {
-
             /**
              * Convert a count into an instance of [WordCount].
              */
@@ -349,9 +352,10 @@ fun MnemonicCode.toSeed(
     }
 }
 
-fun WordCount.toEntropy(): ByteArray = ByteArray(bitLength / 8).apply {
-    Mnemonics.secureRandom.nextBytes(this)
-}
+fun WordCount.toEntropy(): ByteArray =
+    ByteArray(bitLength / 8).apply {
+        Mnemonics.secureRandom.nextBytes(this)
+    }
 
 //
 // Private Extensions
