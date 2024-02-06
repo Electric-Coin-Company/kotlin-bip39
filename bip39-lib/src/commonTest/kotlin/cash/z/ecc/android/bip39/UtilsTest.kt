@@ -2,30 +2,36 @@ package cash.z.ecc.android.bip39
 
 import cash.z.ecc.android.bip39.utils.fromHex
 import cash.z.ecc.android.bip39.utils.toHex
-import io.kotest.core.spec.style.ShouldSpec
-import io.kotest.matchers.shouldBe
+import kotlin.test.Test
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 
-class UtilsTest : ShouldSpec({
-    should("convert ByteArray to hex String") {
+class UtilsTest {
+
+    @Test
+    fun testByteArrayToHexStringConversion() {
         val byteArray = byteArrayOf(-128, -16, 0, 16, 127)
-        byteArray.toHex() shouldBe "80f000107f"
+        assertEquals("80f000107f", byteArray.toHex())
     }
 
-    should("convert hex String to ByteArray") {
+    @Test
+    fun testHexStringToByteArrayConversion() {
         val hexString = "80f000107f"
         val expectedByteArray = byteArrayOf(-128, -16, 0, 16, 127)
-        hexString.fromHex() shouldBe expectedByteArray
+        assertContentEquals(expectedByteArray, hexString.fromHex())
     }
 
-    should("return original value, when converting to hex and then from hex") {
+    @Test
+    fun testReturnsOriginalValueWhenConvertingToHexAndThenFromHex() {
         val originalBytes = ByteArray(256) { (it - 128).toByte() }
         val transformedBytes = originalBytes.toHex().fromHex()
-        transformedBytes shouldBe originalBytes
+        assertContentEquals(originalBytes, transformedBytes)
     }
 
-    should("return original value, when converting from hex and then to hex") {
+    @Test
+    fun testReturnsOriginalValueWhenConvertingFromHexAndThenToHex() {
         val originalHex = "0008101820283038404850586068707880889098a0a8b0b8c0c8d0d8e0e8f0f8"
         val transformedHex = originalHex.fromHex().toHex()
-        transformedHex shouldBe originalHex
+        assertEquals(originalHex, transformedHex)
     }
-})
+}
