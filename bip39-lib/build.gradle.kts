@@ -142,7 +142,7 @@ publishing {
             // Artifact id is tricky.  Gradle uses the project name by default, but Kotlin multiplatform needs to add
             // platform specific suffixes.  Doing a partial replacement is the way to rename the artifact.
             artifactId = artifactId.replace(project.name, myArtifactId)
-            groupId = "io.github.luca992.cash.z.ecc.android"
+            groupId = "cash.z.ecc.android"
             version =
                 if (isSnapshot) {
                     "$myVersion-SNAPSHOT"
