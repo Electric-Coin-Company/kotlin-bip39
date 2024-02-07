@@ -38,7 +38,7 @@ internal actual object Pbkdf2Sha512 {
         p: CharArray,
         s: ByteArray,
         c: Int,
-        dkLen: Int
+        dkLen: Int,
     ): ByteArray {
         val dkLenBytes = dkLen / 8
         val pBytes =
@@ -61,7 +61,7 @@ internal actual object Pbkdf2Sha512 {
         p: ByteArray,
         s: ByteArray,
         c: Int,
-        i: Int
+        i: Int,
     ): ByteArray {
         val key = p.toByteString()
         val bU = ByteArray(s.size + 4)

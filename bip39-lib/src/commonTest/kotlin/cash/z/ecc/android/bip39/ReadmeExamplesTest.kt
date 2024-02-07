@@ -2,95 +2,96 @@ package cash.z.ecc.android.bip39
 
 import cash.z.ecc.android.bip39.Mnemonics.MnemonicCode
 import cash.z.ecc.android.bip39.Mnemonics.WordCount
-import io.kotest.assertions.throwables.shouldNotThrowAny
-import io.kotest.core.spec.style.ShouldSpec
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
+import cash.z.ecc.android.bip39.utils.shouldNotThrowAny
+import kotlin.test.Test
+import kotlin.test.assertContains
+import kotlin.test.assertEquals
 
-class ReadmeExamplesTest : ShouldSpec({
-    val validPhrase =
+class ReadmeExamplesTest {
+    private val validPhrase =
         "still champion voice habit trend flight survey between bitter process artefact blind carbon truly provide dizzy crush flush breeze blouse charge solid fish spread"
-    context("Example: Create 24-word mnemonic phrase") {
+
+    @Test
+    fun testCreate24WordMnemonicPhrase() {
         val mnemonicCode = MnemonicCode(WordCount.COUNT_24)
-        should("result in a valid 24-word phrase") {
-            mnemonicCode.wordCount shouldBe 24
-        }
-        should("result in a valid phrase") {
-            shouldNotThrowAny {
-                mnemonicCode.validate()
-            }
+        assertEquals(24, mnemonicCode.wordCount, "Result is not a valid 24-word phrase")
+        // should result in a valid phrase
+        shouldNotThrowAny {
+            mnemonicCode.validate()
         }
     }
-    context("Example: Generate seed") {
+
+    @Test
+    fun testGenerateSeed() {
         val mnemonicCode = MnemonicCode(WordCount.COUNT_24)
-        should("result in a valid 24-word phrase") {
-            mnemonicCode.toSeed()
-            mnemonicCode.wordCount shouldBe 24
-        }
-        should("result in a valid phrase") {
-            shouldNotThrowAny {
-                mnemonicCode.validate()
-            }
+        mnemonicCode.toSeed()
+        assertEquals(24, mnemonicCode.wordCount, "Result is not a valid 24-word phrase")
+        // should result in a valid phrase
+        shouldNotThrowAny {
+            mnemonicCode.validate()
         }
     }
-    context("Example: Generate seed from existing mnemonic chars") {
+
+    @Test
+    fun testGenerateSeedFromExistingMnemonicChars() {
         val mnemonicCode = MnemonicCode(validPhrase.toCharArray())
-        should("result in a valid 24-word phrase") {
-            mnemonicCode.toSeed()
-            mnemonicCode.wordCount shouldBe 24
-        }
-        should("result in a valid phrase") {
-            shouldNotThrowAny {
-                mnemonicCode.validate()
-            }
+        mnemonicCode.toSeed()
+        assertEquals(24, mnemonicCode.wordCount, "Result is not a valid 24-word phrase")
+        // should result in a valid phrase
+        shouldNotThrowAny {
+            mnemonicCode.validate()
         }
     }
-    context("Example: Generate seed from existing mnemonic string") {
+
+    @Test
+    fun testGenerateSeedFromExistingMnemonicString() {
         val mnemonicCode = MnemonicCode(validPhrase)
-        should("result in a valid 24-word phrase") {
-            mnemonicCode.toSeed()
-            mnemonicCode.wordCount shouldBe 24
-        }
-        should("result in a valid phrase") {
-            shouldNotThrowAny {
-                mnemonicCode.validate()
-            }
+        mnemonicCode.toSeed()
+        assertEquals(24, mnemonicCode.wordCount, "Result is not a valid 24-word phrase")
+        // should result in a valid phrase
+        shouldNotThrowAny {
+            mnemonicCode.validate()
         }
     }
-    context("Example: Generate seed with passphrase") {
+
+    @Test
+    fun testGenerateSeedWithPassphraseNormalWay() {
         val passphrase = "bitcoin".toCharArray()
-        should("'normal way' results in a 64 byte seed") {
-            val seed = MnemonicCode(validPhrase).toSeed(passphrase)
-            seed.size shouldBe 64
-        }
-        should("'private way' results in a 64 byte seed") {
-            var seed: ByteArray
-            charArrayOf('z', 'c', 'a', 's', 'h').let { passphrase ->
-                seed = MnemonicCode(validPhrase).toSeed(passphrase)
-                passphrase.concatToString() shouldBe "zcash"
-                passphrase.fill('0')
-                passphrase.concatToString() shouldBe "00000"
-            }
-            seed.size shouldBe 64
-        }
+        val seed = MnemonicCode(validPhrase).toSeed(passphrase)
+        assertEquals(64, seed.size, "'normal way' does not result in a 64 byte seed")
     }
-    context("Example: Iterate over mnemonic codes") {
+
+    @Test
+    fun testGenerateSeedWithPassphrasePrivateWay() {
+        val seed: ByteArray
+        charArrayOf('z', 'c', 'a', 's', 'h').let { passphrase ->
+            seed = MnemonicCode(validPhrase).toSeed(passphrase)
+            assertEquals("zcash", passphrase.concatToString())
+            passphrase.fill('0')
+            assertEquals("00000", passphrase.concatToString())
+        }
+        assertEquals(64, seed.size, "'private way' does not result in a 64 byte seed")
+    }
+
+    @Test
+    fun testIterateOverMnemonicCodesWithForLoop() {
         val mnemonicCode = MnemonicCode(validPhrase)
-        should("work in a for loop") {
-            var count = 0
-            for (word in mnemonicCode) {
-                count++
-                validPhrase shouldContain word
-            }
-            count shouldBe 24
+        var count = 0
+        for (word in mnemonicCode) {
+            count++
+            assertContains(validPhrase, word)
         }
-        should("work with forEach") {
-            var count = 0
-            mnemonicCode.forEach { word ->
-                count++
-                validPhrase shouldContain word
-            }
-            count shouldBe 24
-        }
+        assertEquals(24, count)
     }
-})
+
+    @Test
+    fun testIterateOverMnemonicCodesWithForEachLoop() {
+        val mnemonicCode = MnemonicCode(validPhrase)
+        var count = 0
+        mnemonicCode.forEach { word ->
+            count++
+            assertContains(validPhrase, word)
+        }
+        assertEquals(24, count)
+    }
+}

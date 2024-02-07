@@ -14,7 +14,7 @@ internal actual class SecretKeyFactoryCommon() {
 
         actual fun getInstance(
             algorithm: String,
-            provider: FallbackProvider
+            provider: FallbackProvider,
         ): SecretKeyFactoryCommon = SecretKeyFactoryCommon()
     }
 }

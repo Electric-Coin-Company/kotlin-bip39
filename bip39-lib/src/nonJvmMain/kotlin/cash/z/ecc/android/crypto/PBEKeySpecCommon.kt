@@ -63,7 +63,7 @@ internal actual class PBEKeySpecCommon {
         password: CharArray?,
         salt: ByteArray,
         iterationCount: Int,
-        keyLength: Int
+        keyLength: Int,
     ) {
         if (password == null || password.isEmpty()) {
             this.password = CharArray(0)

@@ -19,7 +19,7 @@ actual class SecureRandom {
                     null,
                     it.addressOf(0) as CPointer<UByteVar>,
                     bytes.size.convert(),
-                    BCRYPT_USE_SYSTEM_PREFERRED_RNG.toUInt()
+                    BCRYPT_USE_SYSTEM_PREFERRED_RNG.toUInt(),
                 )
             }
         check(result != CMC_STATUS_SUCCESS) {
