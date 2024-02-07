@@ -34,8 +34,22 @@ kotlin {
     }
     if (enableJs) {
         js(IR) {
-            browser() // to compile for the web
-            nodejs() // to compile against node
+            browser {
+                testTask {
+                    useMocha {
+                        // Needed due to: https://github.com/square/okio/issues/1206
+                        timeout = "60s"
+                    }
+                }
+            }
+            nodejs {
+                testTask {
+                    useMocha {
+                        // Needed due to: https://github.com/square/okio/issues/1206
+                        timeout = "60s"
+                    }
+                }
+            }
         }
     }
     if (enableNative) {
