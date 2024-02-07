@@ -4,16 +4,16 @@ import kotlinx.browser.window
 import org.w3c.dom.get
 
 actual class SecureRandom {
-
     var crypto: dynamic = null
 
     init {
-        crypto = try {
-            // browser
-            window["crypto"]
-        } catch (_: Throwable) {
-            null
-        }
+        crypto =
+            try {
+                // browser
+                window["crypto"]
+            } catch (_: Throwable) {
+                null
+            }
         if (crypto == null) {
             try {
                 // node

@@ -1,8 +1,17 @@
 package cash.z.ecc.android.bip39
 
 import cash.z.ecc.android.bip39.Mnemonics.MnemonicCode
-import cash.z.ecc.android.bip39.utils.*
-import kotlin.test.*
+import cash.z.ecc.android.bip39.utils.englishTestData
+import cash.z.ecc.android.bip39.utils.fromHex
+import cash.z.ecc.android.bip39.utils.shouldNotThrowAny
+import cash.z.ecc.android.bip39.utils.shouldThrow
+import cash.z.ecc.android.bip39.utils.swap
+import cash.z.ecc.android.bip39.utils.toHex
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 private const val DEFAULT_LANGUAGE_CODE = "en"
 
@@ -20,10 +29,11 @@ class MnemonicsTest {
         //
         val hex = result.toHex()
         assertEquals(128, hex.length, "Seed should be the expected length when the seed is converted to hex")
+        @Suppress("MaxLineLength")
         assertEquals(
             "b873212f885ccffbf4692afcb84bc2e55886de2dfa07d90f5c3c239abc31c0a6ce047e30fd8bf6a281e71389aa82d73df74c7bbfb3b06b4639a5cee775cccd3c",
             hex,
-            "Seed should equal the expected value when the seed is converted to hex"
+            "Seed should equal the expected value when the seed is converted to hex",
         )
     }
 
@@ -31,13 +41,14 @@ class MnemonicsTest {
     fun testBitLengthOfEntropyCorrectForAllSupportedWordCounts() {
         data class CountToExpectedBitLength(val count: Int, val expectedBitLength: Int)
 
-        val countToExpectedBitLengths = listOf(
-            CountToExpectedBitLength(12, 128),
-            CountToExpectedBitLength(15, 160),
-            CountToExpectedBitLength(18, 192),
-            CountToExpectedBitLength(21, 224),
-            CountToExpectedBitLength(24, 256)
-        )
+        val countToExpectedBitLengths =
+            listOf(
+                CountToExpectedBitLength(12, 128),
+                CountToExpectedBitLength(15, 160),
+                CountToExpectedBitLength(18, 192),
+                CountToExpectedBitLength(21, 224),
+                CountToExpectedBitLength(24, 256),
+            )
         for ((count, bitLength) in countToExpectedBitLengths) {
             val wordCount = Mnemonics.WordCount.valueOf(count)
             assertNotNull(wordCount)
@@ -47,7 +58,6 @@ class MnemonicsTest {
             }
         }
     }
-
 
     @Test
     fun testMnemonicPhraseGenerationAndValidation() {
@@ -61,7 +71,7 @@ class MnemonicsTest {
             assertEquals(
                 expectedSpaces,
                 actualSpaces,
-                "Expected $expectedSpaces spaces for ${wordCount.name}, found $actualSpaces"
+                "Expected $expectedSpaces spaces for ${wordCount.name}, found $actualSpaces",
             )
 
             val words = mnemonicCode.words.map { it.concatToString() }
@@ -69,14 +79,14 @@ class MnemonicsTest {
             assertEquals(
                 wordCount.count,
                 words.size,
-                "Expected ${wordCount.count} elements for ${wordCount.name}, found ${words.size}"
+                "Expected ${wordCount.count} elements for ${wordCount.name}, found ${words.size}",
             )
 
             // Test that each word is present in the original phrase
             val correctWords = phraseString.split(' ')
             assertTrue(
                 words.all { it in correctWords },
-                "Not all words from generated phrase are present in the original phrase for ${wordCount.name}"
+                "Not all words from generated phrase are present in the original phrase for ${wordCount.name}",
             )
         }
     }
@@ -85,25 +95,32 @@ class MnemonicsTest {
     fun testConvertingHexEntropyToMnemonicPhraseMatchesExpected() {
         data class ExpectedMnemonicData(val wordCount: Int, val entropy: String, val mnemonic: String)
 
-        val expected = listOf(
-            ExpectedMnemonicData(
-                24,
-                "b893a6b0da8fc9b73d709bda939e818a677aa376c266949378300b65a34b8e52",
-                "review outdoor promote relax wish swear volume beach surround ostrich parrot below jeans" + " faculty swallow error nest orange army bitter focus place deer fat"
-            ), ExpectedMnemonicData(
-                18,
-                "d5bcbf62dea1a07ab1abb0144b299300137168a7939f3071f112b557",
-                "stick tourist suffer run borrow diary shop invite begin flock gospel ability damage reform" + " oxygen initial corn moon dwarf height image"
-            ), ExpectedMnemonicData(
-                15,
-                "e06ce21369dc09eb2bda66510a76f65ab3f947cce90fcb10",
-                "there grow luggage squirrel scene void quarter error extra father rural rely display" + " physical crisp capable slam lumber"
-            ), ExpectedMnemonicData(
-                12,
-                "0b01c3c0b0590faf45fc171da17cfb22",
-                "arch asthma usual gaze movie stumble blood load buffalo armor disagree earth"
+        val expected =
+            listOf(
+                ExpectedMnemonicData(
+                    24,
+                    "b893a6b0da8fc9b73d709bda939e818a677aa376c266949378300b65a34b8e52",
+                    "review outdoor promote relax wish swear volume beach surround ostrich parrot below jeans" +
+                        " faculty swallow error nest orange army bitter focus place deer fat",
+                ),
+                ExpectedMnemonicData(
+                    18,
+                    "d5bcbf62dea1a07ab1abb0144b299300137168a7939f3071f112b557",
+                    "stick tourist suffer run borrow diary shop invite begin flock gospel ability damage reform" +
+                        " oxygen initial corn moon dwarf height image",
+                ),
+                ExpectedMnemonicData(
+                    15,
+                    "e06ce21369dc09eb2bda66510a76f65ab3f947cce90fcb10",
+                    "there grow luggage squirrel scene void quarter error extra father rural rely display" +
+                        " physical crisp capable slam lumber",
+                ),
+                ExpectedMnemonicData(
+                    12,
+                    "0b01c3c0b0590faf45fc171da17cfb22",
+                    "arch asthma usual gaze movie stumble blood load buffalo armor disagree earth",
+                ),
             )
-        )
 
         expected.forEach { (_, entropy, mnemonic) ->
             val code = MnemonicCode(entropy.fromHex())
@@ -161,9 +178,10 @@ class MnemonicsTest {
 
     @Test
     fun testMnemonicValidationFailsWhenContainingAnInvalidWord() {
-        val mnemonicPhrase = validPhrase.split(' ').let { words ->
-            validPhrase.replace(words[23], "convincee")
-        }
+        val mnemonicPhrase =
+            validPhrase.split(' ').let { words ->
+                validPhrase.replace(words[23], "convincee")
+            }
 
         // "validate() fails with a word validation error"
         shouldThrow<Mnemonics.InvalidWordException> { MnemonicCode(mnemonicPhrase).validate() }
@@ -190,5 +208,4 @@ class MnemonicsTest {
         // "toSeed(validate=false) succeeds!!"
         shouldNotThrowAny { MnemonicCode(mnemonicPhrase).toSeed(validate = false) }
     }
-
 }

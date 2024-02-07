@@ -17,14 +17,19 @@ plugins {
 
 val enableNative = project.property("NATIVE_TARGETS_ENABLED").toString().toBoolean()
 val enableJs = project.property("JS_TARGET_ENABLED").toString().toBoolean()
-val nativeTargets = if (enableNative) arrayOf(
-    "linuxX64",
-    "macosX64", "macosArm64",
-    "iosArm64", "iosX64", "iosSimulatorArm64",
-    "tvosArm64", "tvosX64", "tvosSimulatorArm64",
-    "watchosArm32", "watchosArm64", "watchosX64", "watchosSimulatorArm64",
-    "mingwX64"
-) else arrayOf()
+val nativeTargets =
+    if (enableNative) {
+        arrayOf(
+            "linuxX64",
+            "macosX64", "macosArm64",
+            "iosArm64", "iosX64", "iosSimulatorArm64",
+            "tvosArm64", "tvosX64", "tvosSimulatorArm64",
+            "watchosArm32", "watchosArm64", "watchosX64", "watchosSimulatorArm64",
+            "mingwX64",
+        )
+    } else {
+        arrayOf()
+    }
 
 kotlin {
     jvm {
@@ -69,7 +74,6 @@ kotlin {
             }
         }
 
-
         if (enableNative || enableJs) {
             val nonJvmMain by creating {
                 dependsOn(commonMain)
@@ -79,7 +83,7 @@ kotlin {
             }
 
             if (enableJs) {
-                val jsMain by getting {
+                jsMain {
                     dependsOn(nonJvmMain)
                 }
             }
@@ -113,9 +117,10 @@ tasks {
         outputDirectory.set(dokkaOutputDir)
     }
 
-    val deleteDokkaOutputDir = register<Delete>("deleteDokkaOutputDirectory") {
-        delete(dokkaOutputDir)
-    }
+    val deleteDokkaOutputDir =
+        register<Delete>("deleteDokkaOutputDirectory") {
+            delete(dokkaOutputDir)
+        }
 
     register<Jar>("javadocJar") {
         dependsOn(deleteDokkaOutputDir, dokkaHtml)
@@ -138,11 +143,12 @@ publishing {
             // platform specific suffixes.  Doing a partial replacement is the way to rename the artifact.
             artifactId = artifactId.replace(project.name, myArtifactId)
             groupId = "io.github.luca992.cash.z.ecc.android"
-            version = if (isSnapshot) {
-                "$myVersion-SNAPSHOT"
-            } else {
-                myVersion
-            }
+            version =
+                if (isSnapshot) {
+                    "$myVersion-SNAPSHOT"
+                } else {
+                    myVersion
+                }
 
             pom {
                 name.set("Kotlin BIP-39")
@@ -172,11 +178,12 @@ publishing {
         }
     }
     repositories {
-        val mavenUrl = if (isSnapshot) {
-            project.property("ZCASH_MAVEN_PUBLISH_SNAPSHOT_URL").toString()
-        } else {
-            project.property("ZCASH_MAVEN_PUBLISH_RELEASE_URL").toString()
-        }
+        val mavenUrl =
+            if (isSnapshot) {
+                project.property("ZCASH_MAVEN_PUBLISH_SNAPSHOT_URL").toString()
+            } else {
+                project.property("ZCASH_MAVEN_PUBLISH_RELEASE_URL").toString()
+            }
         val mavenPublishUsername = project.property("ZCASH_MAVEN_PUBLISH_USERNAME").toString()
         val mavenPublishPassword = project.property("ZCASH_MAVEN_PUBLISH_PASSWORD").toString()
 
@@ -197,15 +204,16 @@ signing {
     // Maven Central requires signing for non-snapshots
     isRequired = !isSnapshot
 
-    val signingKey = run {
-        val base64EncodedKey = project.property("ZCASH_ASCII_GPG_KEY").toString()
-        if (base64EncodedKey.isNotEmpty()) {
-            val keyBytes = Base64.getDecoder().decode(base64EncodedKey)
-            String(keyBytes)
-        } else {
-            ""
+    val signingKey =
+        run {
+            val base64EncodedKey = project.property("ZCASH_ASCII_GPG_KEY").toString()
+            if (base64EncodedKey.isNotEmpty()) {
+                val keyBytes = Base64.getDecoder().decode(base64EncodedKey)
+                String(keyBytes)
+            } else {
+                ""
+            }
         }
-    }
 
     if (signingKey.isNotEmpty()) {
         useInMemoryPgpKeys(signingKey, "")

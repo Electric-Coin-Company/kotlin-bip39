@@ -16,5 +16,4 @@ class ReadmeExamplesTestJvm {
         // content gets automatically cleared after use!
         assertEquals(0, mnemonicCode.wordCount)
     }
-
 }

@@ -7,7 +7,6 @@ import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 class UtilsTest {
-
     @Test
     fun testByteArrayToHexStringConversion() {
         val byteArray = byteArrayOf(-128, -16, 0, 16, 127)

@@ -8,7 +8,6 @@ import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 class ReadmeExamplesTest {
-
     private val validPhrase =
         "still champion voice habit trend flight survey between bitter process artefact blind carbon truly provide dizzy crush flush breeze blouse charge solid fish spread"
 

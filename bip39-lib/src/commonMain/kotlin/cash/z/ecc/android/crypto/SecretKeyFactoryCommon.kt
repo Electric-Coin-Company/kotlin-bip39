@@ -8,7 +8,7 @@ internal expect class SecretKeyFactoryCommon {
 
         fun getInstance(
             algorithm: String,
-            provider: FallbackProvider
+            provider: FallbackProvider,
         ): SecretKeyFactoryCommon
     }
 }
