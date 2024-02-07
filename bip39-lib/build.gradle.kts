@@ -4,7 +4,6 @@ plugins {
     // https://github.com/gradle/gradle/issues/20084#issuecomment-1060822638
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     alias(libs.plugins.dokka)
-    alias(libs.plugins.kotest)
     id("bip39.kotlin-multiplatform-conventions")
     id("bip39.dependency-conventions")
 
@@ -53,24 +52,10 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation(libs.kotest.framework.engine)
-                implementation(libs.kotest.assertion)
-                implementation(libs.kotest.property)
             }
         }
 
-        @Suppress("UnusedPrivateProperty")
-        val jvmMain by getting {
-            dependencies {
-            }
-        }
 
-        @Suppress("UnusedPrivateProperty")
-        val jvmTest by getting {
-            dependencies {
-                implementation(libs.kotest.runner.junit5)
-            }
-        }
         if (enableNative || enableJs) {
             val nonJvmMain by creating {
                 dependsOn(commonMain)
