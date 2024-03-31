@@ -34,7 +34,7 @@ internal actual object Pbkdf2Sha512 {
         p: CharArray,
         s: ByteArray,
         c: Int,
-        dkLen: Int
+        dkLen: Int,
     ): ByteArray {
         ByteArrayOutputStream().use { baos ->
             val dkLenBytes = dkLen / 8
@@ -60,7 +60,7 @@ internal actual object Pbkdf2Sha512 {
         p: ByteArray,
         s: ByteArray,
         c: Int,
-        i: Int
+        i: Int,
     ): ByteArray {
         val key = SecretKeySpec(p, "HmacSHA512")
         val mac = Mac.getInstance(key.algorithm).apply { init(key) }

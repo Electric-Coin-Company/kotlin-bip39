@@ -1,7 +1,8 @@
 // Workaround for Version Catalogs
 // https://github.com/gradle/gradle/issues/15383#issuecomment-1013300927
-val catalogs = extensions
-    .getByType<VersionCatalogsExtension>()
+val catalogs =
+    extensions
+        .getByType<VersionCatalogsExtension>()
 val someVersion = catalogs.named("libs").findVersion("ktlint").get().requiredVersion
 
 plugins {
@@ -11,7 +12,7 @@ plugins {
 val ktlint by configurations.creating
 
 dependencies {
-    ktlint("com.pinterest.ktlint:ktlint-cli:${someVersion}") {
+    ktlint("com.pinterest.ktlint:ktlint-cli:$someVersion") {
         attributes {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named<Bundling>(Bundling.EXTERNAL))
         }

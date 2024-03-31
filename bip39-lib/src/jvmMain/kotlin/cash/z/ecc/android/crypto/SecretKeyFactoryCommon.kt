@@ -10,7 +10,7 @@ internal actual class SecretKeyFactoryCommon(private val jvmSecretKeyFactory: ja
 
         actual fun getInstance(
             algorithm: String,
-            provider: FallbackProvider
+            provider: FallbackProvider,
         ): SecretKeyFactoryCommon = SecretKeyFactoryCommon(javax.crypto.SecretKeyFactory.getInstance(algorithm))
     }
 }

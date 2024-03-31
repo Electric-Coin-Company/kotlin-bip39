@@ -21,11 +21,11 @@ internal actual class FallbackProvider : Provider(
     "FallbackProvider",
     1.0,
     "Provides a bridge to a default implementation of the PBKDF2WithHmacSHA512 algorithm" +
-        " to use when one is not already available on the device."
+        " to use when one is not already available on the device.",
 ) {
     override fun getService(
         type: String?,
-        algorithm: String?
+        algorithm: String?,
     ): Service? {
         return ServiceProvider().takeIf {
             SecretKeyFactory::class.java.simpleName.equals(type, true) &&
@@ -39,7 +39,7 @@ internal actual class FallbackProvider : Provider(
         Pbkdf2KeyFactory.ALGORITHM,
         ServiceProvider::class.java.simpleName,
         null,
-        null
+        null,
     ) {
         override fun newInstance(unused: Any?): Any {
             return Pbkdf2KeyFactory()
@@ -64,7 +64,7 @@ class Pbkdf2KeyFactory : SecretKeyFactorySpi() {
 
     override fun engineGetKeySpec(
         s: SecretKey,
-        p: Class<*>
+        p: Class<*>,
     ) = throw UnsupportedOperationException()
 
     override fun engineTranslateKey(s: SecretKey?) = throw UnsupportedOperationException()

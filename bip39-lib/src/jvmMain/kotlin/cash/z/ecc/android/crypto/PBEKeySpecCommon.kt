@@ -6,7 +6,7 @@ internal actual class PBEKeySpecCommon actual constructor(
     password: CharArray?,
     salt: ByteArray,
     iterationCount: Int,
-    keyLength: Int
+    keyLength: Int,
 ) {
     val wrappedPbeKeySpec = PBEKeySpec(password, salt, iterationCount, keyLength)
 

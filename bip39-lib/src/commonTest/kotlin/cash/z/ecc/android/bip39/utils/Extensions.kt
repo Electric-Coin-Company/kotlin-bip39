@@ -26,7 +26,7 @@ fun String.fromHex(): ByteArray {
 
 fun String.swap(
     srcWord: Int,
-    destWord: Int = srcWord + 1
+    destWord: Int = srcWord + 1,
 ): String {
     require(srcWord < destWord) { "srcWord must be less than destWord" }
     require(destWord <= count { it == ' ' }) { "there aren't that many words" }

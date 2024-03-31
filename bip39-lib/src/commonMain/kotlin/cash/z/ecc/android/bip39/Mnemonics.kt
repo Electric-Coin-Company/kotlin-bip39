@@ -43,17 +43,17 @@ object Mnemonics {
         Closeable, Iterable<String> {
         constructor(
             phrase: String,
-            languageCode: String = DEFAULT_LANGUAGE_CODE
+            languageCode: String = DEFAULT_LANGUAGE_CODE,
         ) : this(phrase.toCharArray(), languageCode)
 
         constructor(
             entropy: ByteArray,
-            languageCode: String = DEFAULT_LANGUAGE_CODE
+            languageCode: String = DEFAULT_LANGUAGE_CODE,
         ) : this(computeSentence(entropy), languageCode)
 
         constructor(
             wordCount: WordCount,
-            languageCode: String = DEFAULT_LANGUAGE_CODE
+            languageCode: String = DEFAULT_LANGUAGE_CODE,
         ) : this(computeSentence(wordCount.toEntropy()), languageCode)
 
         override fun close() = clear()
@@ -215,7 +215,7 @@ object Mnemonics {
              */
             private fun computeSentence(
                 entropy: ByteArray,
-                languageCode: String = DEFAULT_LANGUAGE_CODE
+                languageCode: String = DEFAULT_LANGUAGE_CODE,
             ): CharArray {
                 // initialize state
                 var index = 0
@@ -226,7 +226,7 @@ object Mnemonics {
                 // Note: the excess bits of the checksum are intentionally ignored, per BIP-39
                 fun processBit(
                     bit: Boolean,
-                    chars: ArrayList<Char>
+                    chars: ArrayList<Char>,
                 ) {
                     // update the index
                     index = index shl 1
@@ -268,7 +268,8 @@ object Mnemonics {
         COUNT_15(15),
         COUNT_18(18),
         COUNT_21(21),
-        COUNT_24(24);
+        COUNT_24(24),
+        ;
 
         /**
          * The bit length of the entropy necessary to create a mnemonic with the given word count.
@@ -294,7 +295,7 @@ object Mnemonics {
 
     object ChecksumException :
         RuntimeException(
-            "Error: The checksum failed. Verify that none of the words have been transposed."
+            "Error: The checksum failed. Verify that none of the words have been transposed.",
         )
 
     class WordCountException(count: Int) :
@@ -332,7 +333,7 @@ object Mnemonics {
 fun MnemonicCode.toSeed(
     // expect: UTF-8 normalized with NFKD
     passphrase: CharArray = charArrayOf(),
-    validate: Boolean = true
+    validate: Boolean = true,
 ): ByteArray {
     // we can skip validation when we know for sure that the code is valid
     // such as when it was just generated from new/correct entropy (common case for new seeds)

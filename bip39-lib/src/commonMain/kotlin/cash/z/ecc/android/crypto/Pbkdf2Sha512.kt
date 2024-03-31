@@ -13,6 +13,6 @@ internal expect object Pbkdf2Sha512 {
         p: CharArray,
         s: ByteArray,
         c: Int,
-        dkLen: Int
+        dkLen: Int,
     ): ByteArray
 }

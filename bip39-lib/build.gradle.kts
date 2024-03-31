@@ -1,10 +1,9 @@
-import java.util.Base64
+import java.util.*
 
 plugins {
     // https://github.com/gradle/gradle/issues/20084#issuecomment-1060822638
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     alias(libs.plugins.dokka)
-    alias(libs.plugins.kotest)
     id("bip39.kotlin-multiplatform-conventions")
     id("bip39.dependency-conventions")
 
@@ -17,14 +16,20 @@ plugins {
 }
 
 val enableNative = project.property("NATIVE_TARGETS_ENABLED").toString().toBoolean()
-val nativeTargets = if (enableNative) arrayOf(
-    "linuxX64",
-    "macosX64", "macosArm64",
-    "iosArm64", "iosX64", "iosSimulatorArm64",
-    "tvosArm64", "tvosX64", "tvosSimulatorArm64",
-    "watchosArm32", "watchosArm64", "watchosX64", "watchosSimulatorArm64",
-    "mingwX64"
-) else arrayOf()
+val enableJs = project.property("JS_TARGET_ENABLED").toString().toBoolean()
+val nativeTargets =
+    if (enableNative) {
+        arrayOf(
+            "linuxX64",
+            "macosX64", "macosArm64",
+            "iosArm64", "iosX64", "iosSimulatorArm64",
+            "tvosArm64", "tvosX64", "tvosSimulatorArm64",
+            "watchosArm32", "watchosArm64", "watchosX64", "watchosSimulatorArm64",
+            "mingwX64",
+        )
+    } else {
+        arrayOf()
+    }
 
 kotlin {
     jvm {
@@ -32,8 +37,30 @@ kotlin {
             useJUnitPlatform()
         }
     }
-    for (target in nativeTargets) {
-        targets.add(presets.getByName(target).createTarget(target))
+    if (enableJs) {
+        js(IR) {
+            browser {
+                testTask {
+                    useMocha {
+                        // Needed due to: https://github.com/square/okio/issues/1206
+                        timeout = "60s"
+                    }
+                }
+            }
+            nodejs {
+                testTask {
+                    useMocha {
+                        // Needed due to: https://github.com/square/okio/issues/1206
+                        timeout = "60s"
+                    }
+                }
+            }
+        }
+    }
+    if (enableNative) {
+        for (target in nativeTargets) {
+            targets.add(presets.getByName(target).createTarget(target))
+        }
     }
 
     sourceSets {
@@ -44,44 +71,40 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation(libs.kotest.framework.engine)
-                implementation(libs.kotest.assertion)
-                implementation(libs.kotest.property)
             }
         }
-        @Suppress("UnusedPrivateProperty")
-        val jvmMain by getting {
-            dependencies {
-            }
-        }
-        @Suppress("UnusedPrivateProperty")
-        val jvmTest by getting {
-            dependencies {
-                implementation(libs.kotest.runner.junit5)
-            }
-        }
-        if (enableNative) {
+
+        if (enableNative || enableJs) {
             val nonJvmMain by creating {
                 dependsOn(commonMain)
                 dependencies {
                     implementation(libs.com.squareup.okio)
                 }
             }
-            val mingwMain by creating {
-                dependsOn(nonJvmMain)
-            }
-            val unixMain by creating {
-                dependsOn(nonJvmMain)
-            }
-            for (target in nativeTargets) {
-                when (target) {
-                    "mingwX64" ->
-                        getByName("${target}Main").dependsOn(mingwMain)
 
-                    else ->
-                        getByName("${target}Main").dependsOn(unixMain)
+            if (enableJs) {
+                jsMain {
+                    dependsOn(nonJvmMain)
                 }
-                getByName("${target}Test").dependsOn(commonTest)
+            }
+
+            if (enableNative) {
+                val mingwMain by creating {
+                    dependsOn(nonJvmMain)
+                }
+                val unixMain by creating {
+                    dependsOn(nonJvmMain)
+                }
+                for (target in nativeTargets) {
+                    when (target) {
+                        "mingwX64" ->
+                            getByName("${target}Main").dependsOn(mingwMain)
+
+                        else ->
+                            getByName("${target}Main").dependsOn(unixMain)
+                    }
+                    getByName("${target}Test").dependsOn(commonTest)
+                }
             }
         }
     }
@@ -94,9 +117,10 @@ tasks {
         outputDirectory.set(dokkaOutputDir)
     }
 
-    val deleteDokkaOutputDir = register<Delete>("deleteDokkaOutputDirectory") {
-        delete(dokkaOutputDir)
-    }
+    val deleteDokkaOutputDir =
+        register<Delete>("deleteDokkaOutputDirectory") {
+            delete(dokkaOutputDir)
+        }
 
     register<Jar>("javadocJar") {
         dependsOn(deleteDokkaOutputDir, dokkaHtml)
@@ -119,11 +143,12 @@ publishing {
             // platform specific suffixes.  Doing a partial replacement is the way to rename the artifact.
             artifactId = artifactId.replace(project.name, myArtifactId)
             groupId = "cash.z.ecc.android"
-            version = if (isSnapshot) {
-                "$myVersion-SNAPSHOT"
-            } else {
-                myVersion
-            }
+            version =
+                if (isSnapshot) {
+                    "$myVersion-SNAPSHOT"
+                } else {
+                    myVersion
+                }
 
             pom {
                 name.set("Kotlin BIP-39")
@@ -153,11 +178,12 @@ publishing {
         }
     }
     repositories {
-        val mavenUrl = if (isSnapshot) {
-            project.property("ZCASH_MAVEN_PUBLISH_SNAPSHOT_URL").toString()
-        } else {
-            project.property("ZCASH_MAVEN_PUBLISH_RELEASE_URL").toString()
-        }
+        val mavenUrl =
+            if (isSnapshot) {
+                project.property("ZCASH_MAVEN_PUBLISH_SNAPSHOT_URL").toString()
+            } else {
+                project.property("ZCASH_MAVEN_PUBLISH_RELEASE_URL").toString()
+            }
         val mavenPublishUsername = project.property("ZCASH_MAVEN_PUBLISH_USERNAME").toString()
         val mavenPublishPassword = project.property("ZCASH_MAVEN_PUBLISH_PASSWORD").toString()
 
@@ -178,15 +204,16 @@ signing {
     // Maven Central requires signing for non-snapshots
     isRequired = !isSnapshot
 
-    val signingKey = run {
-        val base64EncodedKey = project.property("ZCASH_ASCII_GPG_KEY").toString()
-        if (base64EncodedKey.isNotEmpty()) {
-            val keyBytes = Base64.getDecoder().decode(base64EncodedKey)
-            String(keyBytes)
-        } else {
-            ""
+    val signingKey =
+        run {
+            val base64EncodedKey = project.property("ZCASH_ASCII_GPG_KEY").toString()
+            if (base64EncodedKey.isNotEmpty()) {
+                val keyBytes = Base64.getDecoder().decode(base64EncodedKey)
+                String(keyBytes)
+            } else {
+                ""
+            }
         }
-    }
 
     if (signingKey.isNotEmpty()) {
         useInMemoryPgpKeys(signingKey, "")
