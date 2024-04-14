@@ -32,6 +32,8 @@ kotlin {
             useJUnitPlatform()
         }
     }
+    // TODO [#242]: Replace KotlinTargetPreset.createTarget() API
+    // TODO [#242]: https://github.com/Electric-Coin-Company/kotlin-bip39/issues/242
     for (target in nativeTargets) {
         targets.add(presets.getByName(target).createTarget(target))
     }
@@ -60,6 +62,8 @@ kotlin {
                 implementation(libs.kotest.runner.junit5)
             }
         }
+        // TODO [#243]: Replace dependsOn() API
+        // TODO [#243]: https://github.com/Electric-Coin-Company/kotlin-bip39/issues/243
         if (enableNative) {
             val nonJvmMain by creating {
                 dependsOn(commonMain)
