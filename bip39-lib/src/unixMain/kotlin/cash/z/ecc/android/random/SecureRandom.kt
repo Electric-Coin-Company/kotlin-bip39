@@ -26,7 +26,9 @@ actual class SecureRandom {
                     bytes.usePinned {
                         read(randomData, it.addressOf(0), bytes.size.convert())
                     }
-                check(result >= 0) {
+                // Warning: Operator '==' cannot be applied to 'ssize_t /* = Long */' and 'Int'
+                // Converting both sides to Long to ensure they fit in the range
+                check(result.toLong() == bytes.size.toLong()) {
                     "Could not get random number from /dev/urandom"
                 }
             }
