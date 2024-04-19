@@ -26,7 +26,7 @@ jobs:
       # https://github.com/gradle/wrapper-validation-action/issues/40
       - name: Gradle Wrapper Validation
         timeout-minutes: 1
-        uses: gradle/wrapper-validation-action@b5418f5a58f5fd2eb486dd7efb368fe7be7eae45
+        uses: gradle/wrapper-validation-action@5188e9b5527a0a094cee21e2fe9a8ca44b4629af
 
   static_analysis_detekt:
     needs: validate_gradle_wrapper
