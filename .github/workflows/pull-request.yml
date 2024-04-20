@@ -62,7 +62,7 @@ jobs:
           zip -r ${REPORTS_ZIP_PATH} . -i build/reports/detekt/\*
       - name: Upload Artifacts
         if: ${{ always() }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3
+        uses: actions/upload-artifact@1746f4ab65b179e0ea60a494b83293b640dd5bba
         timeout-minutes: 1
         with:
           name: Detekt static analysis results
@@ -102,7 +102,7 @@ jobs:
           zip -r ${REPORTS_ZIP_PATH} . -i build/reports/ktlint/\*
       - name: Upload Artifacts
         if: ${{ always() }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3
+        uses: actions/upload-artifact@1746f4ab65b179e0ea60a494b83293b640dd5bba
         timeout-minutes: 1
         with:
           name: Ktlint static analysis results
@@ -141,7 +141,7 @@ jobs:
           
           zip -r ${TEST_RESULTS_ZIP_PATH} . -i build/reports/\* \*/build/reports/\*
       - name: Upload Artifacts
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3
+        uses: actions/upload-artifact@1746f4ab65b179e0ea60a494b83293b640dd5bba
         timeout-minutes: 1
         if: ${{ always() }}
         with:
