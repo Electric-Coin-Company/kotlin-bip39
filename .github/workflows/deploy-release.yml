@@ -96,7 +96,7 @@ jobs:
           zip -r ${BINARIES_ZIP_PATH} . -i *build/libs/*
       - name: Upload Artifacts
         if: ${{ always() }}
-        uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         timeout-minutes: 1
         with:
           name: Release binaries
