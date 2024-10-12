@@ -39,7 +39,7 @@ jobs:
           MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           MAVEN_SIGNING_KEY: ${{ secrets.MAVEN_SIGNING_KEY_ASCII }}
         if: "${{ env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_SIGNING_KEY != '' }}"
-        run: echo "::set-output name=defined::true"
+        run: echo "defined=true" >> $GITHUB_OUTPUT
 
   deploy_release:
     environment: deployment

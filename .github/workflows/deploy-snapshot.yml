@@ -48,7 +48,7 @@ jobs:
           MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
         if: "${{ env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' }}"
-        run: echo "::set-output name=defined::true"
+        run: echo "defined=true" >> $GITHUB_OUTPUT
 
   deploy_snapshot:
     if: needs.check_secrets.outputs.has-secrets == 'true'
