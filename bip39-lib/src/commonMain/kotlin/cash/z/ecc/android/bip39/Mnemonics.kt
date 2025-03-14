@@ -26,7 +26,7 @@ object Mnemonics {
     internal val secureRandom = SecureRandom()
 
     @Suppress("VARIABLE_IN_SINGLETON_WITHOUT_THREAD_LOCAL")
-    internal var cachedList = WordList()
+    private var cachedList = WordList()
 
     fun getCachedWords(languageCode: String): List<String> {
         if (cachedList.languageCode != languageCode) {
@@ -106,7 +106,7 @@ object Mnemonics {
         fun validate() {
             // verify: word count is supported
             wordCount.let { wordCount ->
-                if (WordCount.values().none { it.count == wordCount }) {
+                if (WordCount.entries.toTypedArray().none { it.count == wordCount }) {
                     throw WordCountException(wordCount)
                 }
             }
@@ -280,7 +280,7 @@ object Mnemonics {
              * Convert a count into an instance of [WordCount].
              */
             fun valueOf(count: Int): WordCount? {
-                values().forEach {
+                entries.forEach {
                     if (it.count == count) return it
                 }
                 return null

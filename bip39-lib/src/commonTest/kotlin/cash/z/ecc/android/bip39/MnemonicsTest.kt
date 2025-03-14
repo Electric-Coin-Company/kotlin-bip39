@@ -68,7 +68,7 @@ class MnemonicsTest : BehaviorSpec({
     }
 
     Given("a supported word count") {
-        Mnemonics.WordCount.values().forEach { wordCount ->
+        Mnemonics.WordCount.entries.forEach { wordCount ->
             When("a mnemonic phrase is created using the ${wordCount.name} enum value") {
                 MnemonicCode(wordCount).let { phrase ->
                     phrase.chars.concatToString().asClue { phraseString ->
