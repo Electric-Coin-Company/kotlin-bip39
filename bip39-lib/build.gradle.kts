@@ -17,14 +17,6 @@ plugins {
 }
 
 val enableNative = project.property("NATIVE_TARGETS_ENABLED").toString().toBoolean()
-val nativeTargets = if (enableNative) arrayOf(
-    "linuxX64",
-    "macosX64", "macosArm64",
-    "iosArm64", "iosX64", "iosSimulatorArm64",
-    "tvosArm64", "tvosX64", "tvosSimulatorArm64",
-    "watchosArm32", "watchosArm64", "watchosX64", "watchosSimulatorArm64",
-    "mingwX64"
-) else arrayOf()
 
 kotlin {
     jvm {
@@ -32,10 +24,22 @@ kotlin {
             useJUnitPlatform()
         }
     }
-    // TODO [#242]: Replace KotlinTargetPreset.createTarget() API
-    // TODO [#242]: https://github.com/Electric-Coin-Company/kotlin-bip39/issues/242
-    for (target in nativeTargets) {
-        targets.add(presets.getByName(target).createTarget(target))
+
+    if (enableNative) {
+        linuxX64()
+        macosX64()
+        macosArm64()
+        iosArm64()
+        iosX64()
+        iosSimulatorArm64()
+        tvosArm64()
+        tvosX64()
+        tvosSimulatorArm64()
+        watchosArm32()
+        watchosArm64()
+        watchosX64()
+        watchosSimulatorArm64()
+        mingwX64()
     }
 
     sourceSets {
@@ -51,19 +55,16 @@ kotlin {
                 implementation(libs.kotest.property)
             }
         }
-        @Suppress("UnusedPrivateProperty")
         val jvmMain by getting {
             dependencies {
             }
         }
-        @Suppress("UnusedPrivateProperty")
         val jvmTest by getting {
             dependencies {
                 implementation(libs.kotest.runner.junit5)
             }
         }
-        // TODO [#243]: Replace dependsOn() API
-        // TODO [#243]: https://github.com/Electric-Coin-Company/kotlin-bip39/issues/243
+
         if (enableNative) {
             val nonJvmMain by creating {
                 dependsOn(commonMain)
@@ -77,16 +78,36 @@ kotlin {
             val unixMain by creating {
                 dependsOn(nonJvmMain)
             }
-            for (target in nativeTargets) {
-                when (target) {
-                    "mingwX64" ->
-                        getByName("${target}Main").dependsOn(mingwMain)
 
-                    else ->
-                        getByName("${target}Main").dependsOn(unixMain)
-                }
-                getByName("${target}Test").dependsOn(commonTest)
-            }
+            mingwX64Main.get().dependsOn(mingwMain)
+
+            linuxX64Main.get().dependsOn(unixMain)
+            macosX64Main.get().dependsOn(unixMain)
+            macosArm64Main.get().dependsOn(unixMain)
+            iosArm64Main.get().dependsOn(unixMain)
+            iosX64Main.get().dependsOn(unixMain)
+            iosSimulatorArm64Main.get().dependsOn(unixMain)
+            tvosArm64Main.get().dependsOn(unixMain)
+            tvosX64Main.get().dependsOn(unixMain)
+            tvosSimulatorArm64Main.get().dependsOn(unixMain)
+            watchosArm32Main.get().dependsOn(unixMain)
+            watchosArm64Main.get().dependsOn(unixMain)
+            watchosX64Main.get().dependsOn(unixMain)
+            watchosSimulatorArm64Main.get().dependsOn(unixMain)
+
+            linuxX64Test.get().dependsOn(commonTest)
+            macosX64Test.get().dependsOn(commonTest)
+            macosArm64Test.get().dependsOn(commonTest)
+            iosArm64Test.get().dependsOn(commonTest)
+            iosX64Test.get().dependsOn(commonTest)
+            iosSimulatorArm64Test.get().dependsOn(commonTest)
+            tvosArm64Test.get().dependsOn(commonTest)
+            tvosX64Test.get().dependsOn(commonTest)
+            tvosSimulatorArm64Test.get().dependsOn(commonTest)
+            watchosArm32Test.get().dependsOn(commonTest)
+            watchosArm64Test.get().dependsOn(commonTest)
+            watchosX64Test.get().dependsOn(commonTest)
+            watchosSimulatorArm64Test.get().dependsOn(commonTest)
         }
     }
 }
