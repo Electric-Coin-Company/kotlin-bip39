@@ -4,14 +4,16 @@ pluginManager.withPlugin("org.jetbrains.kotlin.multiplatform") {
 
         targets.all {
             compilations.all {
-                compilerOptions.options.allWarningsAsErrors.set(
-                    project.property("BIP39_IS_TREAT_WARNINGS_AS_ERRORS").toString().toBoolean()
-                )
+                compileTaskProvider.configure {
+                    compilerOptions.allWarningsAsErrors.set(
+                        project.property("BIP39_IS_TREAT_WARNINGS_AS_ERRORS").toString().toBoolean()
+                    )
 
-                compilerOptions.options.freeCompilerArgs.addAll(
+                    compilerOptions.freeCompilerArgs.addAll(
                         "-opt-in=kotlin.RequiresOptIn",
-                        "-Xexpect-actual-classes"   // Suppress Expect-Actual experimental API warning
-                )
+                        "-Xexpect-actual-classes" // Suppress Expect-Actual experimental API warning
+                    )
+                }
             }
         }
     }

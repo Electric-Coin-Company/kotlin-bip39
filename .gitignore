@@ -7,6 +7,9 @@ out/
 .gradle/
 build/
 
+# Klib files
+.kotlin/metadata/kotlinTransformedMetadataLibraries/*.klib
+
 # Log Files
 *.log
 
