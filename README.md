@@ -138,9 +138,6 @@ val mnemonicCode = MnemonicCode(WordCount.COUNT_24, languageCode = Locale.GERMAN
 val mnemonicCode = MnemonicCode(WordCount.COUNT_24, languageCode = Locale.ENGLISH.language)
 ```
 
-# Known issues
- * When publishing the library, a Gradle warning will be printed. This is a [known issue](https://youtrack.jetbrains.com/issue/KT-46466) in Kotlin Multiplatform and can be safely ignored.
-
 ## Credits
 * [zcash/ebfull](https://github.com/ebfull) - Zcash core dev and BIP-0039 co-author who inspired creation of this library
 * [bitcoinj](https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/crypto/MnemonicCode.java) - Java implementation from which much of this code was adapted
