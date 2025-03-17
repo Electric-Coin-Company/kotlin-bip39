@@ -55,10 +55,12 @@ kotlin {
                 implementation(libs.kotest.property)
             }
         }
+        @Suppress("UnusedPrivateProperty")
         val jvmMain by getting {
             dependencies {
             }
         }
+        @Suppress("UnusedPrivateProperty")
         val jvmTest by getting {
             dependencies {
                 implementation(libs.kotest.runner.junit5)

@@ -3,5 +3,6 @@ root = true
 [*.{kt,kts}]
 ktlint_standard_trailing-comma-on-call-site = disabled
 ktlint_standard_trailing-comma-on-declaration-site = disabled
+ktlint_standard_function-signature=disabled
 
 max_line_length = off
