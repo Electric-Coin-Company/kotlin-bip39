@@ -1,6 +1,6 @@
 package cash.z.ecc.android.crypto
 
-internal actual class SecretKeyFactoryCommon() {
+internal actual class SecretKeyFactoryCommon {
     actual fun generateSecret(pbeKeySpec: PBEKeySpecCommon): SecretKeyCommon {
         val encoded =
             pbeKeySpec.run {

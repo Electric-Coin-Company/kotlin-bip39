@@ -39,8 +39,11 @@ object Mnemonics {
     // Inner Classes
     //
 
-    class MnemonicCode(val chars: CharArray, val languageCode: String = DEFAULT_LANGUAGE_CODE) :
-        Closeable, Iterable<String> {
+    class MnemonicCode(
+        val chars: CharArray,
+        val languageCode: String = DEFAULT_LANGUAGE_CODE
+    ) : Closeable,
+        Iterable<String> {
         constructor(
             phrase: String,
             languageCode: String = DEFAULT_LANGUAGE_CODE
@@ -244,15 +247,16 @@ object Mnemonics {
                 val checksum = entropy.toSha256()[0]
                 return (entropy + checksum).toBits().let { bits ->
                     // initial size of max char count, to minimize array copies (size * 3/32 * 8)
-                    ArrayList<Char>(entropy.size * 3 / 4).also { chars ->
-                        bits.forEach { processBit(it, chars) }
-                        // trim final space to avoid the need to track the number of words completed
-                        chars.removeAt(chars.lastIndex)
-                    }.let { result ->
-                        // returning the result as a charArray creates a copy so clear the original
-                        // so that it doesn't sit in memory until garbage collection
-                        result.toCharArray().also { result.clear() }
-                    }
+                    ArrayList<Char>(entropy.size * 3 / 4)
+                        .also { chars ->
+                            bits.forEach { processBit(it, chars) }
+                            // trim final space to avoid the need to track the number of words completed
+                            chars.removeAt(chars.lastIndex)
+                        }.let { result ->
+                            // returning the result as a charArray creates a copy so clear the original
+                            // so that it doesn't sit in memory until garbage collection
+                            result.toCharArray().also { result.clear() }
+                        }
                 }
             }
         }
@@ -263,7 +267,9 @@ object Mnemonics {
      *
      * @param count the number of words in the resulting mnemonic
      */
-    enum class WordCount(val count: Int) {
+    enum class WordCount(
+        val count: Int
+    ) {
         COUNT_12(12),
         COUNT_15(15),
         COUNT_18(18),
@@ -297,8 +303,9 @@ object Mnemonics {
             "Error: The checksum failed. Verify that none of the words have been transposed."
         )
 
-    class WordCountException(count: Int) :
-        RuntimeException("Error: $count is an invalid word count.")
+    class WordCountException(
+        count: Int
+    ) : RuntimeException("Error: $count is an invalid word count.")
 
     class InvalidWordException : RuntimeException {
         constructor(index: Int) : super("Error: invalid word encountered at index $index.")
@@ -367,6 +374,4 @@ private fun ByteArray.toBits(): List<Boolean> = flatMap { it.toBits() }
 
 private fun Byte.toBits(): List<Boolean> = (7 downTo 0).map { (toInt() and (1 shl it)) != 0 }
 
-private fun CharArray.toBytes(): ByteArray {
-    return map { it.code.toByte() }.toByteArray()
-}
+private fun CharArray.toBytes(): ByteArray = map { it.code.toByte() }.toByteArray()

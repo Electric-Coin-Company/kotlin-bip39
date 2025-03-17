@@ -8,7 +8,9 @@ import cash.z.ecc.android.bip39.Mnemonics.DEFAULT_LANGUAGE_CODE
  * but, eventually, they will come from the file system and library users should not have to change
  * any code.
  */
-class WordList internal constructor(val languageCode: String = DEFAULT_LANGUAGE_CODE) {
+class WordList internal constructor(
+    val languageCode: String = DEFAULT_LANGUAGE_CODE
+) {
     init {
         validate(languageCode)
     }
