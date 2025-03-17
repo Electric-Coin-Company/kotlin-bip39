@@ -169,7 +169,7 @@ object Mnemonics {
                     // fail if the word was not found on the list
                     if (phraseIndex < 0) throw InvalidWordException(it)
                     // for each of the 11 bits of the phraseIndex
-                    (10 downTo 0).forEach { i ->
+                    for (i in 10 downTo 0) {
                         // isolate the next bit (starting from the big end)
                         val bit = phraseIndex and (1 shl i) != 0
                         // if the bit is set, then update the corresponding bit in the nextByte

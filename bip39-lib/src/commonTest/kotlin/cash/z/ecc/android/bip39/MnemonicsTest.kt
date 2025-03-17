@@ -107,8 +107,8 @@ class MnemonicsTest :
                         row(
                             18,
                             "d5bcbf62dea1a07ab1abb0144b299300137168a7939f3071f112b557",
-                            "stick tourist suffer run borrow diary shop invite begin flock gospel ability damage reform" +
-                                " oxygen initial corn moon dwarf height image"
+                            "stick tourist suffer run borrow diary shop invite begin flock gospel ability damage" +
+                                " reform oxygen initial corn moon dwarf height image"
                         ),
                         row(
                             15,
