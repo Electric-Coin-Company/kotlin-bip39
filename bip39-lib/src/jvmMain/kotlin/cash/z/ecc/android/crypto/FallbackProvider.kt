@@ -17,33 +17,32 @@ import javax.crypto.spec.SecretKeySpec
  * moderately adapted to Kotlin.
  */
 @Suppress("DEPRECATION")
-internal actual class FallbackProvider : Provider(
-    "FallbackProvider",
-    1.0,
-    "Provides a bridge to a default implementation of the PBKDF2WithHmacSHA512 algorithm" +
-        " to use when one is not already available on the device."
-) {
+internal actual class FallbackProvider :
+    Provider(
+        "FallbackProvider",
+        1.0,
+        "Provides a bridge to a default implementation of the PBKDF2WithHmacSHA512 algorithm" +
+            " to use when one is not already available on the device."
+    ) {
     override fun getService(
         type: String?,
         algorithm: String?
-    ): Service? {
-        return ServiceProvider().takeIf {
+    ): Service? =
+        ServiceProvider().takeIf {
             SecretKeyFactory::class.java.simpleName.equals(type, true) &&
                 Pbkdf2KeyFactory.ALGORITHM.equals(algorithm, true)
         }
-    }
 
-    inner class ServiceProvider : Service(
-        this@FallbackProvider,
-        SecretKeyFactory::class.java.simpleName,
-        Pbkdf2KeyFactory.ALGORITHM,
-        ServiceProvider::class.java.simpleName,
-        null,
-        null
-    ) {
-        override fun newInstance(unused: Any?): Any {
-            return Pbkdf2KeyFactory()
-        }
+    inner class ServiceProvider :
+        Service(
+            this@FallbackProvider,
+            SecretKeyFactory::class.java.simpleName,
+            Pbkdf2KeyFactory.ALGORITHM,
+            ServiceProvider::class.java.simpleName,
+            null,
+            null
+        ) {
+        override fun newInstance(unused: Any?): Any = Pbkdf2KeyFactory()
     }
 }
 
@@ -56,11 +55,10 @@ internal actual class FallbackProvider : Provider(
  * available so this is used to bridge to a popular java implementation simply as a fallback.
  */
 class Pbkdf2KeyFactory : SecretKeyFactorySpi() {
-    override fun engineGenerateSecret(keySpec: KeySpec): SecretKey {
-        return (keySpec as PBEKeySpec).run {
+    override fun engineGenerateSecret(keySpec: KeySpec): SecretKey =
+        (keySpec as PBEKeySpec).run {
             SecretKeySpec(Pbkdf2Sha512.derive(password, salt, iterationCount, keyLength), ALGORITHM)
         }
-    }
 
     override fun engineGetKeySpec(
         s: SecretKey,

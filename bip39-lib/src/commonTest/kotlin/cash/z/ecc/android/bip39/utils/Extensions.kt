@@ -4,7 +4,8 @@ fun ByteArray.toHex(): String {
     val sb = StringBuilder(size * 2)
     for (b in this) {
         val hexValue =
-            b.let { if (it >= 0) it.toInt() else 256 + it }
+            b
+                .let { if (it >= 0) it.toInt() else 256 + it }
                 .toString(16)
                 .let { if (it.length < 2) "0$it" else it }
         sb.append(hexValue)
