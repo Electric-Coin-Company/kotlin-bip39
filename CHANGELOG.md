@@ -6,6 +6,14 @@ and this library adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Gradle 8.13
+- Kotlin 2.0.20
+- Other dependency update
+
+### Fixed
+- The build-time warning about deprecated `KotlinTargetPreset.createTarget()` has been resolved
+
 ## [1.0.8] - 2024-04-14
 
 ### Changed
