@@ -59,8 +59,6 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         timeout-minutes: 10
-        with:
-          gradle-home-cache-cleanup: true
       # While not strictly necessary, this sanity checks the build before attempting to upload.
       # This adds minimal additional build time, since most of the work is cached and re-used
       # in the next step.
